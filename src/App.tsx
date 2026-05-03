@@ -31,7 +31,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { useState, useEffect } from 'react';
 
 // --- CONFIG ---
-const KIWIFY_CHECKOUT_URL = "https://pay.kiwify.com.br/demo-checkout"; // Troque pelo seu link real
+const KIWIFY_CHECKOUT_URL = "https://pay.kiwify.com.br/AhSL8x0";
 
 // --- DATA: TESTIMONIALS ---
 const TESTIMONIALS = [
@@ -151,21 +151,64 @@ const Countdown = () => {
 export default function App() {
   const [isPaid, setIsPaid] = useState(false);
   const [showWelcome, setShowWelcome] = useState(false);
+  const [email, setEmail] = useState("");
+  const [isChecking, setIsChecking] = useState(false);
 
+  // Poll for payment status if email is set
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    if (params.get('status') === 'paid') {
-      setIsPaid(true);
-      setShowWelcome(true);
-      window.history.replaceState({}, document.title, "/");
+    let interval: number;
+    if (email && !isPaid) {
+      interval = window.setInterval(async () => {
+        try {
+          const res = await fetch(`/api/check-payment?email=${encodeURIComponent(email)}`);
+          const data = await res.json();
+          if (data.isPaid) {
+            setIsPaid(true);
+            setShowWelcome(true);
+            setIsChecking(false);
+          }
+        } catch (e) {
+          console.error("Error checking payment:", e);
+        }
+      }, 3000); // Check every 3 seconds
     }
-  }, []);
+    return () => clearInterval(interval);
+  }, [email, isPaid]);
 
   const handleCheckout = () => {
-    // Simulando redirecionamento para Kiwify
-    // Em um cenário real: window.location.href = KIWIFY_CHECKOUT_URL;
-    // Para esta demonstração:
-    window.location.href = window.location.origin + "?status=paid";
+    if (!email) {
+      alert("Por favor, digite seu e-mail para continuar para o checkout.");
+      const emailInput = document.getElementById('email-input');
+      emailInput?.scrollIntoView({ behavior: 'smooth' });
+      emailInput?.focus();
+      return;
+    }
+    
+    // REDIRECIONAMENTO IMEDIATO PARA KIWIFY
+    setIsChecking(true);
+    
+    // Concatenando e-mail para facilitar o preenchimento no checkout
+    const url = new URL(KIWIFY_CHECKOUT_URL);
+    url.searchParams.append('email', email);
+    
+    window.location.href = url.toString();
+  };
+
+  const simulateWebhook = async () => {
+    if (!email) return alert("Digite um email primeiro!");
+    try {
+      await fetch('/api/kiwify-webhook', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          order_status: 'paid',
+          customer: { email }
+        })
+      });
+      alert("Webhook simulado enviado! O acesso será liberado em instantes...");
+    } catch (e) {
+      alert("Erro ao simular webhook");
+    }
   };
 
   if (isPaid && showWelcome) {
@@ -233,9 +276,10 @@ export default function App() {
             <div className="flex flex-col sm:flex-row items-center gap-8">
               <button 
                 onClick={handleCheckout}
-                className="w-full sm:w-auto bg-primary text-white p-8 px-14 rounded-[40px] text-2xl font-display font-black flex items-center justify-center gap-4 hover:scale-110 hover:shadow-[0_30px_60px_rgba(255,0,102,0.4)] transition-all active:scale-95 group"
+                disabled={isChecking}
+                className="w-full sm:w-auto bg-primary text-white p-8 px-14 rounded-[40px] text-2xl font-display font-black flex items-center justify-center gap-4 hover:scale-110 hover:shadow-[0_30px_60px_rgba(255,0,102,0.4)] transition-all active:scale-95 group disabled:opacity-50"
               >
-                COMEÇAR AGORA <ArrowRight className="group-hover:translate-x-2 transition-transform" size={28} />
+                {isChecking ? "CARREGANDO..." : "COMEÇAR AGORA"} <ArrowRight className="group-hover:translate-x-2 transition-transform" size={28} />
               </button>
               
               <div className="flex flex-col gap-2 items-center sm:items-start group">
@@ -374,12 +418,47 @@ export default function App() {
                <p className="text-[10px] font-black uppercase tracking-[0.4em] opacity-30 mt-4 underline decoration-primary underline-offset-8">Pagamento Único • Acesso na Hora</p>
             </div>
 
+            <div className="max-w-md mx-auto mb-10 space-y-4">
+              <div className="relative group">
+                <div className="absolute inset-x-0 bottom-0 h-px bg-white/10 group-focus-within:bg-primary transition-colors" />
+                <input 
+                  id="email-input"
+                  type="email" 
+                  placeholder="Seu melhor e-mail..." 
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full bg-transparent p-6 text-center text-xl font-display font-black placeholder:opacity-20 focus:outline-none"
+                />
+              </div>
+              {isChecking && (
+                <motion.div 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="text-xs font-black uppercase tracking-widest text-primary animate-pulse"
+                >
+                  ⌛ Aguardando confirmação do pagamento...
+                </motion.div>
+              )}
+            </div>
+
             <button 
               onClick={handleCheckout}
-              className="w-full bg-white text-bg-dark py-10 rounded-[48px] text-3xl font-display font-black hover:scale-105 active:scale-95 transition-all shadow-[0_30px_100px_rgba(255,255,255,0.15)]"
+              disabled={isChecking}
+              className="w-full bg-white text-bg-dark py-10 rounded-[48px] text-3xl font-display font-black hover:scale-105 active:scale-95 transition-all shadow-[0_30px_100px_rgba(255,255,255,0.15)] mb-6 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              GARANTE MEU 1000 AGORA!
+              {isChecking ? "REDIRECIONANDO..." : "GARANTE MEU 1000 AGORA!"}
             </button>
+
+            {/* DEV ONLY: SIMULAÇÃO */}
+            <div className="mt-4 p-4 border border-dashed border-white/10 rounded-2xl">
+               <p className="text-[9px] font-black uppercase opacity-30 mb-2 tracking-widest">Área do Desenvolvedor (Simulação)</p>
+               <button 
+                 onClick={simulateWebhook}
+                 className="text-[10px] font-black uppercase tracking-widest text-primary hover:opacity-100 opacity-60 transition-opacity"
+               >
+                 [ CLIQUE AQUI PARA SIMULAR WEBHOOK DA KIWIFY ]
+               </button>
+            </div>
             
             <div className="mt-16 flex justify-center gap-10 opacity-30 text-[10px] font-black uppercase tracking-[0.3em]">
                <span>● Hotmart / Kiwify</span>
