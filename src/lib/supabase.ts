@@ -5,6 +5,11 @@ import { createClient } from '@supabase/supabase-js';
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || "";
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || "";
 
+console.group("Supabase Debug");
+console.log("URL:", supabaseUrl ? "Defined (starts with " + supabaseUrl.substring(0, 10) + "...)" : "UNDEFINED");
+console.log("Anon Key:", supabaseAnonKey ? "Defined" : "UNDEFINED");
+console.groupEnd();
+
 if (!supabaseUrl || !supabaseAnonKey) {
   console.warn("AVISO: Credenciais do Supabase não encontradas no ambiente do frontend.");
   console.info("Certifique-se de que VITE_SUPABASE_URL e VITE_SUPABASE_ANON_KEY estão no seu .env");

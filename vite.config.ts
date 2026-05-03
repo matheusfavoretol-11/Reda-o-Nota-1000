@@ -6,14 +6,19 @@ import {defineConfig, loadEnv} from 'vite';
 export default defineConfig(({mode}) => {
   const env = loadEnv(mode, process.cwd(), '');
   
-  // Garantir que as variáveis do Supabase estejam presentes
-  const supabaseUrl = env.VITE_SUPABASE_URL || process.env.VITE_SUPABASE_URL;
-  const supabaseAnonKey = env.VITE_SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY;
+  // Garantir que as variáveis do Supabase estejam presentes e sejam strings
+  const supabaseUrl = String(env.VITE_SUPABASE_URL || process.env.VITE_SUPABASE_URL || "");
+  const supabaseAnonKey = String(env.VITE_SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY || "");
+
+  console.log('--- Vite Env Debug ---');
+  console.log('Mode:', mode);
+  console.log('VITE_SUPABASE_URL found:', !!supabaseUrl);
+  console.log('----------------------');
 
   return {
     plugins: [react(), tailwindcss()],
     define: {
-      'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY || process.env.GEMINI_API_KEY),
+      'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY || process.env.GEMINI_API_KEY || ""),
       'import.meta.env.VITE_SUPABASE_URL': JSON.stringify(supabaseUrl),
       'import.meta.env.VITE_SUPABASE_ANON_KEY': JSON.stringify(supabaseAnonKey),
     },

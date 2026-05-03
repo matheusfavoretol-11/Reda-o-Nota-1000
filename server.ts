@@ -11,8 +11,15 @@ const __dirname = path.dirname(__filename);
 
 // Supabase Setup
 const supabaseUrl = process.env.VITE_SUPABASE_URL || "";
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || "";
-const supabase = createClient(supabaseUrl, supabaseServiceKey);
+const supabaseAnonKey = process.env.VITE_SUPABASE_ANON_KEY || "";
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || supabaseAnonKey;
+
+let supabase: any;
+if (supabaseUrl && supabaseServiceKey) {
+  supabase = createClient(supabaseUrl, supabaseServiceKey);
+} else {
+  console.error("CRITICAL: Supabase credentials missing in server.");
+}
 
 // Gemini Setup
 const genAI = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || "" });
@@ -69,10 +76,11 @@ Formato da resposta:
       if (customer && customer.email) {
         const email = customer.email.toLowerCase();
         
-        try {
-          const { error } = await supabase
-            .from('payments')
-            .upsert({ 
+    try {
+      if (!supabase) throw new Error("Supabase client not initialized");
+      const { error } = await supabase
+        .from('payments')
+        .upsert({ 
               email: email, 
               status: order_status,
               order_id: order_id || 'unknown',
@@ -101,6 +109,7 @@ Formato da resposta:
     }
 
     try {
+      if (!supabase) throw new Error("Supabase client not initialized");
       const { data, error } = await supabase
         .from('payments')
         .select('status')
