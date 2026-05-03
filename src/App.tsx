@@ -148,11 +148,234 @@ const Countdown = () => {
   );
 };
 
+// --- DASHBOARD VIEWS ---
+
+const EbookView = () => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalPages = 30;
+
+  return (
+    <div className="grid lg:grid-cols-[300px_1fr] gap-12 items-start mt-12 overflow-visible">
+      {/* SIDEBAR NAVIGATION */}
+      <div className="glass rounded-[32px] p-6 space-y-2 sticky top-6 hidden lg:block">
+        <h3 className="text-xs font-black uppercase tracking-widest opacity-30 px-4 mb-4 font-mono">Guia Emergencial</h3>
+        {[
+          { p: 1, t: "Págs 1-2: Comece Aqui" },
+          { p: 3, t: "Págs 3-5: As 5 Competências" },
+          { p: 6, t: "Págs 6-8: Fórmulas de Intro" },
+          { p: 9, t: "Págs 9-12: Desenvolvimento" },
+          { p: 13, t: "Págs 13-15: Conclusão" },
+          { p: 16, t: "Págs 16-18: Repertórios" },
+          { p: 19, t: "Págs 19-21: Redações 1000" },
+          { p: 22, t: "Págs 22-24: Conectivos" },
+          { p: 25, t: "Págs 25-27: Checklist Anti-Erro" },
+          { p: 28, t: "Págs 28-30: Plano de Ação" },
+        ].map((item, i) => (
+          <button 
+            key={i} 
+            onClick={() => setCurrentPage(item.p)}
+            className={`w-full text-left p-3 px-4 rounded-xl text-[10px] font-bold transition-all ${currentPage === item.p ? 'bg-primary text-white scale-105 shadow-lg shadow-primary/20' : 'hover:bg-white/5 opacity-60'}`}
+          >
+            {item.t}
+          </button>
+        ))}
+      </div>
+
+      {/* CONTENT AREA */}
+      <div className="glass rounded-[48px] p-8 md:p-16 border-white/5 min-h-[800px] relative">
+        <div className="absolute top-8 right-8 text-[10px] font-black uppercase opacity-20 font-mono tracking-widest">
+          PÁGINA {currentPage} / {totalPages}
+        </div>
+
+        <div className="max-w-3xl mx-auto space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-700">
+          {currentPage <= 2 && (
+            <>
+              <div className="space-y-6">
+                <span className="p-2 bg-primary/10 text-primary text-[10px] font-black uppercase rounded-lg border border-primary/20">📌 INTRODUÇÃO EMERGENCIAL</span>
+                <h1 className="text-5xl font-display font-black leading-tight italic">Calma, eu entendo <br/> você.</h1>
+                <p className="text-xl text-gray-400 font-medium leading-relaxed">
+                  Você está com pressa? Eu também. Por isso, este guia foi feito sem enrolação. Nas próximas 30 páginas, você tem a fórmula exata do 1000.
+                </p>
+              </div>
+
+              <div className="p-8 glass rounded-[32px] border-primary/20 bg-primary/5">
+                <h4 className="text-lg font-bold mb-4 flex items-center gap-2 italic">🚀 Mindset Motivacional</h4>
+                <p className="text-gray-300 italic leading-relaxed">
+                  A redação não é sobre ser um gênio da literatura. É sobre seguir uma técnica. Decore as fórmulas, aplique o checklist e o resultado vem. O 1000 é um processo.
+                </p>
+              </div>
+            </>
+          )}
+
+          {currentPage >= 3 && currentPage <= 5 && (
+            <>
+              <div className="space-y-6">
+                <span className="p-2 bg-secondary/10 text-secondary text-[10px] font-black uppercase rounded-lg border border-secondary/20">⚡ DOMINANDO AS REGRAS</span>
+                <h2 className="text-4xl font-display font-black italic">As 5 Competências em 3 Páginas</h2>
+              </div>
+
+              <div className="overflow-x-auto">
+                <table className="w-full text-left border-collapse glass rounded-3xl overflow-hidden">
+                  <thead>
+                    <tr className="bg-white/5">
+                      <th className="p-6 text-[10px] font-black uppercase opacity-40">Comp.</th>
+                      <th className="p-6 text-[10px] font-black uppercase opacity-40">O que é?</th>
+                      <th className="p-6 text-[10px] font-black uppercase opacity-40">Como garantir pontos</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-white/5">
+                    {[
+                      { c: "C1", n: "Norma culta", d: "Não errar português", g: ["Evite gerúndio", "Revise concordância", "Vírgulas"] },
+                      { c: "C2", n: "Tema", d: "Não fugir do assunto", g: ["Leia o tema 3x", "Sublinhe keywords", "Textos motivadores"] },
+                      { c: "C3", n: "Argumentar", d: "Defender sua tese", g: ["Tese na intro", "2 argumentos fortes", "Dados/citações"] },
+                      { c: "C4", n: "Conectar", d: "Usar conectivos", g: ["Varie conectivos", "Não repita", "Transições suaves"] },
+                      { c: "C5", n: "Proposta", d: "Solução completa", g: ["5 elementos", "Direitos humanos", "Específico"] },
+                    ].map((row, i) => (
+                      <tr key={i} className="hover:bg-white/5 transition-colors">
+                        <td className="p-6 font-black text-primary">{row.c}</td>
+                        <td className="p-6 text-[11px] font-bold">{row.n}<br/><span className="text-[9px] font-medium opacity-40">{row.d}</span></td>
+                        <td className="p-6">
+                          <div className="space-y-1">
+                            {row.g.map((g, j) => <div key={j} className="text-[9px] font-bold flex items-center gap-2"><div className="w-1 h-1 bg-primary rounded-full" /> {g}</div>)}
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </>
+          )}
+
+          {currentPage >= 6 && currentPage <= 8 && (
+            <>
+              <div className="space-y-6">
+                <span className="p-2 bg-accent/10 text-accent text-[10px] font-black uppercase rounded-lg border border-accent/20">📌 INTRODUÇÃO</span>
+                <h2 className="text-4xl font-display font-black italic">Fórmula da Introdução</h2>
+              </div>
+              <div className="p-8 glass rounded-3xl border-white/10 space-y-4">
+                <div className="text-[10px] font-black uppercase text-primary">Template Mestre</div>
+                <p className="text-sm font-medium leading-relaxed italic text-gray-300">
+                  "Desde o período colonial, povos indígenas e quilombolas enfrentam processos de marginalização territorial e cultural no Brasil. Atualmente, mesmo com marcos legais de proteção, essas comunidades continuam sofrendo com invasões de terras. Diante desse cenário, é fundamental compreender os desafios estruturais que impedem a plena valorização dessas populações."
+                </p>
+              </div>
+            </>
+          )}
+
+          {currentPage >= 22 && currentPage <= 24 && (
+            <div className="space-y-10">
+              <div className="space-y-6">
+                 <span className="p-2 bg-primary/10 text-primary text-[10px] font-black uppercase rounded-lg border border-primary/20">🔗 CONEXÃO</span>
+                 <h2 className="text-4xl font-display font-black italic">Conectivos</h2>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                 {[
+                   { f: "Adicionar", c: "Além disso, Ademais" },
+                   { f: "Contrapor", c: "Entretanto, Todavia" },
+                   { f: "Explicar", c: "Haja vista, Pois" },
+                   { f: "Concluir", c: "Portanto, Logo" }
+                 ].map((item, i) => (
+                   <div key={i} className="p-6 glass rounded-2xl space-y-2">
+                      <div className="text-primary font-black uppercase text-[9px]">{item.f}</div>
+                      <div className="text-xs font-bold">{item.c}</div>
+                   </div>
+                 ))}
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* NAVIGATION FOOTER */}
+        <div className="mt-20 pt-12 border-t border-white/5 flex justify-between items-center">
+          <button 
+            disabled={currentPage === 1}
+            onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+            className="p-3 px-6 glass rounded-full font-black text-[10px] uppercase tracking-widest disabled:opacity-20 hover:bg-white/10"
+          >
+            Anterior
+          </button>
+          <button 
+            disabled={currentPage === totalPages}
+            onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+            className="p-3 px-8 bg-primary text-white rounded-full font-black text-[10px] uppercase tracking-widest disabled:opacity-20 hover:scale-105 transition-all shadow-lg shadow-primary/20"
+          >
+            Próxima Página
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const IaView = () => {
+    return (
+        <div className="max-w-4xl mx-auto space-y-12 mt-12 mb-20">
+            <div className="glass rounded-[64px] border-white/5 p-2 shadow-2xl overflow-hidden">
+                <div className="bg-[#0A0A0F] rounded-[62px] min-h-[600px] flex flex-col border border-white/10">
+                    <div className="p-8 border-b border-white/5 flex items-center justify-between">
+                        <div className="flex items-center gap-4">
+                            <div className="w-12 h-12 rounded-3xl bg-gradient-to-tr from-primary to-secondary flex items-center justify-center">
+                                <Sparkles size={24} className="text-white" />
+                            </div>
+                            <div className="text-left">
+                                <div className="text-xs font-black uppercase">Malu AI Corretora</div>
+                                <div className="text-[10px] font-mono opacity-30 text-success">ONLINE E PRONTA</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div className="flex-1 p-8 flex flex-col items-center justify-center text-center space-y-8">
+                        <div className="w-24 h-24 bg-white/5 rounded-full flex items-center justify-center text-5xl">📄</div>
+                        <h3 className="text-3xl font-display font-black italic tracking-tighter">Pronto para a correção?</h3>
+                        <p className="text-gray-400 font-medium max-w-sm">Para uma análise precisa, cole seu texto aqui ou anexe uma foto legível da sua folha de redação.</p>
+                        
+                        <div className="w-full max-w-xl p-2 glass rounded-[32px] border-white/5 flex gap-2">
+                            <input className="flex-1 bg-transparent p-4 text-xs font-bold focus:outline-none placeholder:opacity-30" placeholder="Escreva ou cole seu texto..." />
+                            <button className="bg-primary px-8 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-lg shadow-primary/20 transition-all hover:scale-105">Corrigir</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+const RepertoireView = () => {
+    const categories = [
+        { title: "Desigualdade", icon: "🏛️", reps: ["Parasita", "Carolina M. Jesus"] },
+        { title: "Educação", icon: "📚", reps: ["Paulo Freire", "I. Kant"] },
+        { title: "Tecnologia", icon: "📱", reps: ["Z. Bauman", "LGPD"] },
+        { title: "Saúde Mental", icon: "🧠", reps: ["O Coringa", "OMS"] },
+    ]
+
+    return (
+        <div className="space-y-12 mt-12 mb-20">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                {categories.map((cat, i) => (
+                    <div key={i} className="bento-card space-y-6 group">
+                        <div className="text-4xl p-4 glass rounded-2xl w-fit group-hover:scale-110 transition-all">{cat.icon}</div>
+                        <h3 className="text-xl font-display font-black leading-tight italic tracking-tighter">{cat.title}</h3>
+                        <div className="space-y-3">
+                            {cat.reps.map((r, j) => (
+                                <div key={j} className="text-[10px] font-bold text-gray-500 flex items-center gap-2">
+                                    <div className="w-1.5 h-1.5 bg-primary/40 rounded-full" />
+                                    {r}
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+    )
+}
+
 export default function App() {
   const [isPaid, setIsPaid] = useState(false);
   const [showWelcome, setShowWelcome] = useState(false);
   const [email, setEmail] = useState("");
   const [isChecking, setIsChecking] = useState(false);
+  const [activeTab, setActiveTab] = useState<'overview' | 'ebook' | 'ia' | 'repertorios'>('overview');
 
   // Poll for payment status if email is set
   useEffect(() => {
@@ -217,10 +440,10 @@ export default function App() {
         {/* DASHBOARD NAVBAR */}
         <nav className="p-6 border-b border-white/5 bg-white/[0.02]">
           <div className="max-w-7xl mx-auto flex justify-between items-center">
-             <div className="flex items-center gap-3">
-                <Trophy className="text-primary w-6 h-6" />
-                <span className="font-display font-black text-xl tracking-tighter uppercase">Área do Aluno</span>
-             </div>
+             <button onClick={() => setActiveTab('overview')} className="flex items-center gap-3 hover:opacity-80 transition-opacity">
+                <Trophy className="text-primary w-6 h-6 shadow-[0_0_20px_rgba(255,0,102,0.5)]" />
+                <span className="font-display font-black text-xl tracking-tighter uppercase">Área do <span className="text-primary italic">Aluno</span></span>
+             </button>
              <div className="flex items-center gap-4">
                 <div className="text-right hidden sm:block">
                    <div className="text-[10px] font-black uppercase opacity-40">Estudante Logado</div>
@@ -233,67 +456,87 @@ export default function App() {
           </div>
         </nav>
 
-        <main className="flex-1 p-6 md:p-12">
+        <main className="flex-1 p-6 md:p-12 overflow-y-auto">
           <div className="max-w-7xl mx-auto">
-            <motion.div 
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              className="mb-12"
-            >
-               <h1 className="text-5xl md:text-7xl font-display font-black mb-4 tracking-tighter">BORA PRO <span className="text-gradient italic">MIL?</span> 🚀</h1>
-               <p className="text-gray-400 font-medium">Seu acesso completo está disponível. Por onde vamos começar hoje?</p>
-            </motion.div>
+            {activeTab === 'overview' && (
+              <>
+                <motion.div 
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  className="mb-12"
+                >
+                  <h1 className="text-5xl md:text-7xl font-display font-black mb-4 tracking-tighter">BORA PRO <span className="text-gradient italic">MIL?</span> 🚀</h1>
+                  <p className="text-gray-400 font-medium">Seu acesso completo está disponível. Por onde vamos começar hoje?</p>
+                </motion.div>
 
-            <div className="grid md:grid-cols-3 gap-8">
-               <motion.div 
-                 initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.1 }}
-                 className="bento-card bg-primary/5 border-primary/20 flex flex-col justify-between group"
-               >
-                  <BookOpen size={48} className="text-primary mb-12 group-hover:scale-110 transition-transform" />
-                  <div>
-                     <h3 className="text-2xl font-display font-black mb-2">Ebook Emergencial</h3>
-                     <p className="text-sm text-gray-400 mb-6 font-medium">Download do PDF com as fórmulas bloqueadas.</p>
-                     <button className="w-full bg-primary py-4 rounded-2xl font-black text-xs uppercase tracking-widest shadow-lg shadow-primary/20">BAIXAR AGORA</button>
-                  </div>
-               </motion.div>
+                <div className="grid md:grid-cols-3 gap-8">
+                  <motion.div 
+                    initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.1 }}
+                    className="bento-card bg-primary/5 border-primary/20 flex flex-col justify-between group"
+                  >
+                      <BookOpen size={48} className="text-primary mb-12 group-hover:scale-110 transition-transform" />
+                      <div>
+                        <h3 className="text-2xl font-display font-black mb-2 italic">Ebook Emergencial</h3>
+                        <p className="text-sm text-gray-400 mb-6 font-medium">O manual exato de 30 páginas para salvar sua nota.</p>
+                        <button onClick={() => setActiveTab('ebook')} className="w-full bg-primary py-4 rounded-2xl font-black text-xs uppercase tracking-widest shadow-lg shadow-primary/20 transition-all hover:scale-105 active:scale-95">ESTUDAR AGORA</button>
+                      </div>
+                  </motion.div>
 
-               <motion.div 
-                 initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }}
-                 className="bento-card bg-secondary/5 border-secondary/20 flex flex-col justify-between group"
-               >
-                  <MessageSquare size={48} className="text-secondary mb-12 group-hover:scale-110 transition-transform" />
-                  <div>
-                     <h3 className="text-2xl font-display font-black mb-2">Malu IA Corretora</h3>
-                     <p className="text-sm text-gray-400 mb-6 font-medium">Envie sua primeira redação para correção instantânea.</p>
-                     <button className="w-full bg-secondary py-4 rounded-2xl font-black text-xs uppercase tracking-widest shadow-lg shadow-secondary/20">ABRIR CHAT</button>
-                  </div>
-               </motion.div>
+                  <motion.div 
+                    initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }}
+                    className="bento-card bg-secondary/5 border-secondary/20 flex flex-col justify-between group"
+                  >
+                      <MessageSquare size={48} className="text-secondary mb-12 group-hover:scale-110 transition-transform" />
+                      <div>
+                        <h3 className="text-2xl font-display font-black mb-2 italic">Malu IA Corretora</h3>
+                        <p className="text-sm text-gray-400 mb-6 font-medium">Envie sua redação e receba os pontos de melhoria.</p>
+                        <button onClick={() => setActiveTab('ia')} className="w-full bg-secondary py-4 rounded-2xl font-black text-xs uppercase tracking-widest shadow-lg shadow-secondary/20 transition-all hover:scale-105 active:scale-95">CORRIGIR AGORA</button>
+                      </div>
+                  </motion.div>
 
-               <motion.div 
-                 initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3 }}
-                 className="bento-card bg-accent/5 border-accent/20 flex flex-col justify-between group"
-               >
-                  <Trophy size={48} className="text-accent mb-12 group-hover:scale-110 transition-transform" />
-                  <div>
-                     <h3 className="text-2xl font-display font-black mb-2">Repertórios Curinga</h3>
-                     <p className="text-sm text-gray-400 mb-6 font-medium">Acesse o banco de dados completo por temas.</p>
-                     <button className="w-full bg-accent text-bg-dark py-4 rounded-2xl font-black text-xs uppercase tracking-widest shadow-lg shadow-accent/20">VER BANCO</button>
-                  </div>
-               </motion.div>
-            </div>
+                  <motion.div 
+                    initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3 }}
+                    className="bento-card bg-accent/5 border-accent/20 flex flex-col justify-between group"
+                  >
+                      <Trophy size={48} className="text-accent mb-12 group-hover:scale-110 transition-transform" />
+                      <div>
+                        <h3 className="text-2xl font-display font-black mb-2 italic">Repertórios Curinga</h3>
+                        <p className="text-sm text-gray-400 mb-6 font-medium">Banco completo de citações que cabem em tudo.</p>
+                        <button onClick={() => setActiveTab('repertorios')} className="w-full bg-accent text-bg-dark py-4 rounded-2xl font-black text-xs uppercase tracking-widest shadow-lg shadow-accent/20 transition-all hover:scale-105 active:scale-95">VER REPERTÓRIOS</button>
+                      </div>
+                  </motion.div>
+                </div>
 
-            <div className="mt-12 p-8 glass border-white/5 rounded-[40px] flex flex-col md:flex-row items-center justify-between gap-8">
-               <div className="flex items-center gap-6">
-                  <div className="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center">
-                     <ShieldCheck size={32} className="text-success" />
+                <div className="mt-12 p-8 glass border-white/5 rounded-[40px] flex flex-col md:flex-row items-center justify-between gap-8">
+                  <div className="flex items-center gap-6">
+                      <div className="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center">
+                        <ShieldCheck size={32} className="text-success shadow-[0_0_20px_rgba(0,255,153,0.3)]" />
+                      </div>
+                      <div>
+                        <h4 className="text-xl font-bold italic tracking-tighter">Precisa de ajuda urgente?</h4>
+                        <p className="text-sm text-gray-400">Suporte prioritário via WhatsApp disponível.</p>
+                      </div>
                   </div>
-                  <div>
-                     <h4 className="text-xl font-bold">Precisa de ajuda?</h4>
-                     <p className="text-sm text-gray-400">Suporte prioritário via WhatsApp para alunos PRO.</p>
-                  </div>
-               </div>
-               <button className="px-10 py-4 glass rounded-full font-black text-xs uppercase tracking-widest hover:bg-white/10 transition-all">CHAMAR SUPORTE</button>
-            </div>
+                  <button className="px-10 py-4 glass rounded-[20px] font-black text-[10px] uppercase tracking-widest hover:bg-white/10 transition-all border-white/10">CHAMAR NO WHATSAPP</button>
+                </div>
+              </>
+            )}
+
+            {activeTab === 'ebook' && (
+              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+                <EbookView />
+              </motion.div>
+            )}
+            {activeTab === 'ia' && (
+              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+                <IaView />
+              </motion.div>
+            )}
+            {activeTab === 'repertorios' && (
+              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+                <RepertoireView />
+              </motion.div>
+            )}
           </div>
         </main>
       </div>
