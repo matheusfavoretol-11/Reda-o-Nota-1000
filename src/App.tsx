@@ -444,6 +444,101 @@ const RepertoireView = () => {
     )
 }
 
+
+// --- AUTH VIEWS ---
+const AuthScreen = ({ mode, onClose, setMode }: { mode: 'login' | 'signup', onClose: () => void, setMode: (m: 'login' | 'signup') => void }) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [authLoading, setAuthLoading] = useState(false);
+
+  const handleAuth = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setAuthLoading(true);
+    
+    try {
+      if (mode === 'signup') {
+        const { error } = await supabase.auth.signUp({ 
+          email, 
+          password,
+          options: { emailRedirectTo: window.location.origin }
+        });
+        if (error) throw error;
+        toast.success("Verifique seu e-mail para confirmar a conta!");
+      } else {
+        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) throw error;
+        toast.success("Bem-vindo de volta!");
+        onClose();
+      }
+    } catch (err: any) {
+      console.error("Auth process error:", err);
+      toast.error(err.message || "Erro no processo de autenticação");
+    } finally {
+      setAuthLoading(false);
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-bg-dark/95 backdrop-blur-xl transition-all">
+      <motion.div 
+        initial={{ scale: 0.9, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        exit={{ scale: 0.9, opacity: 0 }}
+        className="glass w-full max-w-md p-10 py-16 rounded-[48px] border-white/5 relative shadow-2xl"
+      >
+        <button onClick={onClose} className="absolute top-8 right-8 opacity-40 hover:opacity-100 transition-opacity">
+          <X size={24} />
+        </button>
+
+        <div className="text-center mb-10">
+          <div className="bg-primary w-16 h-16 rounded-3xl flex items-center justify-center mx-auto mb-6 rotate-3 shadow-[0_0_20px_rgba(255,0,102,0.4)]">
+            <Lock className="text-white" size={24} />
+          </div>
+          <h2 className="text-4xl font-display font-black italic tracking-tighter mb-2">
+            {mode === 'signup' ? 'Nova Conta' : 'Área do Aluno'}
+          </h2>
+          <p className="text-sm text-gray-400 font-medium">{mode === 'signup' ? 'Junte-se à elite da Redação 1000' : 'Entre para continuar seus estudos'}</p>
+        </div>
+
+        <form onSubmit={handleAuth} className="space-y-4">
+          <div className="space-y-2">
+            <label className="text-[10px] font-black uppercase tracking-widest opacity-40 ml-4 font-mono">E-mail</label>
+            <input 
+              required type="email" value={email} onChange={(e) => setEmail(e.target.value)}
+              className="w-full bg-white/5 border border-white/10 p-5 rounded-2xl focus:outline-none focus:border-primary/50 font-bold text-sm transition-all"
+              placeholder="seu@email.com"
+            />
+          </div>
+          <div className="space-y-2">
+            <label className="text-[10px] font-black uppercase tracking-widest opacity-40 ml-4 font-mono">Senha</label>
+            <input 
+              required type="password" value={password} onChange={(e) => setPassword(e.target.value)}
+              className="w-full bg-white/5 border border-white/10 p-5 rounded-2xl focus:outline-none focus:border-primary/50 font-bold text-sm transition-all"
+              placeholder="••••••••"
+            />
+          </div>
+
+          <button 
+            disabled={authLoading}
+            className="w-full bg-primary py-5 rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-lg shadow-primary/20 transition-all hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-3 mt-4"
+          >
+            {authLoading ? <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : mode === 'signup' ? 'CRIAR MINHA CONTA' : 'ACESSAR AGORA'}
+          </button>
+        </form>
+
+        <div className="mt-8 text-center pt-8 border-t border-white/5">
+          <button 
+            onClick={() => setMode(mode === 'login' ? 'signup' : 'login')}
+            className="text-[11px] font-black uppercase tracking-widest opacity-40 hover:opacity-100 transition-opacity hover:text-primary"
+          >
+            {mode === 'login' ? 'Ainda não tem conta? Clique aqui' : 'Já sou aluno, fazer login'}
+          </button>
+        </div>
+      </motion.div>
+    </div>
+  );
+};
+
 export default function App() {
   const [user, setUser] = useState<any>(null);
   const [profile, setProfile] = useState<{ status: string } | null>(null);
@@ -452,6 +547,8 @@ export default function App() {
   const [activeTab, setActiveTab] = useState<'overview' | 'ebook' | 'ia' | 'repertorios'>('overview');
   const [showAuth, setShowAuth] = useState<'login' | 'signup' | null>(null);
   const [isVerifying, setIsVerifying] = useState(false);
+
+  const isPaid = profile?.status === 'paid';
 
   // Auth Listener
   useEffect(() => {
@@ -489,21 +586,24 @@ export default function App() {
   // Auto-verify every 10 seconds if on pending screen
   useEffect(() => {
     let interval: number;
-    const isPaid = profile?.status === 'paid';
     if (user && !isPaid) {
       interval = window.setInterval(() => {
         checkPaymentStatus(user.email);
       }, 10000);
     }
     return () => clearInterval(interval);
-  }, [user, profile?.status]);
+  }, [user, isPaid]);
 
   const checkPaymentStatus = async (userEmail: string | undefined) => {
     if (!userEmail) return;
     try {
       const res = await fetch(`/api/check-payment?email=${encodeURIComponent(userEmail)}`);
+      if (!res.ok) throw new Error("Falha ao verificar pagamento no servidor");
       const data = await res.json();
       setProfile({ status: data.isPaid ? 'paid' : 'pending' });
+      if (data.isPaid) {
+        toast.success("Pagamento identificado! Seu acesso foi liberado.");
+      }
     } catch (e) {
       console.error("Error checking payment:", e);
     }
@@ -525,99 +625,6 @@ export default function App() {
     );
   }
 
-  const isPaid = profile?.status === 'paid';
-
-  // --- AUTH VIEWS ---
-  const AuthScreen = () => {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [authLoading, setAuthLoading] = useState(false);
-
-    const handleAuth = async (e: React.FormEvent) => {
-      e.preventDefault();
-      setAuthLoading(true);
-      
-      try {
-        if (showAuth === 'signup') {
-          const { error } = await supabase.auth.signUp({ 
-            email, 
-            password,
-            options: { emailRedirectTo: window.location.origin }
-          });
-          if (error) throw error;
-          toast.success("Verifique seu e-mail para confirmar a conta!");
-        } else {
-          const { error } = await supabase.auth.signInWithPassword({ email, password });
-          if (error) throw error;
-          toast.success("Bem-vindo de volta!");
-          setShowAuth(null);
-        }
-      } catch (err: any) {
-        toast.error(err.message || "Erro no processo de autenticação");
-      } finally {
-        setAuthLoading(false);
-      }
-    };
-
-    return (
-      <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-bg-dark/95 backdrop-blur-xl transition-all">
-        <motion.div 
-          initial={{ scale: 0.9, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          className="glass w-full max-w-md p-10 py-16 rounded-[48px] border-white/5 relative shadow-2xl"
-        >
-          <button onClick={() => setShowAuth(null)} className="absolute top-8 right-8 opacity-40 hover:opacity-100 transition-opacity">
-            <X size={24} />
-          </button>
-
-          <div className="text-center mb-10">
-            <div className="bg-primary w-16 h-16 rounded-3xl flex items-center justify-center mx-auto mb-6 rotate-3 shadow-[0_0_20px_rgba(255,0,102,0.4)]">
-              <Lock className="text-white" size={24} />
-            </div>
-            <h2 className="text-4xl font-display font-black italic tracking-tighter mb-2">
-              {showAuth === 'signup' ? 'Nova Conta' : 'Área do Aluno'}
-            </h2>
-            <p className="text-sm text-gray-400 font-medium">{showAuth === 'signup' ? 'Junte-se à elite da Redação 1000' : 'Entre para continuar seus estudos'}</p>
-          </div>
-
-          <form onSubmit={handleAuth} className="space-y-4">
-            <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-widest opacity-40 ml-4 font-mono">E-mail</label>
-              <input 
-                required type="email" value={email} onChange={(e) => setEmail(e.target.value)}
-                className="w-full bg-white/5 border border-white/10 p-5 rounded-2xl focus:outline-none focus:border-primary/50 font-bold text-sm transition-all"
-                placeholder="seu@email.com"
-              />
-            </div>
-            <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-widest opacity-40 ml-4 font-mono">Senha</label>
-              <input 
-                required type="password" value={password} onChange={(e) => setPassword(e.target.value)}
-                className="w-full bg-white/5 border border-white/10 p-5 rounded-2xl focus:outline-none focus:border-primary/50 font-bold text-sm transition-all"
-                placeholder="••••••••"
-              />
-            </div>
-
-            <button 
-              disabled={authLoading}
-              className="w-full bg-primary py-5 rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-lg shadow-primary/20 transition-all hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-3 mt-4"
-            >
-              {authLoading ? <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : showAuth === 'signup' ? 'CRIAR MINHA CONTA' : 'ACESSAR AGORA'}
-            </button>
-          </form>
-
-          <div className="mt-8 text-center pt-8 border-t border-white/5">
-            <button 
-              onClick={() => setShowAuth(showAuth === 'login' ? 'signup' : 'login')}
-              className="text-[11px] font-black uppercase tracking-widest opacity-40 hover:opacity-100 transition-opacity hover:text-primary"
-            >
-              {showAuth === 'login' ? 'Ainda não tem conta? Clique aqui' : 'Já sou aluno, fazer login'}
-            </button>
-          </div>
-        </motion.div>
-      </div>
-    );
-  };
 
   if (user && isPaid) {
     return (
@@ -755,11 +762,17 @@ export default function App() {
 
   return (
     <div className="relative overflow-hidden">
-      <Toaster position="bottom-right" invert />
+      <Toaster position="bottom-right" theme="dark" />
       <Nav onAction={handleCTA} />
       
       <AnimatePresence>
-        {showAuth && <AuthScreen />}
+        {showAuth && (
+          <AuthScreen 
+            mode={showAuth} 
+            onClose={() => setShowAuth(null)} 
+            setMode={(m) => setShowAuth(m)}
+          />
+        )}
         {user && !isPaid && (
           <div className="fixed inset-0 z-[90] flex items-center justify-center p-6 bg-bg-dark/95 backdrop-blur-xl">
              <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className="text-center max-w-lg space-y-10 p-12 glass rounded-[64px] border-primary/20">
