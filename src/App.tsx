@@ -213,27 +213,89 @@ export default function App() {
 
   if (isPaid && showWelcome) {
     return (
-      <div className="min-h-screen bg-bg-dark flex items-center justify-center p-6 selection:bg-primary/30">
-        <motion.div 
-          initial={{ scale: 0.9, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          className="bento-card max-w-2xl text-center border-primary/30 shadow-[0_0_100px_rgba(255,0,102,0.15)]"
-        >
-          <div className="w-24 h-24 bg-gradient-to-tr from-primary to-secondary rounded-full flex items-center justify-center mx-auto mb-10 shadow-[0_0_50px_rgba(255,0,102,0.5)]">
-            <Trophy size={48} className="text-white" />
+      <div className="min-h-screen bg-bg-dark flex flex-col selection:bg-primary/30">
+        {/* DASHBOARD NAVBAR */}
+        <nav className="p-6 border-b border-white/5 bg-white/[0.02]">
+          <div className="max-w-7xl mx-auto flex justify-between items-center">
+             <div className="flex items-center gap-3">
+                <Trophy className="text-primary w-6 h-6" />
+                <span className="font-display font-black text-xl tracking-tighter uppercase">Área do Aluno</span>
+             </div>
+             <div className="flex items-center gap-4">
+                <div className="text-right hidden sm:block">
+                   <div className="text-[10px] font-black uppercase opacity-40">Estudante Logado</div>
+                   <div className="text-xs font-bold text-gradient">{email}</div>
+                </div>
+                <div className="w-10 h-10 rounded-full bg-primary/20 border border-primary/30 flex items-center justify-center font-black">
+                   <User size={18} />
+                </div>
+             </div>
           </div>
-          <h1 className="text-6xl font-display font-black mb-6 tracking-tighter leading-none">ACESSO <span className="text-gradient">LIBERADO!</span></h1>
-          <p className="text-xl text-gray-400 mb-12 font-medium leading-relaxed">
-            Bem-vindo ao Redação 1000 PRO. Sua conta foi atualizada e todas as funcionalidades estão desbloqueadas. Bora pro mil?
-          </p>
-          <button 
-            onClick={() => setShowWelcome(false)}
-            className="w-full bg-accent text-bg-dark py-6 rounded-[24px] font-display font-black text-xl mb-6 shadow-lg shadow-accent/20 active:scale-95 transition-all"
-          >
-            ENTRAR NO DASHBOARD
-          </button>
-          <p className="text-[10px] font-black uppercase opacity-30 italic">Acesso vitalício garantido</p>
-        </motion.div>
+        </nav>
+
+        <main className="flex-1 p-6 md:p-12">
+          <div className="max-w-7xl mx-auto">
+            <motion.div 
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              className="mb-12"
+            >
+               <h1 className="text-5xl md:text-7xl font-display font-black mb-4 tracking-tighter">BORA PRO <span className="text-gradient italic">MIL?</span> 🚀</h1>
+               <p className="text-gray-400 font-medium">Seu acesso completo está disponível. Por onde vamos começar hoje?</p>
+            </motion.div>
+
+            <div className="grid md:grid-cols-3 gap-8">
+               <motion.div 
+                 initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.1 }}
+                 className="bento-card bg-primary/5 border-primary/20 flex flex-col justify-between group"
+               >
+                  <BookOpen size={48} className="text-primary mb-12 group-hover:scale-110 transition-transform" />
+                  <div>
+                     <h3 className="text-2xl font-display font-black mb-2">Ebook Emergencial</h3>
+                     <p className="text-sm text-gray-400 mb-6 font-medium">Download do PDF com as fórmulas bloqueadas.</p>
+                     <button className="w-full bg-primary py-4 rounded-2xl font-black text-xs uppercase tracking-widest shadow-lg shadow-primary/20">BAIXAR AGORA</button>
+                  </div>
+               </motion.div>
+
+               <motion.div 
+                 initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }}
+                 className="bento-card bg-secondary/5 border-secondary/20 flex flex-col justify-between group"
+               >
+                  <MessageSquare size={48} className="text-secondary mb-12 group-hover:scale-110 transition-transform" />
+                  <div>
+                     <h3 className="text-2xl font-display font-black mb-2">Malu IA Corretora</h3>
+                     <p className="text-sm text-gray-400 mb-6 font-medium">Envie sua primeira redação para correção instantânea.</p>
+                     <button className="w-full bg-secondary py-4 rounded-2xl font-black text-xs uppercase tracking-widest shadow-lg shadow-secondary/20">ABRIR CHAT</button>
+                  </div>
+               </motion.div>
+
+               <motion.div 
+                 initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3 }}
+                 className="bento-card bg-accent/5 border-accent/20 flex flex-col justify-between group"
+               >
+                  <Trophy size={48} className="text-accent mb-12 group-hover:scale-110 transition-transform" />
+                  <div>
+                     <h3 className="text-2xl font-display font-black mb-2">Repertórios Curinga</h3>
+                     <p className="text-sm text-gray-400 mb-6 font-medium">Acesse o banco de dados completo por temas.</p>
+                     <button className="w-full bg-accent text-bg-dark py-4 rounded-2xl font-black text-xs uppercase tracking-widest shadow-lg shadow-accent/20">VER BANCO</button>
+                  </div>
+               </motion.div>
+            </div>
+
+            <div className="mt-12 p-8 glass border-white/5 rounded-[40px] flex flex-col md:flex-row items-center justify-between gap-8">
+               <div className="flex items-center gap-6">
+                  <div className="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center">
+                     <ShieldCheck size={32} className="text-success" />
+                  </div>
+                  <div>
+                     <h4 className="text-xl font-bold">Precisa de ajuda?</h4>
+                     <p className="text-sm text-gray-400">Suporte prioritário via WhatsApp para alunos PRO.</p>
+                  </div>
+               </div>
+               <button className="px-10 py-4 glass rounded-full font-black text-xs uppercase tracking-widest hover:bg-white/10 transition-all">CHAMAR SUPORTE</button>
+            </div>
+          </div>
+        </main>
       </div>
     );
   }
@@ -468,16 +530,34 @@ export default function App() {
          </div>
       </section>
 
-      <footer className="py-24 px-12 border-t border-white/5 opacity-50">
+            {/* FAQ */}
+            <section id="faq" className="mt-40">
+              <SectionHeader badge="Dúvidas comuns" title="Ficou alguma dúvida?" />
+              <div className="max-w-4xl mx-auto space-y-4">
+                {[
+                  { q: "Como meu acesso é liberado?", a: "Usamos tecnologia de Webhook. Assim que a Kiwify confirma o pagamento, nosso servidor libera seu e-mail automaticamente. Se você estiver com a página aberta, ela atualiza sozinha em segundos." },
+                  { q: "A IA realmente corrige bem?", a: "Sim! A Malu foi treinada com o banco de dados oficial do INEP para identificar as 5 competências. Ela não substitui um professor, mas te dá feedback 24h por dia para você treinar exaustivamente." }
+                ].map((faq, i) => (
+                  <div key={i} className="glass p-8 rounded-[32px] border-white/5">
+                    <h4 className="text-xl font-bold mb-4 flex items-center gap-3">
+                       <Lightbulb className="text-accent" size={20} />
+                       {faq.q}
+                    </h4>
+                    <p className="text-gray-400 font-medium leading-relaxed">{faq.a}</p>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+      <footer className="mt-40 py-24 px-12 border-t border-white/5 opacity-50">
          <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-10">
             <div className="flex items-center gap-2">
                <Trophy size={20} className="text-primary" />
-               <span className="font-display font-black text-xl tracking-tighter">RED 1000 PRO</span>
+               <span className="font-display font-black text-xl tracking-tighter uppercase">RED 1000 PRO</span>
             </div>
             <div className="flex gap-10 text-[10px] font-black uppercase tracking-widest text-gray-500">
-               <a href="#">Privacidade</a>
-               <a href="#">Termos</a>
-               <a href="#" className="text-primary">contato@redacao1000pro.com</a>
+               <span>© 2024 • MatheuS 1000 PRO</span>
+               <a href="#" className="text-primary hover:underline">contato@redacao1000pro.com</a>
             </div>
          </div>
       </footer>
