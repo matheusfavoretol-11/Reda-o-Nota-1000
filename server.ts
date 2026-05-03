@@ -30,8 +30,11 @@ async function startServer() {
 
   app.use(express.json());
 
-  console.log("Current NODE_ENV:", process.env.NODE_ENV);
-  console.log("Supabase URL in server:", process.env.VITE_SUPABASE_URL ? "Defined" : "Undefined");
+  console.log("--- SERVER INITIALIZATION ---");
+  console.log("NODE_ENV:", process.env.NODE_ENV);
+  console.log("VITE_SUPABASE_URL present:", !!process.env.VITE_SUPABASE_URL);
+  console.log("VITE_SUPABASE_ANON_KEY present:", !!process.env.VITE_SUPABASE_ANON_KEY);
+  console.log("-----------------------------");
 
   // AI Correction Endpoint (Proxied for security)
   app.post("/api/correct", async (req, res) => {

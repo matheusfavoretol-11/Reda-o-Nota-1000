@@ -6,6 +6,12 @@ import {defineConfig, loadEnv} from 'vite';
 export default defineConfig(({mode}) => {
   const env = loadEnv(mode, process.cwd(), '');
   
+  console.log('--- VITE CONFIG DEBUG ---');
+  console.log('Mode:', mode);
+  console.log('Keys in LoadEnv:', Object.keys(env).filter(k => k.startsWith('VITE_')));
+  console.log('Keys in ProcessEnv:', Object.keys(process.env).filter(k => k.startsWith('VITE_')));
+  console.log('-------------------------');
+  
   // Garantir que as variáveis do Supabase estejam presentes e sejam strings
   const supabaseUrl = env.VITE_SUPABASE_URL || process.env.VITE_SUPABASE_URL || "";
   const supabaseAnonKey = env.VITE_SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY || "";
