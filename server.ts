@@ -1,3 +1,4 @@
+import "dotenv/config";
 import express from "express";
 import { createServer as createViteServer } from "vite";
 import path from "path";
@@ -21,6 +22,9 @@ async function startServer() {
   const PORT = 3000;
 
   app.use(express.json());
+
+  console.log("Current NODE_ENV:", process.env.NODE_ENV);
+  console.log("Supabase URL in server:", process.env.VITE_SUPABASE_URL ? "Defined" : "Undefined");
 
   // AI Correction Endpoint (Proxied for security)
   app.post("/api/correct", async (req, res) => {
