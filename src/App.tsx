@@ -30,6 +30,8 @@ import {
 import { motion, AnimatePresence } from 'motion/react';
 import { useState, useEffect } from 'react';
 import Markdown from 'react-markdown';
+import { Toaster, toast } from 'sonner';
+import { supabase } from './lib/supabase';
 import { correctEssay } from './services/aiService';
 
 // --- CONFIG ---
@@ -442,72 +444,151 @@ const RepertoireView = () => {
 }
 
 export default function App() {
-  const [isPaid, setIsPaid] = useState(false);
-  const [showWelcome, setShowWelcome] = useState(false);
-  const [email, setEmail] = useState("");
-  const [isChecking, setIsChecking] = useState(false);
+  const [user, setUser] = useState<any>(null);
+  const [profile, setProfile] = useState<{ status: string } | null>(null);
+  const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<'overview' | 'ebook' | 'ia' | 'repertorios'>('overview');
+  const [showAuth, setShowAuth] = useState<'login' | 'signup' | null>(null);
 
-  // Poll for payment status if email is set
+  // Auth Listener
   useEffect(() => {
-    let interval: number;
-    if (email && !isPaid) {
-      interval = window.setInterval(async () => {
-        try {
-          const res = await fetch(`/api/check-payment?email=${encodeURIComponent(email)}`);
-          const data = await res.json();
-          if (data.isPaid) {
-            setIsPaid(true);
-            setShowWelcome(true);
-            setIsChecking(false);
-          }
-        } catch (e) {
-          console.error("Error checking payment:", e);
-        }
-      }, 3000); // Check every 3 seconds
-    }
-    return () => clearInterval(interval);
-  }, [email, isPaid]);
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null);
+      if (session?.user) checkPaymentStatus(session.user.email);
+      setLoading(false);
+    });
 
-  const handleCheckout = () => {
-    if (!email) {
-      alert("Por favor, digite seu e-mail para continuar para o checkout.");
-      const emailInput = document.getElementById('email-input');
-      emailInput?.scrollIntoView({ behavior: 'smooth' });
-      emailInput?.focus();
-      return;
-    }
-    
-    // REDIRECIONAMENTO IMEDIATO PARA KIWIFY
-    setIsChecking(true);
-    
-    // Concatenando e-mail para facilitar o preenchimento no checkout
-    const url = new URL(KIWIFY_CHECKOUT_URL);
-    url.searchParams.append('email', email);
-    
-    window.location.href = url.toString();
-  };
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+      if (session?.user) checkPaymentStatus(session.user.email);
+      else setProfile(null);
+    });
 
-  const simulateWebhook = async () => {
-    if (!email) return alert("Digite um email primeiro!");
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const checkPaymentStatus = async (userEmail: string | undefined) => {
+    if (!userEmail) return;
     try {
-      await fetch('/api/kiwify-webhook', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          order_status: 'paid',
-          customer: { email }
-        })
-      });
-      alert("Webhook simulado enviado! O acesso será liberado em instantes...");
+      const res = await fetch(`/api/check-payment?email=${encodeURIComponent(userEmail)}`);
+      const data = await res.json();
+      setProfile({ status: data.isPaid ? 'paid' : 'pending' });
     } catch (e) {
-      alert("Erro ao simular webhook");
+      console.error("Error checking payment:", e);
     }
   };
 
-  if (isPaid && showWelcome) {
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    toast.success("Sessão encerrada!");
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-bg-dark flex items-center justify-center">
+        <div className="w-12 h-12 border-4 border-primary/20 border-t-primary rounded-full animate-spin" />
+      </div>
+    );
+  }
+
+  const isPaid = profile?.status === 'paid';
+
+  // --- AUTH VIEWS ---
+  const AuthScreen = () => {
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [authLoading, setAuthLoading] = useState(false);
+
+    const handleAuth = async (e: React.FormEvent) => {
+      e.preventDefault();
+      setAuthLoading(true);
+      
+      try {
+        if (showAuth === 'signup') {
+          const { error } = await supabase.auth.signUp({ 
+            email, 
+            password,
+            options: { emailRedirectTo: window.location.origin }
+          });
+          if (error) throw error;
+          toast.success("Verifique seu e-mail para confirmar a conta!");
+        } else {
+          const { error } = await supabase.auth.signInWithPassword({ email, password });
+          if (error) throw error;
+          toast.success("Bem-vindo de volta!");
+          setShowAuth(null);
+        }
+      } catch (err: any) {
+        toast.error(err.message || "Erro no processo de autenticação");
+      } finally {
+        setAuthLoading(false);
+      }
+    };
+
+    return (
+      <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-bg-dark/95 backdrop-blur-xl transition-all">
+        <motion.div 
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          className="glass w-full max-w-md p-10 py-16 rounded-[48px] border-white/5 relative shadow-2xl"
+        >
+          <button onClick={() => setShowAuth(null)} className="absolute top-8 right-8 opacity-40 hover:opacity-100 transition-opacity">
+            <X size={24} />
+          </button>
+
+          <div className="text-center mb-10">
+            <div className="bg-primary w-16 h-16 rounded-3xl flex items-center justify-center mx-auto mb-6 rotate-3 shadow-[0_0_20px_rgba(255,0,102,0.4)]">
+              <Lock className="text-white" size={24} />
+            </div>
+            <h2 className="text-4xl font-display font-black italic tracking-tighter mb-2">
+              {showAuth === 'signup' ? 'Nova Conta' : 'Área do Aluno'}
+            </h2>
+            <p className="text-sm text-gray-400 font-medium">{showAuth === 'signup' ? 'Junte-se à elite da Redação 1000' : 'Entre para continuar seus estudos'}</p>
+          </div>
+
+          <form onSubmit={handleAuth} className="space-y-4">
+            <div className="space-y-2">
+              <label className="text-[10px] font-black uppercase tracking-widest opacity-40 ml-4 font-mono">E-mail</label>
+              <input 
+                required type="email" value={email} onChange={(e) => setEmail(e.target.value)}
+                className="w-full bg-white/5 border border-white/10 p-5 rounded-2xl focus:outline-none focus:border-primary/50 font-bold text-sm transition-all"
+                placeholder="seu@email.com"
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-[10px] font-black uppercase tracking-widest opacity-40 ml-4 font-mono">Senha</label>
+              <input 
+                required type="password" value={password} onChange={(e) => setPassword(e.target.value)}
+                className="w-full bg-white/5 border border-white/10 p-5 rounded-2xl focus:outline-none focus:border-primary/50 font-bold text-sm transition-all"
+                placeholder="••••••••"
+              />
+            </div>
+
+            <button 
+              disabled={authLoading}
+              className="w-full bg-primary py-5 rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-lg shadow-primary/20 transition-all hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-3 mt-4"
+            >
+              {authLoading ? <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : showAuth === 'signup' ? 'CRIAR MINHA CONTA' : 'ACESSAR AGORA'}
+            </button>
+          </form>
+
+          <div className="mt-8 text-center pt-8 border-t border-white/5">
+            <button 
+              onClick={() => setShowAuth(showAuth === 'login' ? 'signup' : 'login')}
+              className="text-[11px] font-black uppercase tracking-widest opacity-40 hover:opacity-100 transition-opacity hover:text-primary"
+            >
+              {showAuth === 'login' ? 'Ainda não tem conta? Clique aqui' : 'Já sou aluno, fazer login'}
+            </button>
+          </div>
+        </motion.div>
+      </div>
+    );
+  };
+
+  if (user && isPaid) {
     return (
       <div className="min-h-screen bg-bg-dark flex flex-col selection:bg-primary/30">
+        <Toaster position="bottom-right" invert />
         {/* DASHBOARD NAVBAR */}
         <nav className="p-6 border-b border-white/5 bg-white/[0.02]">
           <div className="max-w-7xl mx-auto flex justify-between items-center">
@@ -515,14 +596,14 @@ export default function App() {
                 <Trophy className="text-primary w-6 h-6 shadow-[0_0_20px_rgba(255,0,102,0.5)]" />
                 <span className="font-display font-black text-xl tracking-tighter uppercase">Área do <span className="text-primary italic">Aluno</span></span>
              </button>
-             <div className="flex items-center gap-4">
+             <div className="flex items-center gap-6">
                 <div className="text-right hidden sm:block">
                    <div className="text-[10px] font-black uppercase opacity-40">Estudante Logado</div>
-                   <div className="text-xs font-bold text-gradient">{email}</div>
+                   <div className="text-xs font-bold text-gradient">{user.email}</div>
                 </div>
-                <div className="w-10 h-10 rounded-full bg-primary/20 border border-primary/30 flex items-center justify-center font-black">
-                   <User size={18} />
-                </div>
+                <button onClick={handleLogout} className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 transition-colors">
+                   <X size={18} className="opacity-40" />
+                </button>
              </div>
           </div>
         </nav>
@@ -614,9 +695,56 @@ export default function App() {
     );
   }
 
+  const handleCTA = () => {
+    if (user) {
+      if (isPaid) setActiveTab('overview');
+      else {
+        const url = new URL(KIWIFY_CHECKOUT_URL);
+        url.searchParams.append('email', user.email);
+        window.location.href = url.toString();
+      }
+    } else {
+      setShowAuth('signup');
+    }
+  };
+
   return (
     <div className="relative overflow-hidden">
-      <Nav onAction={handleCheckout} />
+      <Toaster position="bottom-right" invert />
+      <Nav onAction={handleCTA} />
+      
+      <AnimatePresence>
+        {showAuth && <AuthScreen />}
+        {user && !isPaid && (
+          <div className="fixed inset-0 z-[90] flex items-center justify-center p-6 bg-bg-dark/95 backdrop-blur-xl">
+             <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className="text-center max-w-lg space-y-10 p-12 glass rounded-[64px] border-primary/20">
+                <div className="bg-primary/20 w-24 h-24 rounded-[40px] flex items-center justify-center mx-auto shadow-[0_0_40px_rgba(255,0,102,0.3)] border border-primary/30">
+                   <AlertTriangle className="text-primary" size={48} />
+                </div>
+                <div className="space-y-4">
+                   <h2 className="text-4xl font-display font-black italic tracking-tighter leading-tight">Pagamento <br/> <span className="text-gradient">não identificado.</span></h2>
+                   <p className="text-gray-400 font-medium">Lamentamos, mas não encontramos uma assinatura ativa para o e-mail: <b>{user.email}</b>. Libere seu acesso agora:</p>
+                </div>
+                <div className="space-y-4">
+                  <button 
+                    onClick={() => {
+                      const url = new URL(KIWIFY_CHECKOUT_URL);
+                      url.searchParams.append('email', user.email);
+                      window.location.href = url.toString();
+                    }}
+                    className="w-full bg-primary py-6 rounded-3xl font-black text-sm uppercase tracking-widest shadow-lg shadow-primary/20 transition-all hover:scale-105"
+                  >
+                    FINALIZAR COMPRA (R$ 49,90)
+                  </button>
+                  <button onClick={handleLogout} className="text-[10px] font-black uppercase tracking-widest opacity-40 hover:opacity-100 transition-opacity">Sair da conta</button>
+                </div>
+                <div className="pt-8 border-t border-white/5">
+                   <p className="text-[9px] font-black uppercase tracking-[0.2em] opacity-30">Acesso imediato via Kiwify após aprovação</p>
+                </div>
+             </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
       
       {/* GLOWS */}
       <div className="fixed inset-0 z-[-1]">
@@ -651,11 +779,10 @@ export default function App() {
             
             <div className="flex flex-col sm:flex-row items-center gap-8">
               <button 
-                onClick={handleCheckout}
-                disabled={isChecking}
-                className="w-full sm:w-auto bg-primary text-white p-8 px-14 rounded-[40px] text-2xl font-display font-black flex items-center justify-center gap-4 hover:scale-110 hover:shadow-[0_30px_60px_rgba(255,0,102,0.4)] transition-all active:scale-95 group disabled:opacity-50"
+                onClick={handleCTA}
+                className="w-full sm:w-auto bg-primary text-white p-8 px-14 rounded-[40px] text-2xl font-display font-black flex items-center justify-center gap-4 hover:scale-110 hover:shadow-[0_30px_60px_rgba(255,0,102,0.4)] transition-all active:scale-95 group"
               >
-                {isChecking ? "CARREGANDO..." : "COMEÇAR AGORA"} <ArrowRight className="group-hover:translate-x-2 transition-transform" size={28} />
+                COMEÇAR AGORA <ArrowRight className="group-hover:translate-x-2 transition-transform" size={28} />
               </button>
               
               <div className="flex flex-col gap-2 items-center sm:items-start group">
@@ -794,46 +921,13 @@ export default function App() {
                <p className="text-[10px] font-black uppercase tracking-[0.4em] opacity-30 mt-4 underline decoration-primary underline-offset-8">Pagamento Único • Acesso na Hora</p>
             </div>
 
-            <div className="max-w-md mx-auto mb-10 space-y-4">
-              <div className="relative group">
-                <div className="absolute inset-x-0 bottom-0 h-px bg-white/10 group-focus-within:bg-primary transition-colors" />
-                <input 
-                  id="email-input"
-                  type="email" 
-                  placeholder="Seu melhor e-mail..." 
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full bg-transparent p-6 text-center text-xl font-display font-black placeholder:opacity-20 focus:outline-none"
-                />
-              </div>
-              {isChecking && (
-                <motion.div 
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="text-xs font-black uppercase tracking-widest text-primary animate-pulse"
-                >
-                  ⌛ Aguardando confirmação do pagamento...
-                </motion.div>
-              )}
-            </div>
-
-            <button 
-              onClick={handleCheckout}
-              disabled={isChecking}
-              className="w-full bg-white text-bg-dark py-10 rounded-[48px] text-3xl font-display font-black hover:scale-105 active:scale-95 transition-all shadow-[0_30px_100px_rgba(255,255,255,0.15)] mb-6 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {isChecking ? "REDIRECIONANDO..." : "GARANTE MEU 1000 AGORA!"}
-            </button>
-
-            {/* DEV ONLY: SIMULAÇÃO */}
-            <div className="mt-4 p-4 border border-dashed border-white/10 rounded-2xl">
-               <p className="text-[9px] font-black uppercase opacity-30 mb-2 tracking-widest">Área do Desenvolvedor (Simulação)</p>
-               <button 
-                 onClick={simulateWebhook}
-                 className="text-[10px] font-black uppercase tracking-widest text-primary hover:opacity-100 opacity-60 transition-opacity"
-               >
-                 [ CLIQUE AQUI PARA SIMULAR WEBHOOK DA KIWIFY ]
-               </button>
+            <div className="max-w-md mx-auto mb-10 pt-8">
+              <button 
+                onClick={handleCTA}
+                className="w-full bg-primary text-white py-10 rounded-[48px] text-3xl font-display font-black hover:scale-105 active:scale-95 transition-all shadow-[0_30px_100px_rgba(255,0,102,0.3)] group flex items-center justify-center gap-4"
+              >
+                QUERO MEU 1000 AGORA! <ArrowRight className="group-hover:translate-x-2 transition-transform" size={32} />
+              </button>
             </div>
             
             <div className="mt-16 flex justify-center gap-10 opacity-30 text-[10px] font-black uppercase tracking-[0.3em]">
@@ -849,7 +943,7 @@ export default function App() {
               <SectionHeader badge="Dúvidas comuns" title="Ficou alguma dúvida?" />
               <div className="max-w-4xl mx-auto space-y-4">
                 {[
-                  { q: "Como meu acesso é liberado?", a: "Usamos tecnologia de Webhook. Assim que a Kiwify confirma o pagamento, nosso servidor libera seu e-mail automaticamente. Se você estiver com a página aberta, ela atualiza sozinha em segundos." },
+                  { q: "Como meu acesso é liberado?", a: "Usamos tecnologia de Webhook oficial. Assim que a Kiwify confirma o pagamento, seu acesso é liberado instantaneamente. Basta fazer login com o e-mail usado na compra e pronto, o Dashboard estará desbloqueado." },
                   { q: "A IA realmente corrige bem?", a: "Sim! A Malu foi treinada com o banco de dados oficial do INEP para identificar as 5 competências. Ela não substitui um professor, mas te dá feedback 24h por dia para você treinar exaustivamente." }
                 ].map((faq, i) => (
                   <div key={i} className="glass p-8 rounded-[32px] border-white/5">

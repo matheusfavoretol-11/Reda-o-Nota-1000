@@ -2,9 +2,15 @@ import express from "express";
 import { createServer as createViteServer } from "vite";
 import path from "path";
 import { fileURLToPath } from "url";
+import { createClient } from "@supabase/supabase-js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+// Supabase Setup
+const supabaseUrl = process.env.VITE_SUPABASE_URL || "";
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || "";
+const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
 async function startServer() {
   const app = express();
@@ -12,36 +18,59 @@ async function startServer() {
 
   app.use(express.json());
 
-  // In-memory store for demonstration purposes
-  // In a real app, use a database (Firebase, SQLite, PostgreSQL)
-  const paidEmails = new Set<string>();
-
   // Kiwify Webhook Endpoint
-  app.post("/api/kiwify-webhook", (req, res) => {
-    const { order_status, customer } = req.body;
+  app.post("/api/kiwify-webhook", async (req, res) => {
+    const { order_status, customer, order_id } = req.body;
 
     console.log("Kiwify Webhook received:", req.body);
 
     if (order_status === "paid" || order_status === "approved" || order_status === "completed") {
       if (customer && customer.email) {
-        paidEmails.add(customer.email.toLowerCase());
-        console.log(`Payment confirmed for: ${customer.email}`);
+        const email = customer.email.toLowerCase();
+        
+        try {
+          const { error } = await supabase
+            .from('payments')
+            .upsert({ 
+              email: email, 
+              status: order_status,
+              order_id: order_id || 'unknown',
+              updated_at: new Date()
+            }, { onConflict: 'email' });
+
+          if (error) {
+            console.error("Error saving to Supabase:", error);
+          } else {
+            console.log(`Payment confirmed and saved for: ${email}`);
+          }
+        } catch (e) {
+          console.error("Supabase Operation Failed:", e);
+        }
       }
     }
 
-    // Always respond with 200 to acknowledge receipt
     res.status(200).send("OK");
   });
 
   // Check payment status
-  app.get("/api/check-payment", (req, res) => {
+  app.get("/api/check-payment", async (req, res) => {
     const email = req.query.email as string;
     if (!email) {
       return res.status(400).json({ error: "Email is required" });
     }
 
-    const isPaid = paidEmails.has(email.toLowerCase());
-    res.json({ isPaid });
+    try {
+      const { data, error } = await supabase
+        .from('payments')
+        .select('status')
+        .eq('email', email.toLowerCase())
+        .single();
+
+      const isPaid = !!data && (data.status === "paid" || data.status === "approved" || data.status === "completed");
+      res.json({ isPaid });
+    } catch (e) {
+      res.json({ isPaid: false });
+    }
   });
 
   // Vite integration
