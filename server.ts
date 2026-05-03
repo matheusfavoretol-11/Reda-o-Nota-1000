@@ -3,6 +3,7 @@ import { createServer as createViteServer } from "vite";
 import path from "path";
 import { fileURLToPath } from "url";
 import { createClient } from "@supabase/supabase-js";
+import { GoogleGenAI } from "@google/genai";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -12,11 +13,47 @@ const supabaseUrl = process.env.VITE_SUPABASE_URL || "";
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || "";
 const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
+// Gemini Setup
+const genAI = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || "" });
+
 async function startServer() {
   const app = express();
   const PORT = 3000;
 
   app.use(express.json());
+
+  // AI Correction Endpoint (Proxied for security)
+  app.post("/api/correct", async (req, res) => {
+    const { text } = req.body;
+    if (!text) return res.status(400).json({ error: "No text provided" });
+
+    try {
+      const systemInstruction = `Você é a Malu, uma especialista em correção de redação do ENEM.
+Seu estilo é ÚNICO: você é extremamente engraçada, descontraída, usa gírias modernas, mas na hora de corrigir, você é CIRÚRGICA e CORRETA.  
+
+Diretrizes:
+1. Analise o texto com base nas 5 competências do ENEM.
+2. Dê uma nota aproximada (0-1000).
+3. Faça apontamentos sobre erros de gramática, tese fraca, falta de repertório ou conclusão incompleta.
+4. Use um tom de "melhor amiga sincerona" ou "professora gente boa que não aguenta mais ver erro bobo".
+5. Seja motivadora no final, mas não passe a mão na cabeça se o texto estiver ruim.
+
+Formato da resposta:
+- Comece com uma reação inicial engraçada ao texto.
+- Use seções claras (mas com nomes divertidos) para cada competência.
+- Termine com um "Veredito da Malu" (Nota e Plano de Ação).`;
+
+      const response = await genAI.models.generateContent({
+        model: "gemini-3-flash-preview",
+        contents: `${systemInstruction}\n\nTexto para correção:\n${text}`,
+      });
+
+      res.json({ feedback: response.text });
+    } catch (error) {
+      console.error("AI Error:", error);
+      res.status(500).json({ error: "Erro ao processar a correção pela Malu." });
+    }
+  });
 
   // Kiwify Webhook Endpoint
   app.post("/api/kiwify-webhook", async (req, res) => {

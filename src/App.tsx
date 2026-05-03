@@ -25,7 +25,8 @@ import {
   Scale,
   Globe,
   User,
-  Plus
+  Plus,
+  RefreshCw
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useState, useEffect } from 'react';
@@ -449,6 +450,7 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<'overview' | 'ebook' | 'ia' | 'repertorios'>('overview');
   const [showAuth, setShowAuth] = useState<'login' | 'signup' | null>(null);
+  const [isVerifying, setIsVerifying] = useState(false);
 
   // Auth Listener
   useEffect(() => {
@@ -466,6 +468,18 @@ export default function App() {
 
     return () => subscription.unsubscribe();
   }, []);
+
+  // Auto-verify every 10 seconds if on pending screen
+  useEffect(() => {
+    let interval: number;
+    const isPaid = profile?.status === 'paid';
+    if (user && !isPaid) {
+      interval = window.setInterval(() => {
+        checkPaymentStatus(user.email);
+      }, 10000);
+    }
+    return () => clearInterval(interval);
+  }, [user, profile?.status]);
 
   const checkPaymentStatus = async (userEmail: string | undefined) => {
     if (!userEmail) return;
@@ -708,6 +722,17 @@ export default function App() {
     }
   };
 
+  const manualVerify = async () => {
+    setIsVerifying(true);
+    await checkPaymentStatus(user?.email);
+    setIsVerifying(false);
+    if (!profile?.status || profile.status === 'pending') {
+      toast.info("Ainda não identificamos seu pagamento. Pode levar alguns minutos.");
+    } else {
+      toast.success("Pagamento identificado! Divirta-se.");
+    }
+  };
+
   return (
     <div className="relative overflow-hidden">
       <Toaster position="bottom-right" invert />
@@ -736,10 +761,18 @@ export default function App() {
                   >
                     FINALIZAR COMPRA (R$ 49,90)
                   </button>
+                  <button 
+                    onClick={manualVerify}
+                    disabled={isVerifying}
+                    className="w-full glass py-5 rounded-3xl font-black text-[10px] uppercase tracking-widest hover:bg-white/10 flex items-center justify-center gap-2"
+                  >
+                    {isVerifying ? <div className="w-3 h-3 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : <RefreshCw size={14} />}
+                    VERIFICAR PAGAMENTO NOVAMENTE
+                  </button>
                   <button onClick={handleLogout} className="text-[10px] font-black uppercase tracking-widest opacity-40 hover:opacity-100 transition-opacity">Sair da conta</button>
                 </div>
                 <div className="pt-8 border-t border-white/5">
-                   <p className="text-[9px] font-black uppercase tracking-[0.2em] opacity-30">Acesso imediato via Kiwify após aprovação</p>
+                   <p className="text-[9px] font-black uppercase tracking-[0.2em] opacity-30 italic">Acesso imediato via Kiwify após aprovação. <br/>Verificamos seu status a cada 10 segundos.</p>
                 </div>
              </motion.div>
           </div>
