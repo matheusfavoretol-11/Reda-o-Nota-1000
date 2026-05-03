@@ -30,6 +30,19 @@
   .bento-card {
     @apply bg-white/[0.03] backdrop-blur-3xl border border-white/[0.06] transition-all duration-700 hover:shadow-[0_0_80px_rgba(255,51,102,0.12)] hover:border-white/10 active:scale-[0.98] p-10 rounded-[56px] overflow-hidden;
   }
+
+  .markdown-body {
+    @apply space-y-6 text-gray-300;
+    h1 { @apply text-3xl font-display font-black text-white italic tracking-tighter; }
+    h2 { @apply text-2xl font-display font-black text-primary italic tracking-tighter mt-10; }
+    h3 { @apply text-xl font-display font-black text-secondary italic tracking-tighter mt-8; }
+    p { @apply leading-relaxed text-sm font-medium; }
+    ul { @apply list-disc list-outside ml-6 space-y-2 text-sm font-medium; }
+    ol { @apply list-decimal list-outside ml-6 space-y-2 text-sm font-medium; }
+    strong { @apply text-white font-bold; }
+    code { @apply bg-white/10 p-1 px-2 rounded-md text-xs font-mono text-accent; }
+    blockquote { @apply border-l-4 border-primary/50 pl-6 py-2 italic bg-primary/5 rounded-r-2xl; }
+  }
 }
 
 /* Custom Animations */
