@@ -448,22 +448,39 @@ export default function App() {
   const [user, setUser] = useState<any>(null);
   const [profile, setProfile] = useState<{ status: string } | null>(null);
   const [loading, setLoading] = useState(true);
+  const [checkingPayment, setCheckingPayment] = useState(false);
   const [activeTab, setActiveTab] = useState<'overview' | 'ebook' | 'ia' | 'repertorios'>('overview');
   const [showAuth, setShowAuth] = useState<'login' | 'signup' | null>(null);
   const [isVerifying, setIsVerifying] = useState(false);
 
   // Auth Listener
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null);
-      if (session?.user) checkPaymentStatus(session.user.email);
+    const initAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      const currentUser = session?.user ?? null;
+      setUser(currentUser);
+      
+      if (currentUser) {
+        setCheckingPayment(true);
+        await checkPaymentStatus(currentUser.email);
+        setCheckingPayment(false);
+      }
       setLoading(false);
-    });
+    };
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
-      if (session?.user) checkPaymentStatus(session.user.email);
-      else setProfile(null);
+    initAuth();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
+      const currentUser = session?.user ?? null;
+      setUser(currentUser);
+      
+      if (currentUser) {
+        setCheckingPayment(true);
+        await checkPaymentStatus(currentUser.email);
+        setCheckingPayment(false);
+      } else {
+        setProfile(null);
+      }
     });
 
     return () => subscription.unsubscribe();
@@ -497,10 +514,13 @@ export default function App() {
     toast.success("Sessão encerrada!");
   };
 
-  if (loading) {
+  if (loading || checkingPayment) {
     return (
       <div className="min-h-screen bg-bg-dark flex items-center justify-center">
-        <div className="w-12 h-12 border-4 border-primary/20 border-t-primary rounded-full animate-spin" />
+        <div className="flex flex-col items-center gap-6">
+          <div className="w-12 h-12 border-4 border-primary/20 border-t-primary rounded-full animate-spin" />
+          <div className="text-[10px] font-black uppercase tracking-widest opacity-40 animate-pulse">Sincronizando Acesso...</div>
+        </div>
       </div>
     );
   }
