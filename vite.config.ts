@@ -13,8 +13,21 @@ export default defineConfig(({mode}) => {
   console.log('-------------------------');
   
   // Garantir que as variáveis do Supabase estejam presentes e sejam strings
-  const supabaseUrl = env.VITE_SUPABASE_URL || process.env.VITE_SUPABASE_URL || "";
-  const supabaseAnonKey = env.VITE_SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY || "";
+  let supabaseUrl = (env.VITE_SUPABASE_URL || process.env.VITE_SUPABASE_URL || "").trim().replace(/^["']|["']$/g, "");
+  let supabaseAnonKey = (env.VITE_SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY || "").trim().replace(/^["']|["']$/g, "");
+
+  // Limpar a URL para garantir que contenha apenas o domínio base (ex: https://xyz.supabase.co)
+  if (supabaseUrl) {
+    try {
+      const url = new URL(supabaseUrl);
+      supabaseUrl = url.origin;
+    } catch (e) {
+      // Se não for uma URL válida, removemos apenas a barra final se existir
+      if (supabaseUrl.endsWith('/')) {
+        supabaseUrl = supabaseUrl.slice(0, -1);
+      }
+    }
+  }
 
   return {
     plugins: [react(), tailwindcss()],

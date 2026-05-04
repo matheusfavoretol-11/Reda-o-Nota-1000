@@ -12,7 +12,7 @@ if (typeof window !== 'undefined') {
 }
 
 if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
-  console.warn("Supabase configuration missing or invalid. URL:", SUPABASE_URL);
+  console.warn("Supabase configuration missing or invalid. Please set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in the Environment Variables settings.");
 }
 
 // Ensure the URL is valid by providing a fallback only to prevent constructor crash

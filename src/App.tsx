@@ -42,7 +42,7 @@ const KIWIFY_CHECKOUT_URL = "https://pay.kiwify.com.br/AhSL8x0";
 const TESTIMONIALS = [
   { name: "Lucas", age: 17, note: 940, text: "Essa IA é insana. Ela me zoou por repetir palavras, mas foi o que me fez entender onde eu tava errando HAHA!", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Lucas" },
   { name: "Ana Clara", age: 18, note: 920, text: "Eu não saia do 600. Com as fórmulas prontas, meu texto fluiu em 40 minutos.", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Ana" },
-  { name: "Rafael", age: 17, note: 900, text: "Paguei R$ 49 e tive mais correção que no cursinho de R$ 600. Custo-benefício imbatível.", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Rafael" }
+  { name: "Rafael", age: 17, note: 900, text: "Paguei R$ 27 e tive mais correção que no cursinho de R$ 600. Custo-benefício imbatível.", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Rafael" }
 ];
 
 // --- COMPONENTS ---
@@ -453,6 +453,20 @@ const AuthScreen = ({ mode, onClose, setMode }: { mode: 'login' | 'signup', onCl
 
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Check for Supabase configuration
+    const url = import.meta.env.VITE_SUPABASE_URL;
+    const key = import.meta.env.VITE_SUPABASE_ANON_KEY;
+    const hasUrl = url && url !== "https://missing-url.supabase.co";
+    const hasKey = key && key !== "missing-key";
+
+    if (!hasUrl || !hasKey) {
+      const missing = !hasUrl && !hasKey ? "URL e Key" : !hasUrl ? "URL" : "Key";
+      toast.error(`Atenção: A variável VITE_SUPABASE_${missing === 'URL e Key' ? 'URL e VITE_SUPABASE_ANON_KEY' : missing} está vazia.`);
+      console.warn("Configurações atuais:", { url, key });
+      return;
+    }
+
     setAuthLoading(true);
     
     try {
@@ -472,7 +486,14 @@ const AuthScreen = ({ mode, onClose, setMode }: { mode: 'login' | 'signup', onCl
       }
     } catch (err: any) {
       console.error("Auth process error:", err);
-      toast.error(err.message || "Erro no processo de autenticação");
+    if (err.message === "Failed to fetch") {
+        toast.error("Erro de conexão (Failed to fetch). Verifique se a URL do Supabase está correta e se você não está bloqueado por firewall ou VPN.");
+        console.error("Connectivity issue with Supabase. Check URL:", import.meta.env.VITE_SUPABASE_URL);
+      } else if (err.message?.includes("Invalid login credentials")) {
+        toast.error("E-mail ou senha incorretos.");
+      } else {
+        toast.error(err.message || "Erro no processo de autenticação");
+      }
     } finally {
       setAuthLoading(false);
     }
@@ -792,7 +813,7 @@ export default function App() {
                     }}
                     className="w-full bg-primary py-6 rounded-3xl font-black text-sm uppercase tracking-widest shadow-lg shadow-primary/20 transition-all hover:scale-105"
                   >
-                    FINALIZAR COMPRA (R$ 49,90)
+                    FINALIZAR COMPRA (R$ 27,90)
                   </button>
                   <button 
                     onClick={manualVerify}
@@ -855,7 +876,7 @@ export default function App() {
                 <div className="flex gap-1">
                   {[...Array(5)].map((_, i) => <Star key={i} size={16} className="fill-accent text-accent" />)}
                 </div>
-                <div className="text-[11px] font-black uppercase tracking-[0.2em] text-white/40">Pagamento Único • R$ 49,90</div>
+                <div className="text-[11px] font-black uppercase tracking-[0.2em] text-white/40">Pagamento Único • R$ 27,90</div>
               </div>
             </div>
           </motion.div>
@@ -983,7 +1004,7 @@ export default function App() {
             
             <div className="mb-16">
                <p className="text-2xl font-display font-medium line-through opacity-20 mb-2">R$ 197,00</p>
-               <p className="text-7xl font-display font-black">R$ 49,90</p>
+               <p className="text-7xl font-display font-black">R$ 27,90</p>
                <p className="text-[10px] font-black uppercase tracking-[0.4em] opacity-30 mt-4 underline decoration-primary underline-offset-8">Pagamento Único • Acesso na Hora</p>
             </div>
 
