@@ -8,19 +8,22 @@ let config = (window as any).__SUPABASE_CONFIG__ || {
 };
 
 const cleanUrl = (url: string) => {
-  if (!url || !url.startsWith('http')) return "";
+  if (!url || typeof url !== 'string') return "";
+  let target = url.trim();
+  if (!target.startsWith('http')) {
+    target = `https://${target}`;
+  }
   try {
-    const urlObj = new URL(url);
-    // Retorna apenas origin (protoclo + host), removendo caminhos como /rest/v1 se o usuário colou errado
+    const urlObj = new URL(target);
     return urlObj.origin;
   } catch (e) {
-    return url.replace(/\/+$/, ""); // Fallback: remove barras no final
+    return target.replace(/\/+$/, "");
   }
 };
 
 const getSafeUrl = (url: string) => {
   const cleaned = cleanUrl(url);
-  return cleaned || "https://missing-url.supabase.co";
+  return (cleaned && cleaned.includes('supabase.co')) ? cleaned : "https://missing-url.supabase.co";
 };
 
 const getSafeKey = (key: string) => (key || "").trim().replace(/^["']|["']$/g, "") || "missing-key";
@@ -37,7 +40,8 @@ export const updateSupabaseConfig = (newUrl: string, newKey: string) => {
   const key = getSafeKey(newKey);
   
   if (url && key && (url !== config.url || key !== config.key)) {
-    console.log("🔄 Configuração do Supabase sincronizada do servidor:", url);
+    const maskedUrl = url.length > 10 ? `${url.substring(0, 15)}...` : url;
+    console.log(`🔄 Configuração do Supabase sincronizada do servidor. URL: ${maskedUrl}`);
     (window as any).__SUPABASE_CONFIG__ = { url, key };
     config = { url, key };
     supabase = createClient(url, key);
@@ -53,8 +57,8 @@ export const getSupabase = () => {
   const key = getSafeKey(current.key);
 
   if (url && url !== "https://missing-url.supabase.co") {
-    // Se o singleton 'supabase' já tiver esse URL, reusamos ele
-    return supabase;
+    // Se por algum motivo o singleton 'supabase' não estiver atualizado, recriamos um local
+    return createClient(url, key);
   }
   return supabase;
 };

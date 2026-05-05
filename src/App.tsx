@@ -473,6 +473,15 @@ const AuthScreen = ({ mode, onClose, setMode }: { mode: 'login' | 'signup', onCl
     setAuthLoading(true);
     const client = getSupabase();
     
+    // Check if using fallback
+    if (url.includes("missing-url") || !hasUrl || !hasKey) {
+      toast.error("Configuração do Supabase incompleta", {
+        description: "As chaves (URL ou Anon Key) não foram detectadas corretamente. Verifique as Settings e se os nomes estão corretos (VITE_SUPABASE_URL e VITE_SUPABASE_ANON_KEY)."
+      });
+      setAuthLoading(false);
+      return;
+    }
+    
     // Limpar e-mail e senha de espaços em branco acidentais
     const cleanEmail = email.trim().toLowerCase();
     const cleanPassword = password;
@@ -505,8 +514,18 @@ const AuthScreen = ({ mode, onClose, setMode }: { mode: 'login' | 'signup', onCl
         onClose();
       }
     } catch (err: any) {
-      console.error("Auth process error:", err);
-    if (err.message === "Failed to fetch") {
+      console.error("Auth process error detail:", {
+        message: err.message,
+        name: err.name,
+        stack: err.stack,
+        url: url ? `${url.substring(0, 15)}...` : 'vazia'
+      });
+      
+      if (err.message?.includes("Invalid path")) {
+        toast.error("Erro de configuração no Supabase", {
+          description: "O endereço (URL) do Supabase parece estar incorreto ou mal formatado nas Settings. Verifique se ele termina em .supabase.co e não possui caminhos extras."
+        });
+      } else if (err.message === "Failed to fetch") {
         toast.error("Erro de conexão (Failed to fetch). Verifique se a URL do Supabase está correta e se você não está bloqueado por firewall ou VPN.");
         console.error("Connectivity issue with Supabase. Check URL:", import.meta.env.VITE_SUPABASE_URL);
       } else if (err.message?.includes("Invalid login credentials")) {
