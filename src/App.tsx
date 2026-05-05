@@ -469,17 +469,24 @@ const AuthScreen = ({ mode, onClose, setMode }: { mode: 'login' | 'signup', onCl
 
     setAuthLoading(true);
     
+    // Limpar e-mail e senha de espaços em branco acidentais
+    const cleanEmail = email.trim().toLowerCase();
+    const cleanPassword = password; // Senhas podem ter espaços intencionais, mas geralmente é bom não trimar se o usuário pôs espaço no meio. No entanto, espaços no início/fim de senha são comuns erros de colagem.
+
     try {
       if (mode === 'signup') {
         const { error } = await supabase.auth.signUp({ 
-          email, 
-          password,
+          email: cleanEmail, 
+          password: cleanPassword,
           options: { emailRedirectTo: window.location.origin }
         });
         if (error) throw error;
         toast.success("Verifique seu e-mail para confirmar a conta!");
       } else {
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        const { error } = await supabase.auth.signInWithPassword({ 
+          email: cleanEmail, 
+          password: cleanPassword 
+        });
         if (error) throw error;
         toast.success("Bem-vindo de volta!");
         onClose();
@@ -491,6 +498,10 @@ const AuthScreen = ({ mode, onClose, setMode }: { mode: 'login' | 'signup', onCl
         console.error("Connectivity issue with Supabase. Check URL:", import.meta.env.VITE_SUPABASE_URL);
       } else if (err.message?.includes("Invalid login credentials")) {
         toast.error("E-mail ou senha incorretos.");
+      } else if (err.message?.includes("Email address") && err.message?.includes("invalid")) {
+        toast.error("O formato do e-mail é inválido. Verifique se digitou corretamente.");
+      } else if (err.message?.includes("rate limit exceeded")) {
+        toast.error("Muitas tentativas em pouco tempo. Aguarde alguns minutos e tente novamente.");
       } else {
         toast.error(err.message || "Erro no processo de autenticação");
       }
