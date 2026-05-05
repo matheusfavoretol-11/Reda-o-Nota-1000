@@ -484,7 +484,16 @@ const AuthScreen = ({ mode, onClose, setMode }: { mode: 'login' | 'signup', onCl
           password: cleanPassword,
           options: { emailRedirectTo: window.location.origin }
         });
-        if (error) throw error;
+        if (error) {
+          // Se o erro for rate limit, damos uma explicação amigável
+          if (error.message?.includes("rate limit exceeded")) {
+             toast.error("Limite de segurança atingido", {
+               description: "O Supabase bloqueou novos cadastros temporariamente para evitar spam. Por favor, aguarde de 15 a 30 minutos e tente novamente com este mesmo e-mail."
+             });
+             return;
+          }
+          throw error;
+        }
         toast.success("Verifique seu e-mail para confirmar a conta!");
       } else {
         const { error } = await client.auth.signInWithPassword({ 
