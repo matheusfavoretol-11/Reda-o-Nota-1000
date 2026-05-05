@@ -8,27 +8,20 @@ export default defineConfig(({mode}) => {
   
   console.log('--- VITE CONFIG DEBUG ---');
   console.log('Mode:', mode);
-  console.log('Keys in LoadEnv:', Object.keys(env).filter(k => k.startsWith('VITE_')));
-  console.log('Keys in ProcessEnv:', Object.keys(process.env).filter(k => k.startsWith('VITE_')));
+  console.log('Available Env Keys:', Object.keys(env));
+  console.log('Available ProcessEnv Keys:', Object.keys(process.env).filter(k => k.includes('SUPABASE') || k.includes('VITE')));
   console.log('-------------------------');
   
-  // Garantir que as variÃ¡veis do Supabase estejam presentes e sejam strings
-  // Verificamos tanto com VITE_ prefixo quanto sem, para maior flexibilidade
-  let supabaseUrl = (
-    env.VITE_SUPABASE_URL || 
-    process.env.VITE_SUPABASE_URL || 
-    env.SUPABASE_URL || 
-    process.env.SUPABASE_URL || 
-    ""
-  ).trim().replace(/^["']|["']$/g, "");
+  // Função para validar se o valor não é um placeholder
+  const isReal = (val: string) => val && !val.includes('YOUR_') && !val.includes('MY_') && val !== "missing-url" && val !== "missing-key";
 
-  let supabaseAnonKey = (
-    env.VITE_SUPABASE_ANON_KEY || 
-    process.env.VITE_SUPABASE_ANON_KEY || 
-    env.SUPABASE_ANON_KEY || 
-    process.env.SUPABASE_ANON_KEY || 
-    ""
-  ).trim().replace(/^["']|["']$/g, "");
+  // Buscar a melhor URL disponível
+  const rawUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL || env.VITE_SUPABASE_URL || env.SUPABASE_URL || "";
+  let supabaseUrl = isReal(rawUrl) ? rawUrl.trim().replace(/^["']|["']$/g, "") : "";
+
+  // Buscar a melhor Key disponível
+  const rawKey = process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY || env.VITE_SUPABASE_ANON_KEY || env.SUPABASE_ANON_KEY || "";
+  let supabaseAnonKey = isReal(rawKey) ? rawKey.trim().replace(/^["']|["']$/g, "") : "";
 
   // Limpar a URL para garantir que contenha apenas o domínio base (ex: https://xyz.supabase.co)
   if (supabaseUrl) {
@@ -49,6 +42,10 @@ export default defineConfig(({mode}) => {
       'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY || process.env.GEMINI_API_KEY || ""),
       'import.meta.env.VITE_SUPABASE_URL': JSON.stringify(supabaseUrl),
       'import.meta.env.VITE_SUPABASE_ANON_KEY': JSON.stringify(supabaseAnonKey),
+      '__SUPABASE_CONFIG__': JSON.stringify({
+        url: supabaseUrl,
+        key: supabaseAnonKey
+      })
     },
     resolve: {
       alias: {

@@ -455,17 +455,21 @@ const AuthScreen = ({ mode, onClose, setMode }: { mode: 'login' | 'signup', onCl
     e.preventDefault();
     
     // Check for Supabase configuration
-    const url = import.meta.env.VITE_SUPABASE_URL;
-    const key = import.meta.env.VITE_SUPABASE_ANON_KEY;
-    const hasUrl = url && url !== "https://missing-url.supabase.co";
-    const hasKey = key && key !== "missing-key";
+    const config = (window as any).__SUPABASE_CONFIG__ || {
+      url: import.meta.env.VITE_SUPABASE_URL,
+      key: import.meta.env.VITE_SUPABASE_ANON_KEY
+    };
+    const url = config.url;
+    const key = config.key;
+    const hasUrl = url && url.includes('supabase.co');
+    const hasKey = key && key.length > 20;
 
     if (!hasUrl || !hasKey) {
-      toast.error("Configuração do Supabase não encontrada.", {
-        description: "Por favor, adicione VITE_SUPABASE_URL e VITE_SUPABASE_ANON_KEY no menu 'Settings' (Configurações) do AI Studio e reinicie o servidor.",
+      toast.error("Configuração do Supabase pendente.", {
+        description: "Parece que as chaves ainda não foram totalmente carregadas ou são inválidas. Certifique-se de preencher VITE_SUPABASE_URL (Ex: https://xyz.supabase.co) e VITE_SUPABASE_ANON_KEY nas Settings.",
         duration: 10000
       });
-      console.warn("Configurações atuais:", { url, key });
+      console.warn("Configurações atuais:", { url: url ? `${url.substring(0, 15)}...` : 'vazio', key: key ? 'presente' : 'vazio' });
       return;
     }
 
