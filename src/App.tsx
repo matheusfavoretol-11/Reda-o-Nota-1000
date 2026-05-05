@@ -461,8 +461,10 @@ const AuthScreen = ({ mode, onClose, setMode }: { mode: 'login' | 'signup', onCl
     const hasKey = key && key !== "missing-key";
 
     if (!hasUrl || !hasKey) {
-      const missing = !hasUrl && !hasKey ? "URL e Key" : !hasUrl ? "URL" : "Key";
-      toast.error(`Atenção: A variável VITE_SUPABASE_${missing === 'URL e Key' ? 'URL e VITE_SUPABASE_ANON_KEY' : missing} está vazia.`);
+      toast.error("Configuração do Supabase não encontrada.", {
+        description: "Por favor, adicione VITE_SUPABASE_URL e VITE_SUPABASE_ANON_KEY no menu 'Settings' (Configurações) do AI Studio e reinicie o servidor.",
+        duration: 10000
+      });
       console.warn("Configurações atuais:", { url, key });
       return;
     }

@@ -10,9 +10,23 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Supabase Setup
-let supabaseUrl = (process.env.VITE_SUPABASE_URL || "").trim().replace(/^["']|["']$/g, "");
-const supabaseAnonKey = (process.env.VITE_SUPABASE_ANON_KEY || "").trim().replace(/^["']|["']$/g, "");
-const supabaseServiceKey = (process.env.SUPABASE_SERVICE_ROLE_KEY || "").trim().replace(/^["']|["']$/g, "") || supabaseAnonKey;
+let supabaseUrl = (
+  process.env.VITE_SUPABASE_URL || 
+  process.env.SUPABASE_URL || 
+  ""
+).trim().replace(/^["']|["']$/g, "");
+
+const supabaseAnonKey = (
+  process.env.VITE_SUPABASE_ANON_KEY || 
+  process.env.SUPABASE_ANON_KEY || 
+  ""
+).trim().replace(/^["']|["']$/g, "");
+
+const supabaseServiceKey = (
+  process.env.SUPABASE_SERVICE_ROLE_KEY || 
+  process.env.SUPABASE_SERVICE_KEY || 
+  ""
+).trim().replace(/^["']|["']$/g, "") || supabaseAnonKey;
 
 if (supabaseUrl) {
   try {

@@ -12,9 +12,23 @@ export default defineConfig(({mode}) => {
   console.log('Keys in ProcessEnv:', Object.keys(process.env).filter(k => k.startsWith('VITE_')));
   console.log('-------------------------');
   
-  // Garantir que as variáveis do Supabase estejam presentes e sejam strings
-  let supabaseUrl = (env.VITE_SUPABASE_URL || process.env.VITE_SUPABASE_URL || "").trim().replace(/^["']|["']$/g, "");
-  let supabaseAnonKey = (env.VITE_SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY || "").trim().replace(/^["']|["']$/g, "");
+  // Garantir que as variÃ¡veis do Supabase estejam presentes e sejam strings
+  // Verificamos tanto com VITE_ prefixo quanto sem, para maior flexibilidade
+  let supabaseUrl = (
+    env.VITE_SUPABASE_URL || 
+    process.env.VITE_SUPABASE_URL || 
+    env.SUPABASE_URL || 
+    process.env.SUPABASE_URL || 
+    ""
+  ).trim().replace(/^["']|["']$/g, "");
+
+  let supabaseAnonKey = (
+    env.VITE_SUPABASE_ANON_KEY || 
+    process.env.VITE_SUPABASE_ANON_KEY || 
+    env.SUPABASE_ANON_KEY || 
+    process.env.SUPABASE_ANON_KEY || 
+    ""
+  ).trim().replace(/^["']|["']$/g, "");
 
   // Limpar a URL para garantir que contenha apenas o domínio base (ex: https://xyz.supabase.co)
   if (supabaseUrl) {
