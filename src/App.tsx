@@ -32,7 +32,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { useState, useEffect } from 'react';
 import Markdown from 'react-markdown';
 import { Toaster, toast } from 'sonner';
-import { supabase } from './lib/supabase';
+import { supabase, updateSupabaseConfig, getSupabase } from './lib/supabase';
 import { correctEssay } from './services/aiService';
 
 // --- CONFIG ---
@@ -462,31 +462,24 @@ const AuthScreen = ({ mode, onClose, setMode }: { mode: 'login' | 'signup', onCl
     const url = config.url || "";
     const key = config.key || "";
     
-    // Validação mais relaxada: se tiver conteúdo e parecer uma URL, tentamos usar.
+    // Tentamos usar o que temos, mas avisamos se parecer vazio
     const hasUrl = url && url.startsWith('http');
     const hasKey = key && key.length > 5;
 
     if (!hasUrl || !hasKey) {
-      toast.error("Configuração do Supabase não detectada", {
-        description: "Certifique-se de que VITE_SUPABASE_URL e VITE_SUPABASE_ANON_KEY estão nas Settings e REINICIE o servidor se necessário.",
-        duration: 10000
-      });
-      console.warn("Status do Supabase:", { 
-        url: url ? `${url.substring(0, 15)}...` : 'vazia', 
-        key: key ? 'presente' : 'vazia' 
-      });
-      return;
+      console.warn("Supabase ainda não configurado ou carregando...", { url, key });
     }
 
     setAuthLoading(true);
+    const client = getSupabase();
     
     // Limpar e-mail e senha de espaços em branco acidentais
     const cleanEmail = email.trim().toLowerCase();
-    const cleanPassword = password; // Senhas podem ter espaços intencionais, mas geralmente é bom não trimar se o usuário pôs espaço no meio. No entanto, espaços no início/fim de senha são comuns erros de colagem.
+    const cleanPassword = password;
 
     try {
       if (mode === 'signup') {
-        const { error } = await supabase.auth.signUp({ 
+        const { error } = await client.auth.signUp({ 
           email: cleanEmail, 
           password: cleanPassword,
           options: { emailRedirectTo: window.location.origin }
@@ -494,7 +487,7 @@ const AuthScreen = ({ mode, onClose, setMode }: { mode: 'login' | 'signup', onCl
         if (error) throw error;
         toast.success("Verifique seu e-mail para confirmar a conta!");
       } else {
-        const { error } = await supabase.auth.signInWithPassword({ 
+        const { error } = await client.auth.signInWithPassword({ 
           email: cleanEmail, 
           password: cleanPassword 
         });
@@ -592,6 +585,23 @@ export default function App() {
   const [activeTab, setActiveTab] = useState<'overview' | 'ebook' | 'ia' | 'repertorios'>('overview');
   const [showAuth, setShowAuth] = useState<'login' | 'signup' | null>(null);
   const [isVerifying, setIsVerifying] = useState(false);
+
+  // Fetch Supabase Config from Server (Fix for AI Studio build-time environment variables)
+  useEffect(() => {
+    const fetchConfig = async () => {
+      try {
+        const response = await fetch('/api/config/supabase');
+        const data = await response.json();
+        if (data.url && data.key) {
+          console.log("Configuração do Supabase carregada do servidor.");
+          updateSupabaseConfig(data.url, data.key);
+        }
+      } catch (e) {
+        console.error("Erro ao buscar configuração dinâmica:", e);
+      }
+    };
+    fetchConfig();
+  }, []);
 
   const isPaid = profile?.status === 'paid';
 

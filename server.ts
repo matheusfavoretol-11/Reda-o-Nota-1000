@@ -151,6 +151,14 @@ Formato da resposta:
     }
   });
 
+  // Dynamic Supabase Config for Client - AI Studio Fix
+  app.get("/api/config/supabase", (req, res) => {
+    res.json({
+      url: process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL || "",
+      key: process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY || ""
+    });
+  });
+
   // Vite integration
   if (process.env.NODE_ENV !== "production") {
     const vite = await createViteServer({

@@ -1,29 +1,49 @@
 import { createClient } from '@supabase/supabase-js';
 
-// No Vite, as variáveis definidas em 'define' são substituídas por strings literais no build.
-// Tentamos buscar de várias fontes para garantir que funcione no AI Studio
-const config = (window as any).__SUPABASE_CONFIG__ || {
-  url: import.meta.env.VITE_SUPABASE_URL,
-  key: import.meta.env.VITE_SUPABASE_ANON_KEY
+// Configuração inicial (pode vir do build-time ou do objeto global)
+let config = (window as any).__SUPABASE_CONFIG__ || {
+  url: import.meta.env.VITE_SUPABASE_URL || "",
+  key: import.meta.env.VITE_SUPABASE_ANON_KEY || ""
 };
 
-const SUPABASE_URL = config.url;
-const SUPABASE_ANON_KEY = config.key;
+// Fallbacks para evitar erro de constructor se estiver vazio (comum no primeiro load do AI Studio)
+const getSafeUrl = (url: string) => (url && url.startsWith('http')) ? url : "https://missing-url.supabase.co";
+const getSafeKey = (key: string) => key || "missing-key";
 
+// Cliente Singleton Inicial
+export let supabase = createClient(getSafeUrl(config.url), getSafeKey(config.key));
+
+// Função para atualizar o cliente se as chaves forem buscadas via API (solução para build antigo no AI Studio)
+export const updateSupabaseConfig = (newUrl: string, newKey: string) => {
+  if (newUrl && newKey && (newUrl !== config.url || newKey !== config.key)) {
+    console.log("Configuração do Supabase carregada dinamicamente via API.");
+    (window as any).__SUPABASE_CONFIG__ = { url: newUrl, key: newKey };
+    config = { url: newUrl, key: newKey };
+    // Recriamos o singleton para novos usos que não chamarem getSupabase()
+    supabase = createClient(newUrl, newKey);
+  }
+};
+
+/**
+ * Retorna uma instância do Supabase garantidamente atualizada.
+ * Use isso em funções de ação (como handleAuth) para evitar problemas de cache.
+ */
+export const getSupabase = () => {
+  const currentConfig = (window as any).__SUPABASE_CONFIG__ || config;
+  const url = currentConfig.url || import.meta.env.VITE_SUPABASE_URL;
+  const key = currentConfig.key || import.meta.env.VITE_SUPABASE_ANON_KEY;
+  
+  if (url && url.startsWith('http') && url !== "https://missing-url.supabase.co") {
+     return createClient(url, key);
+  }
+  return supabase;
+};
+
+// Debug helper
 if (typeof window !== 'undefined') {
   (window as any)._SUPABASE_DEBUG = {
-    url: SUPABASE_URL ? `${SUPABASE_URL.substring(0, 15)}...` : "MISSING",
-    key: SUPABASE_ANON_KEY ? "PRESENT" : "MISSING",
-    source: (window as any).__SUPABASE_CONFIG__ ? "GLOBAL_CONFIG" : "ENV"
+    url: config.url ? `${config.url.substring(0, 15)}...` : "MISSING",
+    key: config.key ? "PRESENT" : "MISSING",
+    source: (window as any).__SUPABASE_CONFIG__ ? "DYNAMIC_API" : "BUILD_ENV"
   };
 }
-
-if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
-  console.warn("Supabase configuration missing or invalid. Please set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in the Environment Variables settings.");
-}
-
-// Ensure the URL is valid by providing a fallback only to prevent constructor crash
-const finalUrl = SUPABASE_URL || "https://missing-url.supabase.co";
-const finalKey = SUPABASE_ANON_KEY || "missing-key";
-
-export const supabase = createClient(finalUrl, finalKey);
