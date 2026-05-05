@@ -28,48 +28,74 @@ const cleanKey = (key: string): string => {
   return (key || "").trim().replace(/^["']|["']$/g, "");
 };
 
-// Configuração atual (Lê do ambiente ou do objeto dinâmico do AI Studio)
-const getRawUrl = () => (window as any).__SUPABASE_CONFIG__?.url || import.meta.env.VITE_SUPABASE_URL || "";
-const getRawKey = () => (window as any).__SUPABASE_CONFIG__?.key || import.meta.env.VITE_SUPABASE_ANON_KEY || "";
-
 const FALLBACK_URL = "https://missing-url.supabase.co";
 
+// Cliente singleton privado para controle interno
+let supabaseInstance: any = null;
+
 /**
- * Cria uma instância do cliente sempre validando as entradas atuais.
+ * Retorna a instância única do cliente Supabase.
+ * Implementa o padrão Singleton para evitar o erro "Multiple GoTrueClient instances".
  */
 export const getSupabase = () => {
-  const rawUrl = getRawUrl();
-  const rawKey = getRawKey();
-  
-  const url = cleanUrl(rawUrl);
-  const key = cleanKey(rawKey);
+  // Se já temos uma instância válida (não fallback), retornamos ela
+  if (supabaseInstance && supabaseInstance.supabaseUrl !== FALLBACK_URL) {
+    return supabaseInstance;
+  }
 
-  // Verificação básica de sanidade
-  if (!url || url === FALLBACK_URL || !url.includes('supabase.co')) {
-    console.warn("⚠️ Supabase URL não configurada ou inválida nas Settings.");
+  const rawUrl = (window as any).__SUPABASE_CONFIG__?.url || import.meta.env.VITE_SUPABASE_URL;
+  const rawKey = (window as any).__SUPABASE_CONFIG__?.key || import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+  const url = cleanUrl(rawUrl || "");
+  const key = cleanKey(rawKey || "");
+
+  // Diagnóstico amigável para o desenvolvedor (Exibido apenas uma vez ou na recriação)
+  if (typeof window !== 'undefined') {
+    console.log("[Supabase Singleton Diagnostic]", {
+      hasUrl: !!url && url !== FALLBACK_URL,
+      urlPrefix: url ? url.substring(0, 15) + "..." : "N/A",
+      hasKey: !!key && key.length > 20,
+      source: (window as any).__SUPABASE_CONFIG__ ? "Dynamic API" : "Environment Vars"
+    });
+  }
+
+  if (!url || url === FALLBACK_URL) {
+    console.error("❌ ERRO: VITE_SUPABASE_URL não configurada ou inválida nas Settings.");
     return createClient(FALLBACK_URL, "missing-key");
   }
 
-  if (key.length < 20) {
-    console.warn("⚠️ Supabase Anon Key parece inválida ou curta demais.");
+  if (!key || key.length < 20) {
+    console.warn("⚠️ AVISO: VITE_SUPABASE_ANON_KEY parece estar vazia ou incorreta.");
   }
 
-  return createClient(url, key);
+  console.log("🚀 Inicializando instância única do Supabase");
+  supabaseInstance = createClient(url, key, {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true,
+      detectSessionInUrl: true
+    }
+  });
+
+  return supabaseInstance;
 };
 
-// Singleton para compatibilidade com códigos existentes
+// Exportamos o singleton para uso imediato
 export const supabase = getSupabase();
 
 /**
- * Função usada pelo App.tsx para injetar as chaves se o build estiver "atrasado" 
- * em relação às Settings do AI Studio.
+ * Permite forçar uma nova configuração (útil apenas se as chaves mudarem em runtime no AI Studio)
  */
 export const updateSupabaseConfig = (newUrl: string, newKey: string) => {
   const url = cleanUrl(newUrl);
   const key = cleanKey(newKey);
   
-  if (url && key) {
+  if (url && key && url !== FALLBACK_URL) {
     (window as any).__SUPABASE_CONFIG__ = { url, key };
-    console.log("✅ Configuração do Supabase sincronizada dinamicamente.");
+    // Re-inicializamos a instância para garantir que o cliente use as novas chaves imediatamente
+    supabaseInstance = createClient(url, key, {
+      auth: { persistSession: true, autoRefreshToken: true }
+    });
+    console.log("✅ Supabase reconfigurado com chaves dinâmicas.");
   }
 };
