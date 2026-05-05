@@ -459,17 +459,22 @@ const AuthScreen = ({ mode, onClose, setMode }: { mode: 'login' | 'signup', onCl
       url: import.meta.env.VITE_SUPABASE_URL,
       key: import.meta.env.VITE_SUPABASE_ANON_KEY
     };
-    const url = config.url;
-    const key = config.key;
-    const hasUrl = url && url.includes('supabase.co');
-    const hasKey = key && key.length > 20;
+    const url = config.url || "";
+    const key = config.key || "";
+    
+    // Validação mais relaxada: se tiver conteúdo e parecer uma URL, tentamos usar.
+    const hasUrl = url && url.startsWith('http');
+    const hasKey = key && key.length > 5;
 
     if (!hasUrl || !hasKey) {
-      toast.error("Configuração do Supabase pendente.", {
-        description: "Parece que as chaves ainda não foram totalmente carregadas ou são inválidas. Certifique-se de preencher VITE_SUPABASE_URL (Ex: https://xyz.supabase.co) e VITE_SUPABASE_ANON_KEY nas Settings.",
+      toast.error("Configuração do Supabase não detectada", {
+        description: "Certifique-se de que VITE_SUPABASE_URL e VITE_SUPABASE_ANON_KEY estão nas Settings e REINICIE o servidor se necessário.",
         duration: 10000
       });
-      console.warn("Configurações atuais:", { url: url ? `${url.substring(0, 15)}...` : 'vazio', key: key ? 'presente' : 'vazio' });
+      console.warn("Status do Supabase:", { 
+        url: url ? `${url.substring(0, 15)}...` : 'vazia', 
+        key: key ? 'presente' : 'vazia' 
+      });
       return;
     }
 
@@ -507,7 +512,9 @@ const AuthScreen = ({ mode, onClose, setMode }: { mode: 'login' | 'signup', onCl
       } else if (err.message?.includes("Email address") && err.message?.includes("invalid")) {
         toast.error("O formato do e-mail é inválido. Verifique se digitou corretamente.");
       } else if (err.message?.includes("rate limit exceeded")) {
-        toast.error("Muitas tentativas em pouco tempo. Aguarde alguns minutos e tente novamente.");
+        toast.error("Limite de segurança atingido", {
+          description: "O Supabase bloqueou novos e-mails temporariamente para evitar spam. Por favor, aguarde cerca de 15 minutos e tente novamente."
+        });
       } else {
         toast.error(err.message || "Erro no processo de autenticação");
       }
