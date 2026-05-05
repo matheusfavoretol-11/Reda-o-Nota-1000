@@ -9,12 +9,22 @@ let config = (window as any).__SUPABASE_CONFIG__ || {
 
 const cleanUrl = (url: string) => {
   if (!url || typeof url !== 'string') return "";
-  let target = url.trim();
-  if (!target.startsWith('http')) {
+  let target = url.trim().replace(/^["']|["']$/g, "");
+  
+  if (target.length > 100) {
+     console.error("ERRO: O URL do Supabase parece ser uma chave (muito longo). Verifique as Settings.");
+     return "";
+  }
+
+  if (!target.startsWith('http') && target.length > 0) {
     target = `https://${target}`;
   }
+  
   try {
     const urlObj = new URL(target);
+    if (!urlObj.hostname.endsWith('supabase.co') && !urlObj.hostname.includes('127.0.0.1')) {
+       console.warn("AVISO: O URL do Supabase não termina em .supabase.co Host:", urlObj.hostname);
+    }
     return urlObj.origin;
   } catch (e) {
     return target.replace(/\/+$/, "");
@@ -23,10 +33,16 @@ const cleanUrl = (url: string) => {
 
 const getSafeUrl = (url: string) => {
   const cleaned = cleanUrl(url);
-  return (cleaned && cleaned.includes('supabase.co')) ? cleaned : "https://missing-url.supabase.co";
+  return (cleaned && cleaned.startsWith('http')) ? cleaned : "https://missing-url.supabase.co";
 };
 
-const getSafeKey = (key: string) => (key || "").trim().replace(/^["']|["']$/g, "") || "missing-key";
+const getSafeKey = (key: string) => {
+  const cleaned = (key || "").trim().replace(/^["']|["']$/g, "");
+  if (cleaned.startsWith('http')) {
+     console.error("ERRO: A Anon Key do Supabase parece ser uma URL. Verifique as Settings.");
+  }
+  return cleaned || "missing-key";
+};
 
 // Exportamos o cliente como 'let' para que possamos atualizá-lo dinamicamente
 export let supabase = createClient(getSafeUrl(config.url), getSafeKey(config.key));
@@ -57,8 +73,17 @@ export const getSupabase = () => {
   const key = getSafeKey(current.key);
 
   if (url && url !== "https://missing-url.supabase.co") {
-    // Se por algum motivo o singleton 'supabase' não estiver atualizado, recriamos um local
-    return createClient(url, key);
+    // Diagnostic log para o desenvolvedor
+    console.debug(`[Supabase Init] URL: ${url.substring(0, 15)}... | Key: ${key.substring(0, 10)}...`);
+    
+    return createClient(url, key, {
+      global: {
+        fetch: (u, ...args) => {
+          console.debug(`[Supabase Req] ${u}`);
+          return fetch(u, ...args);
+        }
+      }
+    });
   }
   return supabase;
 };
