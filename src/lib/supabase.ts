@@ -80,8 +80,15 @@ export const getSupabase = () => {
   return supabaseInstance;
 };
 
-// Exportamos o singleton para uso imediato
-export const supabase = getSupabase();
+// singleton para uso imediato em hooks ou componentes.
+// Usamos um Proxy para que 'supabase' sempre aponte para a instância atual, 
+// mesmo que ela seja recriada via updateSupabaseConfig.
+export const supabase: any = new Proxy({}, {
+  get: (_target, prop) => {
+    const instance = getSupabase();
+    return instance[prop];
+  }
+});
 
 /**
  * Permite forçar uma nova configuração (útil apenas se as chaves mudarem em runtime no AI Studio)
@@ -91,11 +98,15 @@ export const updateSupabaseConfig = (newUrl: string, newKey: string) => {
   const key = cleanKey(newKey);
   
   if (url && key && url !== FALLBACK_URL) {
+    const current = (window as any).__SUPABASE_CONFIG__;
+    if (current?.url === url && current?.key === key) return;
+
     (window as any).__SUPABASE_CONFIG__ = { url, key };
-    // Re-inicializamos a instância para garantir que o cliente use as novas chaves imediatamente
-    supabaseInstance = createClient(url, key, {
-      auth: { persistSession: true, autoRefreshToken: true }
-    });
-    console.log("✅ Supabase reconfigurado com chaves dinâmicas.");
+    
+    // Antes de recriar a instância, podemos logar
+    console.log("🔄 Configuração do Supabase mudou. Reinicializando cliente único...");
+    
+    // Invalidamos a instância atual para que o próximo acesso via Proxy ou getSupabase crie uma nova
+    supabaseInstance = null;
   }
 };
