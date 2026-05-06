@@ -43,8 +43,8 @@ export const getSupabase = () => {
     return supabaseInstance;
   }
 
-  const rawUrl = (window as any).__SUPABASE_CONFIG__?.url || import.meta.env.VITE_SUPABASE_URL;
-  const rawKey = (window as any).__SUPABASE_CONFIG__?.key || import.meta.env.VITE_SUPABASE_ANON_KEY;
+  const rawUrl = (window as any).__SUPABASE_DYNAMIC_CONFIG__?.url || import.meta.env.VITE_SUPABASE_URL;
+  const rawKey = (window as any).__SUPABASE_DYNAMIC_CONFIG__?.key || import.meta.env.VITE_SUPABASE_ANON_KEY;
 
   const url = cleanUrl(rawUrl || "");
   const key = cleanKey(rawKey || "");
@@ -55,7 +55,7 @@ export const getSupabase = () => {
       hasUrl: !!url && url !== FALLBACK_URL,
       urlPrefix: url ? url.substring(0, 15) + "..." : "N/A",
       hasKey: !!key && key.length > 20,
-      source: (window as any).__SUPABASE_CONFIG__ ? "Dynamic API" : "Environment Vars"
+      source: (window as any).__SUPABASE_DYNAMIC_CONFIG__ ? "Dynamic API" : "Environment Vars"
     });
   }
 
@@ -83,10 +83,15 @@ export const getSupabase = () => {
 // singleton para uso imediato em hooks ou componentes.
 // Usamos um Proxy para que 'supabase' sempre aponte para a instância atual, 
 // mesmo que ela seja recriada via updateSupabaseConfig.
-export const supabase: any = new Proxy({}, {
+// IMPORTANTE: Garantimos que funções sejam bindadas à instância original para manter o contexto 'this'.
+export const supabase: any = new Proxy({} as any, {
   get: (_target, prop) => {
     const instance = getSupabase();
-    return instance[prop];
+    const value = instance[prop];
+    if (typeof value === 'function') {
+      return value.bind(instance);
+    }
+    return value;
   }
 });
 
@@ -98,13 +103,12 @@ export const updateSupabaseConfig = (newUrl: string, newKey: string) => {
   const key = cleanKey(newKey);
   
   if (url && key && url !== FALLBACK_URL) {
-    const current = (window as any).__SUPABASE_CONFIG__;
+    const current = (window as any).__SUPABASE_DYNAMIC_CONFIG__;
     if (current?.url === url && current?.key === key) return;
 
-    (window as any).__SUPABASE_CONFIG__ = { url, key };
+    (window as any).__SUPABASE_DYNAMIC_CONFIG__ = { url, key };
     
-    // Antes de recriar a instância, podemos logar
-    console.log("🔄 Configuração do Supabase mudou. Reinicializando cliente único...");
+    console.log("🔄 Configuração do Supabase atualizada dinamicamente.");
     
     // Invalidamos a instância atual para que o próximo acesso via Proxy ou getSupabase crie uma nova
     supabaseInstance = null;

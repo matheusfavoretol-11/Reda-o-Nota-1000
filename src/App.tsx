@@ -587,7 +587,7 @@ const AuthScreen = ({ mode, onClose, setMode }: { mode: 'login' | 'signup', onCl
     e.preventDefault();
     
     // Check for Supabase configuration
-    const config = (window as any).__SUPABASE_CONFIG__ || {
+    const config = (window as any).__SUPABASE_DYNAMIC_CONFIG__ || {
       url: import.meta.env.VITE_SUPABASE_URL,
       key: import.meta.env.VITE_SUPABASE_ANON_KEY
     };
@@ -659,16 +659,16 @@ const AuthScreen = ({ mode, onClose, setMode }: { mode: 'login' | 'signup', onCl
         message: err.message,
         name: err.name,
         stack: err.stack,
-        url: url ? `${url.substring(0, 15)}...` : 'vazia'
+        clientUrl: (client as any).supabaseUrl
       });
       
       if (err.message?.includes("Invalid path")) {
         toast.error("Erro de configuração no Supabase", {
-          description: "O endereço (URL) do Supabase parece estar incorreto ou mal formatado nas Settings. Verifique se ele termina em .supabase.co e não possui caminhos extras."
+          description: "O endereço (URL) do Supabase parece estar incorreto ou mal formatado. Verifique se ele termina em .supabase.co e não possui caminhos extras."
         });
       } else if (err.message === "Failed to fetch") {
-        toast.error("Erro de conexão (Failed to fetch). Verifique se a URL do Supabase está correta e se você não está bloqueado por firewall ou VPN.");
-        console.error("Connectivity issue with Supabase. Check URL:", import.meta.env.VITE_SUPABASE_URL);
+        toast.error("Erro de conexão (Failed to fetch). Verifique se o seu projeto Supabase não está pausado e se sua internet permite conexões externas.");
+        console.error("Connectivity issue with Supabase. Active Client URL:", (client as any).supabaseUrl);
       } else if (err.message?.includes("Invalid login credentials")) {
         toast.error("E-mail ou senha incorretos.");
       } else if (err.message?.includes("Email address") && err.message?.includes("invalid")) {
