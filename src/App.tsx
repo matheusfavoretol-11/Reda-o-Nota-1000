@@ -594,25 +594,23 @@ const AuthScreen = ({ mode, onClose, setMode }: { mode: 'login' | 'signup', onCl
     const url = config.url || "";
     const key = config.key || "";
     
-    // Tentamos usar o que temos, mas avisamos se parecer vazio
-    const hasUrl = url && url.startsWith('http');
-    const hasKey = key && key.length > 5;
+    const isUrlMissing = !url || url.includes("missing-url") || !url.startsWith('http');
+    const isKeyMissing = !key || key.length < 20;
 
-    if (!hasUrl || !hasKey) {
-      console.warn("Supabase ainda não configurado ou carregando...", { url, key });
-    }
+    if (isUrlMissing || isKeyMissing) {
+      const missingVars = [];
+      if (isUrlMissing) missingVars.push("VITE_SUPABASE_URL");
+      if (isKeyMissing) missingVars.push("VITE_SUPABASE_ANON_KEY");
 
-    setAuthLoading(true);
-    const client = getSupabase();
-    
-    // Check if using fallback
-    if (url.includes("missing-url") || !hasUrl || !hasKey) {
       toast.error("Configuração do Supabase incompleta", {
-        description: "As chaves (URL ou Anon Key) não foram detectadas corretamente. Verifique as Settings e se os nomes estão corretos (VITE_SUPABASE_URL e VITE_SUPABASE_ANON_KEY)."
+        description: `Variáveis faltando: ${missingVars.join(" e ")}. Configure no seu .env ou nas Settings do projeto.`
       });
       setAuthLoading(false);
       return;
     }
+
+    setAuthLoading(true);
+    const client = getSupabase();
     
     // Limpar e-mail e senha de espaços em branco acidentais
     const cleanEmail = email.trim().toLowerCase();

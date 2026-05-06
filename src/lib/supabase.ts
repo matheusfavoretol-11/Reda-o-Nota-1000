@@ -49,18 +49,27 @@ export const getSupabase = () => {
   const url = cleanUrl(rawUrl || "");
   const key = cleanKey(rawKey || "");
 
-  // Diagnóstico amigável para o desenvolvedor (Exibido apenas uma vez ou na recriação)
+  // Diagnóstico detalhado para o desenvolvedor
   if (typeof window !== 'undefined') {
-    console.log("[Supabase Singleton Diagnostic]", {
-      hasUrl: !!url && url !== FALLBACK_URL,
-      urlPrefix: url ? url.substring(0, 15) + "..." : "N/A",
-      hasKey: !!key && key.length > 20,
-      source: (window as any).__SUPABASE_DYNAMIC_CONFIG__ ? "Dynamic API" : "Environment Vars"
-    });
+    const missing = [];
+    if (!url || url === FALLBACK_URL) missing.push("VITE_SUPABASE_URL");
+    if (!key || key.length < 20) missing.push("VITE_SUPABASE_ANON_KEY");
+
+    if (missing.length > 0) {
+      console.group("🛑 ERRO DE CONFIGURAÇÃO SUPABASE");
+      console.error("Variáveis faltando ou inválidas:", missing.join(", "));
+      console.info("Certifique-se de as chaves estão no arquivo .env OU nas Settings do AI Studio.");
+      console.info("Acesse: Menu Hamburger -> Settings -> Environment Variables");
+      console.log("Valores atuais detectados:", {
+        url: url === FALLBACK_URL ? "MISSING/FALLBACK" : (url ? url.substring(0, 15) + "..." : "EMPTY"),
+        key: key.length < 5 ? "EMPTY/TOO_SHORT" : "PRESENT (hidden)",
+        source: (window as any).__SUPABASE_DYNAMIC_CONFIG__ ? "Dynamic API (Runtime)" : "Vite (Build time)"
+      });
+      console.groupEnd();
+    }
   }
 
   if (!url || url === FALLBACK_URL) {
-    console.error("❌ ERRO: VITE_SUPABASE_URL não configurada ou inválida nas Settings.");
     return createClient(FALLBACK_URL, "missing-key");
   }
 
