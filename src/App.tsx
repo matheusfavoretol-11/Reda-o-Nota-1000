@@ -655,40 +655,36 @@ const AuthScreen = ({ mode, onClose, setMode }: { mode: 'login' | 'signup', onCl
     e.preventDefault();
     setAuthLoading(true);
 
-    // Tentar obter config dinâmica antes de validar
-    let config = (window as any).__SUPABASE_DYNAMIC_CONFIG__;
-    
-    if (!config || !config.url || config.url.includes("missing-url")) {
-      try {
-        const response = await fetch('/api/config/supabase');
-        const data = await response.json();
-        if (data.url && data.key && !data.url.includes("your-project-id")) {
-          updateSupabaseConfig(data.url, data.key);
-          config = { url: data.url, key: data.key };
-        }
-      } catch (err) {
-        console.error("Erro ao tentar recuperar config dinamicamente no clique:", err);
+    let url = "";
+    let key = "";
+
+    // Prioridade total: Tentar pegar do servidor para garantir chaves reais
+    try {
+      const response = await fetch('/api/config/supabase');
+      const data = await response.json();
+      if (data.url && data.key && !data.url.includes("your-project-id") && data.url.includes("supabase.co")) {
+        url = data.url;
+        key = data.key;
+        updateSupabaseConfig(url, key);
       }
+    } catch (err) {
+      console.error("Erro ao buscar config do servidor:", err);
     }
 
-    // Se ainda assim não temos config, usamos o import.meta.env como última esperança
-    const url = config?.url || import.meta.env.VITE_SUPABASE_URL || "";
-    const key = config?.key || import.meta.env.VITE_SUPABASE_ANON_KEY || "";
+    // Fallback para build-time
+    if (!url) {
+      url = (window as any).__SUPABASE_DYNAMIC_CONFIG__?.url || import.meta.env.VITE_SUPABASE_URL || "";
+      key = (window as any).__SUPABASE_DYNAMIC_CONFIG__?.key || import.meta.env.VITE_SUPABASE_ANON_KEY || "";
+    }
     
     const isUrlMissing = !url || url.includes("missing-url") || !url.startsWith('http');
     const isKeyMissing = !key || key.length < 20;
     const isPlaceholder = url.includes("your-project-id") || key.includes("your-anon-public-key");
 
     if (isUrlMissing || isKeyMissing || isPlaceholder) {
-      if (isPlaceholder) {
-        toast.error("Você está usando chaves de exemplo!", {
-          description: "No dashboard do Supabase (Settings -> API), copie a Project URL e a anon key, e coloque nas 'Settings' do seu projeto no AI Studio (Menu -> Settings -> Environment Variables)."
-        });
-      } else {
-        toast.error("Conexão com o Banco de Dados falhou", {
-          description: "Certifique-se de que você configurou as variáveis VITE_SUPABASE_URL e VITE_SUPABASE_ANON_KEY no menu Settings do AI Studio e reiniciou o app."
-        });
-      }
+      toast.error("Configuração do Banco de Dados não detectada", {
+        description: "Vá em 'Settings' -> 'Environment Variables' no menu superior, adicione VITE_SUPABASE_URL e VITE_SUPABASE_ANON_KEY com suas chaves reais e REINICIE o aplicativo."
+      });
       setAuthLoading(false);
       return;
     }

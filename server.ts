@@ -153,10 +153,11 @@ Formato da resposta:
 
   // Dynamic Supabase Config for Client - AI Studio Fix
   app.get("/api/config/supabase", (req, res) => {
-    res.json({
-      url: supabaseUrl,
-      key: supabaseAnonKey
-    });
+    // Re-read from env to ensure we get manual settings from AI Studio environment
+    const dynamicUrl = (process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL || "").trim().replace(/^["']|["']$/g, "");
+    const dynamicKey = (process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY || "").trim().replace(/^["']|["']$/g, "");
+    
+    res.json({ url: dynamicUrl, key: dynamicKey });
   });
 
   // Vite integration
