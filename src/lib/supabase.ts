@@ -52,12 +52,20 @@ export const getSupabase = () => {
   // Diagnóstico detalhado para o desenvolvedor
   if (typeof window !== 'undefined') {
     const missing = [];
+    const isPlaceholder = (url && url.includes("your-project-id")) || (key && key.includes("your-anon-public-key"));
+    
     if (!url || url === FALLBACK_URL) missing.push("VITE_SUPABASE_URL");
     if (!key || key.length < 20) missing.push("VITE_SUPABASE_ANON_KEY");
 
-    if (missing.length > 0) {
+    if (missing.length > 0 || isPlaceholder) {
       console.group("🛑 ERRO DE CONFIGURAÇÃO SUPABASE");
-      console.error("Variáveis faltando ou inválidas:", missing.join(", "));
+      if (isPlaceholder) {
+        console.error("VOCÊ ESTÁ USANDO CHAVES DE EXEMPLO!");
+        console.warn("Substitua 'your-project-id' e 'your-anon-public-key' pelas suas chaves REAIS.");
+      }
+      if (missing.length > 0) {
+        console.error("Variáveis faltando ou inválidas:", missing.join(", "));
+      }
       console.info("Certifique-se de as chaves estão no arquivo .env OU nas Settings do AI Studio.");
       console.info("Acesse: Menu Hamburger -> Settings -> Environment Variables");
       console.log("Valores atuais detectados:", {

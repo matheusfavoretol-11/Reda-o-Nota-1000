@@ -664,15 +664,22 @@ const AuthScreen = ({ mode, onClose, setMode }: { mode: 'login' | 'signup', onCl
     
     const isUrlMissing = !url || url.includes("missing-url") || !url.startsWith('http');
     const isKeyMissing = !key || key.length < 20;
+    const isPlaceholder = url.includes("your-project-id") || key.includes("your-anon-public-key");
 
-    if (isUrlMissing || isKeyMissing) {
-      const missingVars = [];
-      if (isUrlMissing) missingVars.push("VITE_SUPABASE_URL");
-      if (isKeyMissing) missingVars.push("VITE_SUPABASE_ANON_KEY");
+    if (isUrlMissing || isKeyMissing || isPlaceholder) {
+      if (isPlaceholder) {
+        toast.error("Você está usando chaves de exemplo!", {
+          description: "Substitua os valores 'your-project-id' e 'your-anon-public-key' no seu .env ou nas Settings pelas suas chaves REAIS do dashboard do Supabase."
+        });
+      } else {
+        const missingVars = [];
+        if (isUrlMissing) missingVars.push("VITE_SUPABASE_URL");
+        if (isKeyMissing) missingVars.push("VITE_SUPABASE_ANON_KEY");
 
-      toast.error("Configuração do Supabase incompleta", {
-        description: `Variáveis faltando: ${missingVars.join(" e ")}. Configure no seu .env ou nas Settings do projeto.`
-      });
+        toast.error("Configuração do Supabase incompleta", {
+          description: `Variáveis faltando: ${missingVars.join(" e ")}. Configure no seu .env ou nas Settings do projeto.`
+        });
+      }
       setAuthLoading(false);
       return;
     }
