@@ -98,31 +98,37 @@ Formato da resposta:
   app.post("/api/kiwify-webhook", async (req, res) => {
     const { order_status, customer, order_id } = req.body;
 
-    console.log("Kiwify Webhook received:", req.body);
+    console.log("Kiwify Webhook received:", { order_id, status: order_status, email: customer?.email });
 
-    if (order_status === "paid" || order_status === "approved" || order_status === "completed") {
-      if (customer && customer.email) {
-        const email = customer.email.toLowerCase();
-        
-    try {
-      if (!supabase) throw new Error("Supabase client not initialized");
-      const { error } = await supabase
-        .from('payments')
-        .upsert({ 
-              email: email, 
-              status: order_status,
-              order_id: order_id || 'unknown',
-              updated_at: new Date()
-            }, { onConflict: 'email' });
-
-          if (error) {
-            console.error("Error saving to Supabase:", error);
-          } else {
-            console.log(`Payment confirmed and saved for: ${email}`);
-          }
-        } catch (e) {
-          console.error("Supabase Operation Failed:", e);
+    const validStatuses = ["paid", "approved", "completed"];
+    if (customer?.email && validStatuses.includes(order_status?.toLowerCase())) {
+      const email = customer.email.toLowerCase().trim();
+      
+      try {
+        if (!supabase) {
+          console.error("Supabase client not initialized for webhook");
+          return res.status(500).send("Internal Server Error: DB missing");
         }
+
+        // Upsert payment info using service_role key to bypass RLS
+        const { error } = await supabase
+          .from('payments')
+          .upsert({ 
+            email: email, 
+            status: order_status,
+            order_id: order_id || 'unknown',
+            updated_at: new Date()
+          }, { onConflict: 'email' });
+
+        if (error) {
+          console.error("Error saving to Supabase:", error);
+          return res.status(500).send("Database Error");
+        }
+        
+        console.log(`✅ Acesso liberado para: ${email}`);
+      } catch (e) {
+        console.error("Supabase Operation Failed:", e);
+        return res.status(500).send("Operation Failed");
       }
     }
 
