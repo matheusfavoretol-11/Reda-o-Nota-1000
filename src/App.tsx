@@ -662,28 +662,31 @@ const AuthScreen = ({ mode, onClose, setMode }: { mode: 'login' | 'signup', onCl
     try {
       const response = await fetch('/api/config/supabase');
       const data = await response.json();
-      if (data.url && data.key && !data.url.includes("your-project-id") && data.url.includes("supabase.co")) {
+      if (data.url && data.key && !data.url.includes("your-project-id")) {
         url = data.url;
         key = data.key;
         updateSupabaseConfig(url, key);
+        console.log("✅ Configuração Supabase carregada do servidor.");
       }
     } catch (err) {
-      console.error("Erro ao buscar config do servidor:", err);
+      console.warn("⚠️ Falha ao buscar config do servidor, tentando local:", err);
     }
 
-    // Fallback para build-time
+    // Fallback para build-time ou global
     if (!url) {
       url = (window as any).__SUPABASE_DYNAMIC_CONFIG__?.url || import.meta.env.VITE_SUPABASE_URL || "";
       key = (window as any).__SUPABASE_DYNAMIC_CONFIG__?.key || import.meta.env.VITE_SUPABASE_ANON_KEY || "";
     }
     
-    const isUrlMissing = !url || url.includes("missing-url") || !url.startsWith('http');
+    // Validação permissiva
+    const isUrlMissing = !url || url.length < 10 || !url.startsWith('http');
     const isKeyMissing = !key || key.length < 20;
     const isPlaceholder = url.includes("your-project-id") || key.includes("your-anon-public-key");
 
     if (isUrlMissing || isKeyMissing || isPlaceholder) {
+      console.error("❌ Falha na validação das chaves:", { url: url ? "PRESENTE" : "MISSING", key: key ? "PRESENTE" : "MISSING" });
       toast.error("Configuração do Banco de Dados não detectada", {
-        description: "Vá em 'Settings' -> 'Environment Variables' no menu superior, adicione VITE_SUPABASE_URL e VITE_SUPABASE_ANON_KEY com suas chaves reais e REINICIE o aplicativo."
+        description: "Adicione VITE_SUPABASE_URL e VITE_SUPABASE_ANON_KEY no menu 'Settings' -> 'Environment Variables' e reinicie o app."
       });
       setAuthLoading(false);
       return;
