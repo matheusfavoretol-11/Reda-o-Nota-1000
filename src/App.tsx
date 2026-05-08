@@ -596,7 +596,7 @@ const BenefitsOffer = ({ user, onLogout, manualVerify, isVerifying }: { user: an
           <div className="glass p-10 md:p-16 rounded-[48px] border-primary/20 bg-gradient-to-tr from-primary/10 via-transparent to-secondary/5 text-center space-y-10">
             <div className="space-y-4">
               <div className="text-2xl font-display font-medium line-through opacity-20">R$ 197,00</div>
-              <div className="text-7xl md:text-8xl font-display font-black tracking-tighter">R$ 27,90</div>
+              <div className="text-7xl md:text-8xl font-display font-black tracking-tighter">R$ 29,90</div>
               <p className="text-xs font-black uppercase tracking-[0.3em] opacity-40">Acesso Vitalício • Pagamento Único</p>
             </div>
 
@@ -609,6 +609,10 @@ const BenefitsOffer = ({ user, onLogout, manualVerify, isVerifying }: { user: an
               </button>
               
               <div className="flex flex-col gap-4">
+                <div className="flex items-center justify-center gap-2 text-[9px] font-black uppercase tracking-widest text-primary animate-pulse mb-2">
+                   <div className="w-1.5 h-1.5 bg-primary rounded-full" />
+                   Sincronizando com banco de dados...
+                </div>
                 <button 
                   onClick={manualVerify}
                   disabled={isVerifying}
@@ -889,13 +893,16 @@ export default function App() {
     return () => subscription.unsubscribe();
   }, []);
 
-  // Auto-verify every 10 seconds if on pending screen
+  // Auto-verify every 3 seconds if on pending screen (faster for immediate access)
   useEffect(() => {
     let interval: number;
     if (user && !isPaid) {
+      // First check immediately
+      checkPaymentStatus(user.email);
+      
       interval = window.setInterval(() => {
         checkPaymentStatus(user.email);
-      }, 10000);
+      }, 3000);
     }
     return () => clearInterval(interval);
   }, [user, isPaid]);
