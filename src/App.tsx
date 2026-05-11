@@ -42,7 +42,7 @@ const KIWIFY_CHECKOUT_URL = "https://pay.kiwify.com.br/AhSL8x0";
 const TESTIMONIALS = [
   { name: "Lucas", age: 17, note: 940, text: "Essa IA é insana. Ela me zoou por repetir palavras, mas foi o que me fez entender onde eu tava errando HAHA!", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Lucas" },
   { name: "Ana Clara", age: 18, note: 920, text: "Eu não saia do 600. Com as fórmulas prontas, meu texto fluiu em 40 minutos.", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Ana" },
-  { name: "Rafael", age: 17, note: 900, text: "Paguei R$ 27 e tive mais correção que no cursinho de R$ 600. Custo-benefício imbatível.", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Rafael" }
+  { name: "Rafael", age: 17, note: 900, text: "Paguei R$ 29 e tive mais correção que no cursinho de R$ 600. Custo-benefício imbatível.", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Rafael" }
 ];
 
 // --- COMPONENTS ---
@@ -1139,7 +1139,7 @@ export default function App() {
                 <div className="flex gap-1">
                   {[...Array(5)].map((_, i) => <Star key={i} size={16} className="fill-accent text-accent" />)}
                 </div>
-                <div className="text-[11px] font-black uppercase tracking-[0.2em] text-white/40">Pagamento Único • R$ 27,90</div>
+                <div className="text-[11px] font-black uppercase tracking-[0.2em] text-white/40">Pagamento Único • R$ 29,90</div>
               </div>
             </div>
           </motion.div>
@@ -1267,7 +1267,7 @@ export default function App() {
             
             <div className="mb-16">
                <p className="text-2xl font-display font-medium line-through opacity-20 mb-2">R$ 197,00</p>
-               <p className="text-7xl font-display font-black">R$ 27,90</p>
+               <p className="text-7xl font-display font-black">R$ 29,90</p>
                <p className="text-[10px] font-black uppercase tracking-[0.4em] opacity-30 mt-4 underline decoration-primary underline-offset-8">Pagamento Único • Acesso na Hora</p>
             </div>
 

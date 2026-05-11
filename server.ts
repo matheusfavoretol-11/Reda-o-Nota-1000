@@ -22,11 +22,13 @@ const supabaseAnonKey = (
   ""
 ).trim().replace(/^["']|["']$/g, "");
 
+// CRITICAL for Webhooks: Use SERVICE_ROLE_KEY to bypass RLS
 const supabaseServiceKey = (
   process.env.SUPABASE_SERVICE_ROLE_KEY || 
   process.env.SUPABASE_SERVICE_KEY || 
+  process.env.VITE_SUPABASE_SERVICE_ROLE_KEY ||
   ""
-).trim().replace(/^["']|["']$/g, "") || supabaseAnonKey;
+).trim().replace(/^["']|["']$/g, "");
 
 if (supabaseUrl) {
   try {
@@ -40,8 +42,12 @@ if (supabaseUrl) {
 }
 
 let supabase: any;
-if (supabaseUrl && supabaseServiceKey) {
-  supabase = createClient(supabaseUrl, supabaseServiceKey);
+// Prioritize Service Key for server-side operations
+if (supabaseUrl && (supabaseServiceKey || supabaseAnonKey)) {
+  supabase = createClient(supabaseUrl, supabaseServiceKey || supabaseAnonKey);
+  if (!supabaseServiceKey) {
+    console.warn("⚠️ WARNING: SUPABASE_SERVICE_ROLE_KEY missing. Webhook might fail if RLS is enabled.");
+  }
 } else {
   console.error("CRITICAL: Supabase credentials missing in server.");
 }
