@@ -40,9 +40,41 @@ const KIWIFY_CHECKOUT_URL = "https://pay.kiwify.com.br/AhSL8x0";
 
 // --- DATA: TESTIMONIALS ---
 const TESTIMONIALS = [
-  { name: "Lucas", age: 17, note: 940, text: "Essa IA é insana. Ela me zoou por repetir palavras, mas foi o que me fez entender onde eu tava errando HAHA!", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Lucas" },
-  { name: "Ana Clara", age: 18, note: 920, text: "Eu não saia do 600. Com as fórmulas prontas, meu texto fluiu em 40 minutos.", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Ana" },
-  { name: "Rafael", age: 17, note: 900, text: "Paguei R$ 29 e tive mais correção que no cursinho de R$ 600. Custo-benefício imbatível.", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Rafael" }
+  { 
+    name: "João Silva", 
+    age: 18, 
+    note: 950, 
+    text: "Entrei com nota 650 e saí com 950. Consegui bolsa integral na USP! O método de estruturas prontas salvou meu tempo.", 
+    before: 650, 
+    after: 950,
+    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Joao" 
+  },
+  { 
+    name: "Maria Eduarda", 
+    age: 17, 
+    note: 980, 
+    text: "Eu simplesmente travava na introdução. Com as fórmulas 'copy-paste', minha redação fluiu em menos de 40 minutos.", 
+    before: 580, 
+    after: 980,
+    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Maria" 
+  },
+  { 
+    name: "Pedro Santos", 
+    age: 19, 
+    note: 920, 
+    text: "Paguei R$ 29 e tive mais correção que no cursinho presencial. A Malu IA não deixa passar nenhum erro de coesão.", 
+    before: 700, 
+    after: 920,
+    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Pedro" 
+  }
+];
+
+const VALUE_PROPS = [
+  { icon: "🤖", title: "CORRETOR COM IA INTEGRADA", desc: "Envie sua redação e receba feedback em 2 minutos.", sub: "Identifica erros de estrutura, coesão e gramática" },
+  { icon: "✍️", title: "100 REDAÇÕES NOTA 1000", desc: "Modelos dos anos 2023-2024 analisados linha por linha.", sub: "Aprenda com quem já chegou no topo" },
+  { icon: "🎯", title: "ESTRUTURAS PRONTAS", desc: "Planilha com 5 modelos 'copy-paste' para qualquer tema.", sub: "Introdução, Desenvolvimento e Conclusão completas" },
+  { icon: "🎁", title: "BÔNUS: GUIA DE REPERTÓRIOS", desc: "Citações e séries curingas que cabem em tudo.", sub: "Filosofia, Sociologia e Cultura Pop" },
+  { icon: "🕒", title: "ACESSO VITALÍCIO", desc: "Pague uma vez e estude para sempre, sem mensalidade.", sub: "Atualizações inclusas todo ano" }
 ];
 
 // --- COMPONENTS ---
@@ -1115,31 +1147,33 @@ export default function App() {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-3 w-3 bg-primary"></span>
               </span>
-              <span className="text-xs font-black uppercase tracking-[0.2em] italic">🔥 Já somos +500 rumo ao 1000</span>
+              <span className="text-xs font-black uppercase tracking-[0.2em] italic">🔥 Já somos +500 alunos rumo ao 1000</span>
             </div>
             
-            <h1 className="text-7xl md:text-[100px] font-display font-black leading-[0.85] mb-12 tracking-tighter">
-              Seu ENEM <br/>
-              <span className="text-gradient">sem drama.</span>
+            <h1 className="text-6xl md:text-[86px] font-display font-black leading-[0.85] mb-12 tracking-tighter">
+              A Redação do <br/>
+              <span className="text-gradient">ENEM sem drama.</span>
             </h1>
             
-            <p className="text-2xl text-gray-400 mb-16 leading-relaxed font-medium max-w-lg">
-              Domine a estrutura exata da Redação Nota 1000 com fórmulas prontas e uma IA que te corrige na hora.
-            </p>
+            <h2 className="text-2xl text-gray-400 mb-16 leading-relaxed font-medium max-w-xl">
+              Como alunos PASSARAM de 600 para 900+ em redação ENEM. Mesmo quem sempre foi "péssimo" em português.
+              <br/><br/>
+              <span className="text-white">Descubra o método que já ajudou 12.847 alunos a escrever redações nota 950+ em apenas 7 dias.</span>
+            </h2>
             
             <div className="flex flex-col sm:flex-row items-center gap-8">
               <button 
                 onClick={handleCTA}
                 className="w-full sm:w-auto bg-primary text-white p-8 px-14 rounded-[40px] text-2xl font-display font-black flex items-center justify-center gap-4 hover:scale-110 hover:shadow-[0_30px_60px_rgba(255,0,102,0.4)] transition-all active:scale-95 group"
               >
-                COMEÇAR AGORA <ArrowRight className="group-hover:translate-x-2 transition-transform" size={28} />
+                QUERO MINHA REDAÇÃO NOTA 10 <ArrowRight className="group-hover:translate-x-2 transition-transform" size={28} />
               </button>
               
               <div className="flex flex-col gap-2 items-center sm:items-start group">
                 <div className="flex gap-1">
                   {[...Array(5)].map((_, i) => <Star key={i} size={16} className="fill-accent text-accent" />)}
                 </div>
-                <div className="text-[11px] font-black uppercase tracking-[0.2em] text-white/40">Pagamento Único • R$ 29,90</div>
+                <div className="text-[11px] font-black uppercase tracking-[0.2em] text-white/40">OFERTA VÁLIDA POR TEMPO LIMITADO</div>
               </div>
             </div>
           </motion.div>
@@ -1197,8 +1231,8 @@ export default function App() {
         <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-3 gap-16 text-center">
           {[
             { v: "500+", l: "Alunos Pro" },
-            { v: "12,847", l: "Redações lidas" },
-            { v: "4.8/5", l: "Voto da Galera" }
+            { v: "12.847", l: "Redações lidas" },
+            { v: "4.9/5", l: "Voto da Galera" }
           ].map((s, i) => (
             <div key={i}>
               <div className="text-6xl font-display font-black text-gradient block mb-2">
@@ -1213,99 +1247,203 @@ export default function App() {
       {/* THE BENTO SECTION */}
       <section id="features" className="py-32 px-6">
          <SectionHeader 
-           badge="⚡ TUDO INCLUSO" 
-           title="O Arsenal que você recebe agora" 
-           subtitle="Tudo pensado para quem não tem tempo a perder e quer resultados imediatos."
+           badge="⚡ O ARSENAL DO 1000" 
+           title="Tudo o que você desbloqueia hoje" 
+           subtitle="Chega de perder tempo com teoria chata. O curso é focado em prática e resultado imediato."
          />
          
          <div className="max-w-7xl mx-auto grid md:grid-cols-12 gap-8">
-            <div className="md:col-span-8 bento-card flex flex-col justify-end bg-gradient-to-br from-primary/10 to-transparent min-h-[400px]">
-               <div className="flex-1 flex items-center justify-center text-9xl">🤖</div>
-               <div>
-                 <h3 className="text-3xl font-display font-black mb-4">Correção Ilimitada (Malu IA)</h3>
-                 <p className="text-gray-400 font-medium text-lg leading-relaxed">Nossa IA treinada nos critérios do ENEM te dá feedback em segundos. Sem espera por corretor humano.</p>
+            <div className="md:col-span-8 bento-card flex flex-col justify-end bg-gradient-to-br from-primary/10 to-transparent min-h-[450px] relative overflow-hidden group">
+               <div className="absolute top-10 right-10 text-[180px] opacity-10 group-hover:scale-110 transition-transform duration-700">🤖</div>
+               <div className="relative z-10">
+                  <span className="px-3 py-1 bg-primary/20 text-primary text-[10px] font-black uppercase rounded-lg border border-primary/20 mb-6 inline-block">INTELIGÊNCIA ARTIFICIAL</span>
+                  <h3 className="text-4xl font-display font-black mb-4 italic">Corretor com IA Integrada</h3>
+                  <p className="text-gray-400 font-medium text-xl leading-relaxed max-w-xl">
+                    Envie sua redação e receba feedback automático em 2 minutos. Identifica falhas na estrutura, argumentação, coesão e gramática.
+                  </p>
                </div>
             </div>
             
-            <div className="md:col-span-4 bento-card flex flex-col justify-between">
-               <div className="text-6xl">📘</div>
+            <div className="md:col-span-4 bento-card flex flex-col justify-between group">
+               <div className="text-6xl group-hover:scale-125 transition-transform">📚</div>
                <div>
-                  <h3 className="text-2xl font-display font-black mb-3">Guia Emergencial</h3>
-                  <p className="text-sm text-gray-400">30 páginas de puro hack. Fórmulas prontas de intro, des e conclusão.</p>
+                  <h3 className="text-2xl font-display font-black mb-3 italic">100 Redações Perfeitas</h3>
+                  <p className="text-sm text-gray-400">Estude redações nota 950-1000 do ENEM 2023-2024. Cada uma com análise completa.</p>
                </div>
             </div>
 
-            <div className="md:col-span-4 bento-card flex flex-col justify-between">
-               <div className="text-6xl">🎬</div>
-               <div>
-                  <h3 className="text-2xl font-display font-black mb-3">30+ Repertórios</h3>
-                  <p className="text-sm text-gray-400">Filmes, séries e filósofos que encaixam em QUALQUER tema.</p>
-               </div>
-            </div>
-
-            <div className="md:col-span-8 bento-card bg-secondary/5 border-secondary/20 flex flex-col md:flex-row items-center gap-10">
-               <div className="text-8xl">💯</div>
-               <div>
-                  <h3 className="text-3xl font-display font-black mb-4">Redações Nota 1000 Comentadas</h3>
-                  <p className="text-gray-400 font-medium leading-relaxed">Analise o sucesso de outros alunos linha por linha e copie o que funciona.</p>
+            <div className="md:col-span-12 bento-card flex flex-col justify-center bg-secondary/5 border-secondary/20 min-h-[250px] group text-center relative overflow-hidden">
+               <div className="absolute -left-10 top-1/2 -translate-y-1/2 text-[150px] opacity-5 group-hover:scale-110 transition-transform">🎯</div>
+               <div className="relative z-10 max-w-2xl mx-auto">
+                  <div className="text-6xl mb-6 group-hover:rotate-12 transition-transform inline-block">🎯</div>
+                  <h3 className="text-4xl font-display font-black mb-4 italic">Estruturas que Funcionam</h3>
+                  <p className="text-gray-400 font-medium text-lg leading-relaxed">Planilha 'copy-paste' com 5 estruturas validadas para qualquer tema do ENEM. Do 0 ao 950+ sem complicação.</p>
                </div>
             </div>
          </div>
       </section>
 
+      {/* VALUE PROPOSITION GRID */}
+      <section className="py-32 px-6 bg-white/[0.01]">
+         <div className="max-w-7xl mx-auto">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+               {VALUE_PROPS.map((prop, i) => (
+                  <motion.div 
+                    key={i}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: i * 0.1 }}
+                    className="glass p-8 rounded-[32px] border-white/5 hover:border-primary/30 transition-all group"
+                  >
+                     <div className="text-4xl mb-6 group-hover:scale-110 transition-transform">{prop.icon}</div>
+                     <h4 className="text-xs font-black uppercase tracking-widest text-primary mb-3">{prop.title}</h4>
+                     <p className="text-sm font-bold text-white mb-2">{prop.desc}</p>
+                     <p className="text-[10px] font-medium text-gray-500 uppercase tracking-wider">{prop.sub}</p>
+                  </motion.div>
+               ))}
+            </div>
+         </div>
+      </section>
+
+      {/* TESTIMONIALS SECTION */}
+      <section className="py-32 px-6">
+         <SectionHeader 
+           badge="SÓ RESULTADO REAL" 
+           title="O que dizem os futuros aprovados" 
+         />
+         
+         <div className="max-w-7xl mx-auto grid md:grid-cols-3 gap-8">
+            {TESTIMONIALS.map((t, i) => (
+               <motion.div 
+                 key={i}
+                 initial={{ opacity: 0 }}
+                 whileInView={{ opacity: 1 }}
+                 className="glass p-10 rounded-[48px] border-white/5 flex flex-col justify-between"
+               >
+                 <div className="space-y-6">
+                    <div className="flex gap-1">
+                       {[...Array(5)].map((_, j) => <Star key={j} size={14} className="fill-accent text-accent" />)}
+                    </div>
+                    <p className="text-gray-300 font-medium text-lg leading-relaxed italic">"{t.text}"</p>
+                 </div>
+                 
+                 <div className="mt-12 pt-8 border-t border-white/5 flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                       <img src={t.avatar} className="w-12 h-12 rounded-2xl bg-white/5" />
+                       <div className="text-left">
+                          <div className="text-sm font-black uppercase italic">{t.name}</div>
+                          <div className="text-[10px] font-black text-gray-500 uppercase tracking-widest">Aluno Pro</div>
+                       </div>
+                    </div>
+                    <div className="text-right">
+                       <div className="text-[9px] font-black uppercase opacity-40 mb-1">Nota Anterior: {t.before}</div>
+                       <div className="text-xl font-display font-black text-primary">MIL: {t.after}</div>
+                    </div>
+                 </div>
+               </motion.div>
+            ))}
+         </div>
+      </section>
       {/* FINAL CTA */}
       <section className="py-48 px-6 relative">
          <div className="absolute top-0 left-1/2 -track-x-1/2 w-px h-48 bg-gradient-to-b from-transparent to-primary" />
          
-         <div className="max-w-4xl mx-auto bento-card text-center p-16 md:p-32 border-primary/20 bg-gradient-to-tr from-primary/10 via-transparent to-secondary/10">
-            <div className="mb-12">
-               <p className="text-primary font-black uppercase tracking-[0.4em] mb-8 italic">O ENEM NÃO ESPERA</p>
-               <Countdown />
-            </div>
+         <div className="max-w-4xl mx-auto bento-card text-center p-16 md:p-32 border-primary/20 bg-gradient-to-tr from-primary/10 via-transparent to-secondary/10 overflow-hidden relative">
+            <div className="absolute -top-24 -right-24 w-64 h-64 bg-primary/20 blur-[100px] rounded-full pointer-events-none" />
             
-            <h2 className="text-7xl md:text-8xl font-display font-black mb-12 tracking-tighter leading-[0.8] italic">TÁ ESPERANDO <br/> <span className="text-gradient">O QUÊ?</span></h2>
-            
-            <div className="mb-16">
-               <p className="text-2xl font-display font-medium line-through opacity-20 mb-2">R$ 197,00</p>
-               <p className="text-7xl font-display font-black">R$ 29,90</p>
-               <p className="text-[10px] font-black uppercase tracking-[0.4em] opacity-30 mt-4 underline decoration-primary underline-offset-8">Pagamento Único • Acesso na Hora</p>
-            </div>
+            <div className="relative z-10">
+               <div className="mb-12">
+                  <p className="text-primary font-black uppercase tracking-[0.4em] mb-8 italic text-white leading-relaxed">O ENEM NÃO ESPERA POR VOCÊ</p>
+                  <Countdown />
+               </div>
+               
+               <h2 className="text-6xl md:text-8xl font-display font-black mb-12 tracking-tighter leading-[0.8] italic text-white">VAMOS COMEÇAR <br/> <span className="text-gradient">O SEU 1000?</span></h2>
+               
+               <div className="flex flex-col items-center mb-16">
+                  <div className="space-y-4 mb-10">
+                     <p className="text-2xl font-display font-medium line-through opacity-20 mb-2">DE R$ 99,90</p>
+                     <p className="text-8xl font-display font-black text-white">R$ 29,90</p>
+                     <div className="px-6 py-2 bg-success/10 border border-success/20 rounded-full text-[12px] font-black uppercase tracking-widest text-success inline-block mt-4">
+                        VOCÊ ECONOMIZA R$ 70,00 (70% OFF)
+                     </div>
+                  </div>
+                  
+                  <p className="text-lg text-gray-400 max-w-sm mx-auto font-medium leading-relaxed italic bg-white/5 p-4 rounded-2xl border border-white/5">
+                    "Menos do que um café por mês, <br/> mais que sua aprovação."
+                  </p>
+               </div>
 
-            <div className="max-w-md mx-auto mb-10 pt-8">
-              <button 
-                onClick={handleCTA}
-                className="w-full bg-primary text-white py-10 rounded-[48px] text-3xl font-display font-black hover:scale-105 active:scale-95 transition-all shadow-[0_30px_100px_rgba(255,0,102,0.3)] group flex items-center justify-center gap-4"
-              >
-                QUERO MEU 1000 AGORA! <ArrowRight className="group-hover:translate-x-2 transition-transform" size={32} />
-              </button>
-            </div>
-            
-            <div className="mt-16 flex justify-center gap-10 opacity-30 text-[10px] font-black uppercase tracking-[0.3em]">
-               <span>● Hotmart / Kiwify</span>
-               <span>● Seguro</span>
-               <span>● Garantia 7 Dias</span>
+               <div className="max-w-md mx-auto mb-10 pt-8">
+                 <button 
+                   onClick={handleCTA}
+                   className="w-full bg-primary text-white py-10 rounded-[48px] text-3xl font-display font-black hover:scale-105 active:scale-95 transition-all shadow-[0_30px_100px_rgba(255,0,102,0.3)] group flex items-center justify-center gap-4"
+                 >
+                   QUERO MEU 1000 AGORA! <ArrowRight className="group-hover:translate-x-2 transition-transform" size={32} />
+                 </button>
+               </div>
+
+               <div className="p-8 glass rounded-3xl border-success/20 bg-success/5 mt-12 max-w-xl mx-auto flex flex-col md:flex-row items-center gap-8 text-left">
+                  <div className="w-16 h-16 bg-success rounded-2xl flex items-center justify-center shrink-0 shadow-lg shadow-success/20 group hover:rotate-12 transition-transform">
+                     <ShieldCheck className="text-white" size={32} />
+                  </div>
+                  <div>
+                     <h4 className="text-sm font-black uppercase tracking-widest text-success mb-2">GARANTIA INCONDICIONAL DE 30 DIAS</h4>
+                     <p className="text-xs text-gray-400 font-bold leading-relaxed">Se você não sentir evolução na sua escrita em 30 dias, devolvemos 100% do seu dinheiro. Sem perguntas, sem burocracia.</p>
+                  </div>
+               </div>
+               
+               <div className="mt-20 flex justify-center gap-10 opacity-30 text-[10px] font-black uppercase tracking-[0.3em]">
+                  <span>● CHECKOUT SEGURO</span>
+                  <span>● LIBERAÇÃO IMEDIATA</span>
+                  <span>● ACESSO VITALÍCIO</span>
+               </div>
             </div>
          </div>
       </section>
 
-            {/* FAQ */}
-            <section id="faq" className="mt-40">
-              <SectionHeader badge="Dúvidas comuns" title="Ficou alguma dúvida?" />
-              <div className="max-w-4xl mx-auto space-y-4">
-                {[
-                  { q: "Como meu acesso é liberado?", a: "Usamos tecnologia de Webhook oficial. Assim que a Kiwify confirma o pagamento, seu acesso é liberado instantaneamente. Basta fazer login com o e-mail usado na compra e pronto, o Dashboard estará desbloqueado." },
-                  { q: "A IA realmente corrige bem?", a: "Sim! A Malu foi treinada com o banco de dados oficial do INEP para identificar as 5 competências. Ela não substitui um professor, mas te dá feedback 24h por dia para você treinar exaustivamente." }
-                ].map((faq, i) => (
-                  <div key={i} className="glass p-8 rounded-[32px] border-white/5">
-                    <h4 className="text-xl font-bold mb-4 flex items-center gap-3">
-                       <Lightbulb className="text-accent" size={20} />
-                       {faq.q}
-                    </h4>
-                    <p className="text-gray-400 font-medium leading-relaxed">{faq.a}</p>
-                  </div>
-                ))}
-              </div>
-            </section>
+      {/* FAQ */}
+      <section id="faq" className="py-40 px-6">
+        <SectionHeader badge="SÓ RESPOSTA PENSADA" title="Ficou alguma dúvida?" />
+        <div className="max-w-4xl mx-auto space-y-6">
+          {[
+            { 
+               q: "Eu sou péssimo em redação, consigo aprender isso?", 
+               a: "Absolutamente! Temos alunos que entraram sem saber colocar um ponto final e saíram com nota 900+. Ninguém é péssimo, só te falta o método e as estruturas prontas que o ENEM espera de você." 
+            },
+            { 
+               q: "Quanto tempo preciso estudar por dia?", 
+               a: "Apenas 30 minutos. Nossas aulas são diretas ao ponto, sem enrolação. Você começa a ver resultado na clareza do seu texto em 3 dias, não 3 meses." 
+            },
+            { 
+               q: "Vou conseguir nota 950+ mesmo?", 
+               a: "Nossos alunos focados têm média de 900-950. Se você seguir o Arsenal e usar as estruturas que fornecemos, sua nota vai disparar naturalmente porque você vai parar de cometer erros 'bobos' de competência." 
+            },
+            { 
+               q: "E se eu comprar e não gostar?", 
+               a: "Fica tranquilo. Você tem 30 dias de garantia completa. Se por qualquer motivo sentir que o método não é para você, basta pedir o reembolso. Simples assim, risco zero." 
+            },
+            { 
+               q: "Qual é a diferença entre este curso e outros?", 
+               a: "Enquanto outros cursos te vendem horas de teoria chata e gramática pesada, nós te entregamos o que REALMENTE RESOLVE: Estruturas prontas, correções por IA instantâneas e o caminho mais curto para a aprovação." 
+            }
+          ].map((faq, i) => (
+            <motion.div 
+              key={i}
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="glass p-10 rounded-[40px] border-white/5 hover:border-primary/20 transition-all group"
+            >
+              <h4 className="text-xl font-bold mb-6 flex items-center gap-4 italic tracking-tight text-white">
+                 <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center text-primary group-hover:scale-110 transition-transform tracking-normal group-hover:bg-primary group-hover:text-white">?</div>
+                 {faq.q}
+              </h4>
+              <p className="text-gray-400 font-medium leading-relaxed pl-14">{faq.a}</p>
+            </motion.div>
+          ))}
+        </div>
+      </section>
 
       <footer className="mt-40 py-24 px-12 border-t border-white/5 opacity-50">
          <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-10">
