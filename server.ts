@@ -6,29 +6,32 @@ import { fileURLToPath } from "url";
 import { createClient } from "@supabase/supabase-js";
 import { GoogleGenAI } from "@google/genai";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// Environment Setup
+const getEnvVar = (name: string): string => {
+  const env = (import.meta as any).env || (globalThis as any).process?.env || {};
+  return (env[name] || "").trim().replace(/^["']|["']$/g, "");
+};
 
 // Supabase Setup
 let supabaseUrl = (
-  process.env.VITE_SUPABASE_URL || 
-  process.env.SUPABASE_URL || 
+  getEnvVar("VITE_SUPABASE_URL") || 
+  getEnvVar("SUPABASE_URL") || 
   ""
-).trim().replace(/^["']|["']$/g, "");
+).trim();
 
 const supabaseAnonKey = (
-  process.env.VITE_SUPABASE_ANON_KEY || 
-  process.env.SUPABASE_ANON_KEY || 
+  getEnvVar("VITE_SUPABASE_ANON_KEY") || 
+  getEnvVar("SUPABASE_ANON_KEY") || 
   ""
-).trim().replace(/^["']|["']$/g, "");
+).trim();
 
 // CRITICAL for Webhooks: Use SERVICE_ROLE_KEY to bypass RLS
 const supabaseServiceKey = (
-  process.env.SUPABASE_SERVICE_ROLE_KEY || 
-  process.env.SUPABASE_SERVICE_KEY || 
-  process.env.VITE_SUPABASE_SERVICE_ROLE_KEY ||
+  getEnvVar("SUPABASE_SERVICE_ROLE_KEY") || 
+  getEnvVar("SUPABASE_SERVICE_KEY") || 
+  getEnvVar("VITE_SUPABASE_SERVICE_ROLE_KEY") ||
   ""
-).trim().replace(/^["']|["']$/g, "");
+).trim();
 
 if (supabaseUrl) {
   try {
@@ -53,7 +56,15 @@ if (supabaseUrl && (supabaseServiceKey || supabaseAnonKey)) {
 }
 
 // Gemini Setup
-const genAI = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || "" });
+const GEMINI_API_KEY = (
+  getEnvVar("VITE_GEMINI_API_KEY") || 
+  getEnvVar("GEMINI_API_KEY") || 
+  getEnvVar("GEMINI_API_KEY1") || 
+  ""
+);
+
+// Using @google/genai as per skill recommendations for Google AI Studio
+const ai = GEMINI_API_KEY ? new GoogleGenAI({ apiKey: GEMINI_API_KEY }) : null;
 
 async function startServer() {
   const app = express();
@@ -62,43 +73,11 @@ async function startServer() {
   app.use(express.json());
 
   console.log("--- SERVER INITIALIZATION ---");
-  console.log("NODE_ENV:", process.env.NODE_ENV);
-  console.log("VITE_SUPABASE_URL present:", !!process.env.VITE_SUPABASE_URL);
-  console.log("VITE_SUPABASE_ANON_KEY present:", !!process.env.VITE_SUPABASE_ANON_KEY);
+  console.log("GEMINI_API_KEY detected:", !!GEMINI_API_KEY);
+  if (GEMINI_API_KEY) {
+    console.log("Key Prefix:", GEMINI_API_KEY.substring(0, 6) + "...");
+  }
   console.log("-----------------------------");
-
-  // AI Correction Endpoint (Proxied for security)
-  app.post("/api/correct", async (req, res) => {
-    const { text } = req.body;
-    if (!text) return res.status(400).json({ error: "No text provided" });
-
-    try {
-      const systemInstruction = `Você é a Malu, uma especialista em correção de redação do ENEM.
-Seu estilo é ÚNICO: você é extremamente engraçada, descontraída, usa gírias modernas, mas na hora de corrigir, você é CIRÚRGICA e CORRETA.  
-
-Diretrizes:
-1. Analise o texto com base nas 5 competências do ENEM.
-2. Dê uma nota aproximada (0-1000).
-3. Faça apontamentos sobre erros de gramática, tese fraca, falta de repertório ou conclusão incompleta.
-4. Use um tom de "melhor amiga sincerona" ou "professora gente boa que não aguenta mais ver erro bobo".
-5. Seja motivadora no final, mas não passe a mão na cabeça se o texto estiver ruim.
-
-Formato da resposta:
-- Comece com uma reação inicial engraçada ao texto.
-- Use seções claras (mas com nomes divertidos) para cada competência.
-- Termine com um "Veredito da Malu" (Nota e Plano de Ação).`;
-
-      const response = await genAI.models.generateContent({
-        model: "gemini-3-flash-preview",
-        contents: `${systemInstruction}\n\nTexto para correção:\n${text}`,
-      });
-
-      res.json({ feedback: response.text });
-    } catch (error) {
-      console.error("AI Error:", error);
-      res.status(500).json({ error: "Erro ao processar a correção pela Malu." });
-    }
-  });
 
   // Kiwify Webhook Endpoint
   app.post("/api/kiwify-webhook", async (req, res) => {
@@ -141,6 +120,82 @@ Formato da resposta:
     res.status(200).send("OK");
   });
 
+  // AI Correction Endpoint
+  app.post("/api/correct", async (req, res) => {
+    const { text } = req.body;
+    if (!text) return res.status(400).json({ error: "No text provided" });
+
+    if (!ai) {
+      console.error("AI Error: Google Gen AI not initialized. Missing API Key.");
+      return res.status(500).json({ 
+        error: "A chave da API (GEMINI_API_KEY) não foi encontrada no servidor. Verifique as configurações de ambiente." 
+      });
+    }
+
+    try {
+      const systemInstruction = `Você é a MALU IA, uma ESPECIALISTA em redação com mais de 20 anos de experiência, cirúrgica nos detalhes. Você é ENGRAÇADA, sincera, honesta e educa através do humor. Seu objetivo é transformar o usuário em um escritor nota 1000.
+
+## CONHECIMENTO BASE (USE ISSO):
+1. OS 5 PILARES: Clareza (ser direto), Coerência (lógica), Coesão (conectivos), Argumentação (provas reais) e Estrutura (Intro/Dev/Concl).
+2. REPERTÓRIOS CORINGA: Paulo Freire (Educação), Bauman (Modernidade Líquida), Foucault (Poder), Simone de Beauvoir (Gênero), Constituição de 1988 (Direitos), Revolução Industrial (Trabalho/Tecnologia), ODS da ONU.
+3. ESTRUTURA NOTA 1000: Intro (Gancho + Problema + Tese), Desenvolvimento (Tópico Frasal + Argumento + Exemplo + Conclusão do parágrafo), Conclusão (Agente, Ação, Meio, Efeito, Detalhamento).
+
+## CARACTERÍSTICAS ESSENCIAIS:
+- Nome: Malu IA Corretora
+- Personalidade: Amiga mas BRUTALMENTE honesta. Faz piadas relevantes sobre erros.
+- Modo de Operação: 
+  - ETAPA 1: Diagnóstico da Malu (Reação engraçada e primeira impressão).
+  - ETAPA 2: Análise Profunda em 7 áreas (Estrutura, Argumento, Coesão, Repertório, Linguagem, Originalidade, Impacto).
+  - ETAPA 3: O Veredito Final (Resumo motivador).
+  - ETAPA 4: Seus 5 Maiores Erros e 5 Maiores Pontos Fortes.
+  - ETAPA 5: Reescritas de Melhoria (Mostre antes e depois de 3 trechos).
+  - ETAPA 6: Repertórios Sugeridos e Próximos Passos.
+
+## PROTOCOLO DE RESPOSTA (USE MARKDOWN):
+---
+## 🎭 DIAGNÓSTICO DA MALU
+[Reação engraçada]
+
+## 2️⃣ ANÁLISE PROFUNDA
+[Notas 0-10 para as 7 áreas e feedback breve]
+
+## 3️⃣ O VEREDITO FINAL
+[Resumo honesto e motivador]
+
+## 4️⃣ SEUS 5 MAIORES ERROS
+[Lista numerada]
+
+## 5️⃣ SEUS 5 MAIORES PONTOS FORTES
+[Lista numerada]
+
+## 6️⃣ REESCRITAS DE MELHORIA
+[Blocos de Antes/Depois/Por quê]
+
+## 7️⃣ REPERTÓRIOS SUGERIDOS
+[Sugestões específicas de repertórios coringas do seu banco]
+
+## 8️⃣ SEUS PRÓXIMOS PASSOS
+[Lista de tarefas para o 1000]
+
+## ✨ MENSAGEM FINAL
+[Frase de efeito]
+---`;
+      const modelName = "gemini-1.5-flash"; // Flash is fast for correction
+      
+      const response = await ai.models.generateContent({
+        model: modelName,
+        contents: `${systemInstruction}\n\nTexto para correção:\n${text}`
+      });
+      
+      const feedback = response.text;
+
+      res.json({ feedback });
+    } catch (error: any) {
+      console.error("AI Error:", error);
+      res.status(500).json({ error: error.message || "Erro ao processar a correção pela Malu." });
+    }
+  });
+
   // Check payment status
   app.get("/api/check-payment", async (req, res) => {
     const email = req.query.email as string;
@@ -156,9 +211,14 @@ Formato da resposta:
         .eq('email', email.toLowerCase())
         .single();
 
-      const isPaid = !!data && (data.status === "paid" || data.status === "approved" || data.status === "completed");
+      // For testing purposes, libere o acesso premium para o usuário matheusfavoretol@gmail.com
+      const isPaid = (!!data && (data.status === "paid" || data.status === "approved" || data.status === "completed")) || email.toLowerCase() === 'matheusfavoretol@gmail.com';
       res.json({ isPaid });
     } catch (e) {
+      // For testing purposes, libere o acesso premium para o usuário matheusfavoretol@gmail.com
+      if (email.toLowerCase() === 'matheusfavoretol@gmail.com') {
+        return res.json({ isPaid: true });
+      }
       res.json({ isPaid: false });
     }
   });
@@ -166,14 +226,15 @@ Formato da resposta:
   // Dynamic Supabase Config for Client - AI Studio Fix
   app.get("/api/config/supabase", (req, res) => {
     // Re-read from env to ensure we get manual settings from AI Studio environment
-    const dynamicUrl = (process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL || "").trim().replace(/^["']|["']$/g, "");
-    const dynamicKey = (process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY || "").trim().replace(/^["']|["']$/g, "");
+    const dynamicUrl = (getEnvVar("VITE_SUPABASE_URL") || getEnvVar("SUPABASE_URL") || "");
+    const dynamicKey = (getEnvVar("VITE_SUPABASE_ANON_KEY") || getEnvVar("SUPABASE_ANON_KEY") || "");
     
     res.json({ url: dynamicUrl, key: dynamicKey });
   });
 
   // Vite integration
-  if (process.env.NODE_ENV !== "production") {
+  const nodeEnv = getEnvVar("NODE_ENV");
+  if (nodeEnv !== "production") {
     const vite = await createViteServer({
       server: { middlewareMode: true },
       appType: "spa",
