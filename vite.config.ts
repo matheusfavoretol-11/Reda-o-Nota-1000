@@ -1,20 +1,10 @@
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
-import { fileURLToPath } from 'url';
 import { defineConfig, loadEnv } from 'vite';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
-  
-  console.log('--- VITE CONFIG DEBUG ---');
-  console.log('Mode:', mode);
-  console.log('Available Env Keys:', Object.keys(env));
-  console.log('Available ProcessEnv Keys:', Object.keys(process.env).filter(k => k.includes('SUPABASE') || k.includes('VITE')));
-  console.log('-------------------------');
   
   // Função para validar se o valor não é um placeholder
   const isReal = (val: string) => val && !val.includes('YOUR_') && !val.includes('MY_') && val !== "missing-url" && val !== "missing-key";
@@ -27,13 +17,12 @@ export default defineConfig(({ mode }) => {
   const rawKey = process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY || env.VITE_SUPABASE_ANON_KEY || env.SUPABASE_ANON_KEY || "";
   let supabaseAnonKey = isReal(rawKey) ? rawKey.trim().replace(/^["']|["']$/g, "") : "";
 
-  // Limpar a URL para garantir que contenha apenas o domínio base (ex: https://xyz.supabase.co)
+  // Limpar a URL para garantir que contenha apenas o domínio base
   if (supabaseUrl) {
     try {
       const url = new URL(supabaseUrl);
       supabaseUrl = url.origin;
     } catch (e) {
-      // Se não for uma URL válida, removemos apenas a barra final se existir
       if (supabaseUrl.endsWith('/')) {
         supabaseUrl = supabaseUrl.slice(0, -1);
       }
@@ -49,12 +38,10 @@ export default defineConfig(({ mode }) => {
     },
     resolve: {
       alias: {
-        '@': path.resolve(__dirname, '.'),
+        '@': path.resolve(process.cwd(), '.'),
       },
     },
     server: {
-      // HMR is disabled in AI Studio via DISABLE_HMR env var.
-      // Do not modifyâfile watching is disabled to prevent flickering during agent edits.
       host: true,
       port: 3000,
       hmr: {
