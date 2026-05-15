@@ -561,19 +561,42 @@ const AnimatedCounter = ({ value, duration = 2 }: { value: string, duration?: nu
   return <span>{Math.floor(count).toLocaleString()}{suffix}</span>;
 };
 
-const Countdown = () => {
-  const [timeLeft, setTimeLeft] = useState({ d: 45, h: 23, m: 59 });
+const Countdown = ({ compact = false }: { compact?: boolean }) => {
+  const [timeLeft, setTimeLeft] = useState({ d: 0, h: 14, m: 32, s: 45 });
+  
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTimeLeft(prev => {
+        if (prev.s > 0) return { ...prev, s: prev.s - 1 };
+        if (prev.m > 0) return { ...prev, m: prev.m - 1, s: 59 };
+        if (prev.h > 0) return { ...prev, h: prev.h - 1, m: 59, s: 59 };
+        return prev;
+      });
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  if (compact) {
+    return (
+      <div className="flex gap-2 items-center justify-center bg-primary/10 border border-primary/20 p-2 rounded-xl">
+        <Clock size={14} className="text-primary animate-pulse" />
+        <span className="text-[10px] font-black uppercase tracking-widest text-primary">
+          Oferta expira em: {timeLeft.h}h {timeLeft.m}m {timeLeft.s}s
+        </span>
+      </div>
+    );
+  }
   
   return (
     <div className="flex gap-4 justify-center">
       {[
-        { v: timeLeft.d, l: "Dias", c: "text-primary" },
-        { v: timeLeft.h, l: "Hrs", c: "text-secondary" },
-        { v: timeLeft.m, l: "Min", c: "text-accent" }
+        { v: timeLeft.h, l: "Hrs", c: "text-primary" },
+        { v: timeLeft.m, l: "Min", c: "text-secondary" },
+        { v: timeLeft.s, l: "Seg", c: "text-accent" }
       ].map((time, i) => (
-        <div key={i} className="glass w-24 h-24 rounded-[32px] flex flex-col items-center justify-center border-white/5">
-          <div className={`text-4xl font-display font-black ${time.c}`}>{time.v}</div>
-          <div className="text-[10px] uppercase font-black opacity-30">{time.l}</div>
+        <div key={i} className="glass w-20 h-20 rounded-[24px] flex flex-col items-center justify-center border-white/5 bg-white/[0.02]">
+          <div className={`text-3xl font-display font-black ${time.c}`}>{time.v.toString().padStart(2, '0')}</div>
+          <div className="text-[8px] uppercase font-black opacity-30">{time.l}</div>
         </div>
       ))}
     </div>
@@ -1829,8 +1852,147 @@ export default function App() {
         <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] bg-secondary/10 blur-[180px] rounded-full animate-pulse" style={{ animationDelay: '3s' }} />
       </div>
 
-      {/* HERO SECTION */}
-      <section className="pt-48 pb-32 px-6">
+      {/* MOBILE OPTIMIZED HERO */}
+      <section className="md:hidden pt-24 pb-8 px-5 flex flex-col gap-6 min-h-[92vh] justify-center bg-[#050508] relative overflow-hidden">
+        <div className="absolute top-0 right-10 w-64 h-64 bg-primary/10 blur-[100px] pointer-events-none" />
+        
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="space-y-6 text-center"
+        >
+          {/* PAIN POINT IDENTIFICATION (PROBLEMA) */}
+          <div className="space-y-1">
+            <span className="text-primary text-[10px] font-black uppercase tracking-[0.2em]">SUA NOTA TRAVOU NOS 600?</span>
+            <p className="text-white/60 text-[11px] font-bold italic">"Eu estudo e a nota não sobe. Vou ser reprovado de novo?" — <span className="text-white">Pare de sofrer.</span></p>
+          </div>
+          
+          {/* 7-WORD HEADLINE: [RESULTADO] + [TEMPO] + [GARANTIA] */}
+          <h1 className="text-[44px] font-display font-black leading-[0.85] tracking-tighter italic uppercase text-white">
+            VOCÊ TIRA <span className="text-primary tracking-[-0.05em]">600-700?</span> <br/> AQUI VOCÊ <br/> SAI DE <span className="text-primary">950</span>
+          </h1>
+          
+          {/* PARA QUEM É (TARGET) */}
+          <p className="text-gray-400 text-sm font-bold leading-tight px-4 border-l-2 border-primary/30 mx-4 italic py-1">
+            👉 Você que <span className="text-white">quer Federal</span> mas a redação ainda é seu maior pesadelo.
+          </p>
+
+          {/* URGENCY & PROMO */}
+          <div className="space-y-4 pt-4">
+             <div className="inline-flex flex-col items-center gap-1">
+               <div className="inline-flex items-center gap-2 px-3 py-1 bg-success/10 border border-success/20 rounded-full">
+                 <Zap size={10} className="text-success fill-success animate-pulse" />
+                 <span className="text-[9px] font-black uppercase tracking-widest text-success">70% OFF + EBOOK R$197 GRÁTIS</span>
+               </div>
+               <span className="text-[8px] font-bold text-orange-500 uppercase tracking-widest">Apenas para os próximos 12 inscritos</span>
+             </div>
+             
+             <div className="flex flex-col gap-1">
+                <span className="text-lg line-through opacity-20 font-black">R$ 97,00</span>
+                <div className="flex items-center justify-center gap-2 font-display">
+                   <span className="text-6xl text-white font-black tracking-tight leading-none italic">R$ 29,90</span>
+                </div>
+             </div>
+
+             {/* DYNAMIC COUNTDOWN */}
+             <Countdown compact />
+          </div>
+
+          <button 
+            onClick={handleCTA}
+            className="group w-full bg-orange-600 text-white py-7 rounded-2xl text-xl font-display font-black shadow-[0_20px_50px_rgba(234,88,12,0.5)] active:scale-95 transition-all flex flex-col items-center justify-center gap-0 border-b-4 border-black/30"
+          >
+            <span className="flex items-center gap-2">GARANTIR ACESSO AGORA <ArrowRight size={20} /></span>
+            <span className="text-[10px] opacity-70 font-bold uppercase tracking-widest">Acesso vitalício à Malu IA</span>
+          </button>
+          
+          <div className="flex items-center justify-center gap-6 opacity-30">
+            <div className="flex items-center gap-1"><ShieldCheck size={10} /> <span className="text-[8px] font-black uppercase">Garantia 7 Dias</span></div>
+            <div className="flex items-center gap-1"><Lock size={10} /> <span className="text-[8px] font-black uppercase">Checkout Seguro</span></div>
+          </div>
+        </motion.div>
+      </section>
+
+      {/* QUICK PROOF STRIP (SOCIAL PROOF) */}
+      <section className="md:hidden py-12 px-6 bg-white/[0.02] border-y border-white/5 space-y-6">
+         <div className="flex flex-col items-center gap-3 text-center">
+            <div className="flex items-center gap-1">
+               {[...Array(5)].map((_, i) => <Star key={i} size={14} className="fill-accent text-accent" />)}
+               <span className="text-white text-sm font-black ml-1">4.9/5</span>
+            </div>
+            <p className="text-[10px] font-black uppercase tracking-widest opacity-80 italic">Aprovado por <span className="text-primary italic">2.847 futuros graduandos</span></p>
+         </div>
+
+         <div className="flex gap-4 animate-scroll overflow-hidden">
+            {[
+               { n: "Maria C.", t: "Saí de 650 para 920 em 3 semanas!" },
+               { n: "João V.", t: "As estruturas prontas me salvaram." },
+               { n: "Ana L.", t: "A Malu é bizarramente precisa." }
+            ].map((p, i) => (
+               <div key={i} className="glass px-6 py-4 rounded-2xl border-white/5 min-w-[260px] shrink-0">
+                  <p className="text-[12px] font-medium italic text-gray-300 leading-tight">"{p.t}"</p>
+                  <p className="text-[9px] font-black uppercase mt-2 opacity-30">— {p.n}</p>
+               </div>
+            ))}
+         </div>
+
+         <button 
+           onClick={handleCTA}
+           className="w-full bg-white/5 border border-white/10 text-white py-4 rounded-xl text-sm font-black uppercase tracking-widest hover:bg-white/10 transition-all"
+         >
+           Ver mais depoimentos
+         </button>
+      </section>
+
+      {/* MOBILE BENEFITS CHECKLIST */}
+      <section className="md:hidden py-16 px-6 space-y-10">
+         {/* NUMBERS STRIP */}
+         <div className="grid grid-cols-2 gap-4 mb-12">
+            <div className="glass p-5 rounded-2xl border-white/5 text-center">
+               <div className="text-3xl font-display font-black text-primary">2.8k+</div>
+               <div className="text-[8px] font-black uppercase opacity-40">Alunos Ativos</div>
+            </div>
+            <div className="glass p-5 rounded-2xl border-white/5 text-center">
+               <div className="text-3xl font-display font-black text-secondary">92%</div>
+               <div className="text-[8px] font-black uppercase opacity-40">Melhora em 15 dias</div>
+            </div>
+         </div>
+
+         <div className="space-y-2 text-center">
+            <span className="text-primary text-[10px] font-black uppercase tracking-[0.2em]">O que você recebe</span>
+            <h2 className="text-3xl font-display font-black leading-none italic uppercase">Tudo o que você precisa <br/> <span className="text-primary tracking-tighter">em um só lugar</span></h2>
+         </div>
+
+         <div className="space-y-6">
+            {[
+               { t: "Malu IA: Correção Instantânea", d: "Pare de esperar dias. Saiba seus erros agora." },
+               { t: "Guia 1000: O Mapa da Federal", d: "A estrutura 'esqueleto' que o ENEM adora." },
+               { t: "Citações Curingas", d: "Repertório pronto que serve para todo tema." },
+               { t: "Checklist de Aprovação", d: "Saiba exatamente o que fazer todo dia." }
+            ].map((b, i) => (
+               <div key={i} className="flex gap-5 items-start p-5 glass border-white/5 rounded-2xl">
+                  <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center shrink-0">
+                     <CheckCircle2 size={20} className="text-primary" />
+                  </div>
+                  <div>
+                     <h4 className="text-sm font-black text-white italic uppercase mb-1">{b.t}</h4>
+                     <p className="text-xs text-gray-500 font-medium leading-normal">{b.d}</p>
+                  </div>
+               </div>
+            ))}
+         </div>
+
+         <button 
+           onClick={handleCTA}
+           className="w-full bg-orange-600 text-white py-6 rounded-2xl text-xl font-display font-black shadow-xl active:scale-95 transition-all flex items-center justify-center gap-3 uppercase italic"
+         >
+           QUERO COMEÇAR HOJE <ArrowRight size={20} />
+         </button>
+      </section>
+
+
+      {/* DESKTOP HERO SECTION */}
+      <section className="hidden md:block pt-48 pb-32 px-6">
         <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-24 items-center">
           <motion.div 
             initial={{ opacity: 0, y: 30 }}
@@ -1921,8 +2083,8 @@ export default function App() {
         </div>
       </section>
 
-      {/* STATS */}
-      <section className="py-32 border-y border-white/5 bg-white/[0.01] relative overflow-hidden">
+      {/* STATS - Hidden on Mobile to focus on urgency */}
+      <section className="hidden md:block py-32 border-y border-white/5 bg-white/[0.01] relative overflow-hidden">
         <div className="absolute inset-0 opacity-5 pointer-events-none">
            <div className="absolute top-0 right-0 w-[500px] h-full bg-primary/20 blur-[120px]" />
            <div className="absolute bottom-0 left-0 w-[500px] h-full bg-secondary/20 blur-[120px]" />
@@ -1945,8 +2107,8 @@ export default function App() {
         </div>
       </section>
 
-      {/* PLATFORM PREVIEW - "PROOF" SECTION */}
-      <section className="py-40 px-6 relative overflow-hidden bg-bg-dark">
+      {/* PLATFORM PREVIEW - "PROOF" SECTION - Hidden on Mobile */}
+      <section className="hidden md:block py-40 px-6 relative overflow-hidden bg-bg-dark">
          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
          
          <SectionHeader 
@@ -2072,47 +2234,56 @@ export default function App() {
          </div>
       </section>
 
-      {/* THE BENTO SECTION */}
-      <section id="features" className="py-32 px-6">
-         <SectionHeader 
-           badge="⚡ O ARSENAL DO 1000" 
-           title="Tudo o que você desbloqueia hoje" 
-           subtitle="Chega de perder tempo com teoria chata. O curso é focado em prática e resultado imediato."
-         />
+      {/* THE BENTO SECTION - Desktop Only now (Mobile has checklist) */}
+      <section id="features" className="hidden md:block py-20 md:py-32 px-6">
+         <div className="md:hidden space-y-4 mb-10 text-center">
+            <span className="inline-block px-3 py-1 bg-primary/10 text-primary text-[9px] font-black uppercase rounded-lg border border-primary/20">O QUE VOCÊ LEVA</span>
+            <h2 className="text-4xl font-display font-black leading-none tracking-tight italic">SEU ARSENAL <span className="text-primary italic">PARA O 1000</span></h2>
+         </div>
          
-         <div className="max-w-7xl mx-auto grid md:grid-cols-12 gap-8">
-            <div className="md:col-span-8 bento-card flex flex-col justify-end bg-gradient-to-br from-primary/10 to-transparent min-h-[450px] relative overflow-hidden group">
-               <div className="absolute top-10 right-10 text-[180px] opacity-10 group-hover:scale-110 transition-transform duration-700">🤖</div>
+         <div className="hidden md:block">
+           <SectionHeader 
+             badge="⚡ O ARSENAL DO 1000" 
+             title="Tudo o que você desbloqueia hoje" 
+             subtitle="Chega de perder tempo com teoria chata. O curso é focado em prática e resultado imediato."
+           />
+         </div>
+         
+         <div className="max-w-7xl mx-auto grid md:grid-cols-12 gap-5 md:gap-8">
+            {/* Benefício 1: IA - MAIS IMPORTANTE */}
+            <div className="md:col-span-8 bento-card flex flex-col justify-end bg-gradient-to-br from-primary/10 to-transparent min-h-[320px] md:min-h-[450px] relative overflow-hidden group border-primary/20">
+               <div className="absolute top-8 right-8 text-[100px] md:text-[180px] opacity-10 group-hover:scale-110 transition-transform duration-700">🤖</div>
                <div className="relative z-10">
-                  <span className="px-3 py-1 bg-primary/20 text-primary text-[10px] font-black uppercase rounded-lg border border-primary/20 mb-6 inline-block">INTELIGÊNCIA ARTIFICIAL</span>
-                  <h3 className="text-4xl font-display font-black mb-4 italic">Corretor com IA Integrada</h3>
-                  <p className="text-gray-400 font-medium text-xl leading-relaxed max-w-xl">
-                    Envie sua redação e receba feedback automático em 2 minutos. Identifica falhas na estrutura, argumentação, coesão e gramática.
+                  <span className="px-3 py-1 bg-primary/20 text-primary text-[8px] md:text-[10px] font-black uppercase rounded-lg border border-primary/20 mb-4 md:mb-6 inline-block">CORRETORA INSTANTÂNEA</span>
+                  <h3 className="text-3xl md:text-4xl font-display font-black mb-2 md:mb-4 italic">CORREÇÃO EM 2 MINUTOS</h3>
+                  <p className="text-gray-400 font-medium text-base md:text-xl leading-snug max-w-xl">
+                    Malu IA identifica todos os seus erros na C1 e C3 na hora. Sem esperar dias por um professor.
                   </p>
                </div>
             </div>
             
-            <div className="md:col-span-4 bento-card flex flex-col justify-between group">
-               <div className="text-6xl group-hover:scale-125 transition-transform">📚</div>
+            {/* Benefício 2: Guia PDF */}
+            <div className="md:col-span-4 bento-card flex flex-col justify-between group py-6 px-8 bg-white/[0.02]">
+               <div className="text-4xl md:text-6xl group-hover:scale-125 transition-transform mb-4">📘</div>
                <div>
-                  <h3 className="text-2xl font-display font-black mb-3 italic">Redações Nota 1000</h3>
-                  <p className="text-sm text-gray-400">Estude redações nota 950-1000 do ENEM 2023-2024. Cada uma com análise completa.</p>
+                  <h3 className="text-xl md:text-2xl font-display font-black mb-2 italic">GUIA DE ESTRUTURAS</h3>
+                  <p className="text-xs md:text-sm text-gray-500 font-bold leading-relaxed italic">As fórmulas prontas para você apenas "encaixar" seu tema.</p>
                </div>
             </div>
 
-            <div className="md:col-span-12 bento-card flex flex-col justify-center bg-secondary/5 border-secondary/20 min-h-[250px] group text-center relative overflow-hidden">
-               <div className="absolute -left-10 top-1/2 -translate-y-1/2 text-[150px] opacity-5 group-hover:scale-110 transition-transform">🎯</div>
-               <div className="relative z-10 max-w-2xl mx-auto">
-                  <div className="text-6xl mb-6 group-hover:rotate-12 transition-transform inline-block">🎯</div>
-                  <h3 className="text-4xl font-display font-black mb-4 italic">Estruturas que Funcionam</h3>
-                  <p className="text-gray-400 font-medium text-lg leading-relaxed">Planilha 'copy-paste' com 5 estruturas validadas para qualquer tema do ENEM. Do 0 ao 950+ sem complicação.</p>
+            {/* Benefício 3: Estruturas (Simplified for mobile) */}
+            <div className="md:col-span-12 bento-card flex flex-col md:flex-row items-center gap-6 md:gap-10 py-8 px-8 bg-secondary/5 border-secondary/10 group">
+               <div className="text-5xl md:text-6xl group-hover:rotate-12 transition-transform">🎯</div>
+               <div className="text-center md:text-left">
+                  <h3 className="text-2xl md:text-4xl font-display font-black mb-1 md:mb-2 italic uppercase">Modelos Copy-Paste</h3>
+                  <p className="text-sm md:text-lg text-gray-400 font-medium leading-relaxed">5 estruturas validadas que servem para qualquer tema do ENEM.</p>
                </div>
             </div>
          </div>
       </section>
 
-      {/* VALUE PROPOSITION GRID */}
-      <section className="py-32 px-6 bg-white/[0.01]">
+      {/* VALUE PROPOSITION GRID - Hidden on Mobile */}
+      <section className="hidden md:block py-32 px-6 bg-white/[0.01]">
          <div className="max-w-7xl mx-auto">
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
                {VALUE_PROPS.map((prop, i) => (
@@ -2134,12 +2305,19 @@ export default function App() {
          </div>
       </section>
 
-      {/* TESTIMONIALS SECTION */}
-      <section className="py-32 px-6">
-         <SectionHeader 
-           badge="SÓ RESULTADO REAL" 
-           title="O que dizem os futuros aprovados" 
-         />
+      {/* TESTIMONIALS SECTION - Compact on Mobile */}
+      <section className="py-20 md:py-32 px-6">
+         <div className="md:hidden mb-12">
+            <span className="inline-block px-3 py-1 bg-accent/10 text-accent text-[9px] font-black uppercase rounded-lg border border-accent/20 mb-4">RESULTADOS REAIS</span>
+            <h2 className="text-4xl font-display font-black leading-none tracking-tight italic text-white underline decoration-primary">ELES CHEGARAM LÁ.</h2>
+         </div>
+         
+         <div className="hidden md:block">
+           <SectionHeader 
+             badge="SÓ RESULTADO REAL" 
+             title="O que dizem os futuros aprovados" 
+           />
+         </div>
          
          <div className="max-w-7xl mx-auto grid md:grid-cols-3 gap-8">
             {TESTIMONIALS.map((t, i) => (
@@ -2147,91 +2325,124 @@ export default function App() {
                  key={i}
                  initial={{ opacity: 0 }}
                  whileInView={{ opacity: 1 }}
-                 className="glass p-10 rounded-[48px] border-white/5 flex flex-col justify-between"
+                 className={`glass p-8 md:p-10 rounded-[40px] md:rounded-[48px] border-white/5 flex flex-col justify-between ${i > 0 ? 'hidden md:flex' : ''}`}
                >
-                 <div className="space-y-6">
+                 <div className="space-y-4 md:space-y-6">
                     <div className="flex gap-1">
                        {[...Array(5)].map((_, j) => <Star key={j} size={14} className="fill-accent text-accent" />)}
                     </div>
                     <p className="text-gray-300 font-medium text-lg leading-relaxed italic">"{t.text}"</p>
                  </div>
                  
-                 <div className="mt-12 pt-8 border-t border-white/5 flex items-center justify-between">
+                 <div className="mt-8 md:mt-12 pt-6 md:pt-8 border-t border-white/5 flex items-center justify-between">
                     <div className="flex items-center gap-4">
-                       <img src={t.avatar} className="w-12 h-12 rounded-2xl bg-white/5" />
+                       <img src={t.avatar} className="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-white/5" />
                        <div className="text-left">
-                          <div className="text-sm font-black uppercase italic">{t.name}</div>
-                          <div className="text-[10px] font-black text-gray-500 uppercase tracking-widest">Aluno Pro</div>
+                          <div className="text-xs md:text-sm font-black uppercase italic">{t.name}</div>
+                          <div className="text-[8px] md:text-[10px] font-black text-gray-500 uppercase tracking-widest">Aluno Pro</div>
                        </div>
                     </div>
                     <div className="text-right">
-                       <div className="text-[9px] font-black uppercase opacity-40 mb-1">Nota Anterior: {t.before}</div>
-                       <div className="text-xl font-display font-black text-primary">MIL: {t.after}</div>
+                       <div className="text-[8px] md:text-[9px] font-black uppercase opacity-40 mb-1">Anterior: {t.before}</div>
+                       <div className="text-lg md:text-xl font-display font-black text-primary">DEPOIS: {t.after}</div>
                     </div>
                  </div>
                </motion.div>
             ))}
          </div>
       </section>
-      {/* FINAL CTA */}
-      <section className="py-48 px-6 relative">
-         <div className="absolute top-0 left-1/2 -track-x-1/2 w-px h-48 bg-gradient-to-b from-transparent to-primary" />
+      {/* MOBILE FAQ & GUARANTEE */}
+      <section className="md:hidden py-16 px-6 bg-[#08080C]">
+         <div className="space-y-6 mb-12">
+            <h3 className="text-2xl font-display font-black italic uppercase text-white">Dúvidas Frequentes</h3>
+            <div className="space-y-4">
+               {[
+                  { q: "Sou péssimo em redação, funciona?", a: "Sim! O método foi feito para quem tira 600 e quer o 900+ rápido." },
+                  { q: "Como recebo o acesso?", a: "Imediato após o pagamento. Você recebe tudo por e-mail." },
+                  { q: "O pagamento é único?", a: "Sim. Pague uma vez, use para sempre. Sem mensalidades." }
+               ].map((f, i) => (
+                  <div key={i} className="p-5 glass border-white/5 rounded-2xl bg-white/[0.01]">
+                     <h4 className="text-xs font-black uppercase text-primary mb-2">? {f.q}</h4>
+                     <p className="text-[11px] text-gray-400 font-bold leading-relaxed italic">{f.a}</p>
+                  </div>
+               ))}
+            </div>
+         </div>
+
+         <div className="p-8 glass rounded-3xl border-success/20 bg-success/5 text-center space-y-4">
+            <div className="w-16 h-16 bg-success rounded-2xl flex items-center justify-center mx-auto shadow-lg shadow-success/20">
+               <ShieldCheck className="text-white" size={32} />
+            </div>
+            <div>
+               <h4 className="text-sm font-black uppercase tracking-widest text-success mb-2">RISCO ZERO: GARANTIA DE 7 DIAS</h4>
+               <p className="text-xs text-gray-400 font-bold leading-relaxed italic">
+                 Se você não gostar de qualquer coisa, te devolvemos 100% do valor. O risco é todo nosso.
+               </p>
+            </div>
+         </div>
+      </section>
+
+      {/* FINAL CTA - Simplified for Mobile */}
+      <section className="py-24 md:py-48 px-6 relative">
+         <div className="absolute top-0 left-1/2 -track-x-1/2 w-px h-24 md:h-48 bg-gradient-to-b from-transparent to-primary" />
          
-         <div className="max-w-4xl mx-auto bento-card text-center p-16 md:p-32 border-primary/20 bg-gradient-to-tr from-primary/10 via-transparent to-secondary/10 overflow-hidden relative">
+         <div className="max-w-4xl mx-auto bento-card text-center p-8 md:p-32 border-primary/20 bg-gradient-to-tr from-primary/10 via-transparent to-secondary/10 overflow-hidden relative">
             <div className="absolute -top-24 -right-24 w-64 h-64 bg-primary/20 blur-[100px] rounded-full pointer-events-none" />
             
             <div className="relative z-10">
-               <div className="mb-12">
-                  <p className="text-primary font-black uppercase tracking-[0.4em] mb-8 italic text-white leading-relaxed">O ENEM NÃO ESPERA POR VOCÊ</p>
+               <div className="mb-8 md:mb-12">
+                  <p className="text-primary font-black uppercase tracking-[0.4em] mb-6 md:mb-8 italic text-white text-xs md:text-sm">O ENEM NÃO ESPERA POR VOCÊ</p>
                   <Countdown />
                </div>
                
-               <h2 className="text-6xl md:text-8xl font-display font-black mb-12 tracking-tighter leading-[0.8] italic text-white">VAMOS COMEÇAR <br/> <span className="text-gradient">O SEU 1000?</span></h2>
+               <h2 className="text-5xl md:text-8xl font-display font-black mb-8 md:mb-12 tracking-tighter leading-[0.8] italic text-white flex flex-col gap-2">
+                  VAMOS COMEÇAR 
+                  <span className="text-gradient">O SEU 1000?</span>
+               </h2>
                
-               <div className="flex flex-col items-center mb-16">
-                  <div className="space-y-4 mb-10">
-                     <p className="text-2xl font-display font-medium line-through opacity-20 mb-2">DE R$ 99,90</p>
-                     <p className="text-8xl font-display font-black text-white">R$ 29,90</p>
-                     <div className="px-6 py-2 bg-success/10 border border-success/20 rounded-full text-[12px] font-black uppercase tracking-widest text-success inline-block mt-4">
+               <div className="flex flex-col items-center mb-10 md:mb-16">
+                  <div className="space-y-2 md:space-y-4 mb-6 md:mb-10">
+                     <p className="text-xl md:text-2xl font-display font-medium line-through opacity-20">DE R$ 99,90</p>
+                     <p className="text-7xl md:text-8xl font-display font-black text-white">R$ 29,90</p>
+                     <div className="px-4 md:px-6 py-2 bg-success/10 border border-success/20 rounded-full text-[10px] md:text-[12px] font-black uppercase tracking-widest text-success inline-block mt-2">
                         VOCÊ ECONOMIZA R$ 70,00 (70% OFF)
                      </div>
                   </div>
                   
-                  <p className="text-lg text-gray-400 max-w-sm mx-auto font-medium leading-relaxed italic bg-white/5 p-4 rounded-2xl border border-white/5">
-                    "Menos do que um café por mês, <br/> mais que sua aprovação."
+                  <p className="text-sm md:text-lg text-gray-400 max-w-sm mx-auto font-medium leading-relaxed italic bg-white/5 p-4 rounded-2xl border border-white/5">
+                    "Menos do que um café por mês, <br className="hidden md:block" /> mais que sua aprovação."
                   </p>
                </div>
 
-               <div className="max-w-md mx-auto mb-10 pt-8">
+               <div className="max-w-md mx-auto mb-10 pt-4 md:pt-8">
                  <button 
                    onClick={handleCTA}
-                   className="w-full bg-primary text-white py-10 rounded-[48px] text-3xl font-display font-black hover:scale-105 active:scale-95 transition-all shadow-[0_30px_100px_rgba(255,0,102,0.3)] group flex items-center justify-center gap-4"
+                   className="w-full bg-primary text-white py-6 md:py-10 rounded-[32px] md:rounded-[48px] text-xl md:text-3xl font-display font-black hover:scale-105 active:scale-95 transition-all shadow-[0_20px_100px_rgba(255,0,102,0.3)] group flex items-center justify-center gap-4"
                  >
-                   QUERO MEU 1000 AGORA! <ArrowRight className="group-hover:translate-x-2 transition-transform" size={32} />
+                   QUERO MEU 1000! <ArrowRight className="group-hover:translate-x-2 transition-transform" size={24} />
                  </button>
                </div>
 
-               <div className="p-8 glass rounded-3xl border-success/20 bg-success/5 mt-12 max-w-xl mx-auto flex flex-col md:flex-row items-center gap-8 text-left">
-                  <div className="w-16 h-16 bg-success rounded-2xl flex items-center justify-center shrink-0 shadow-lg shadow-success/20 group hover:rotate-12 transition-transform">
-                     <ShieldCheck className="text-white" size={32} />
+               <div className="p-6 md:p-8 glass rounded-2xl md:rounded-3xl border-success/20 bg-success/5 mt-8 md:mt-12 max-w-xl mx-auto flex flex-col md:flex-row items-center gap-4 md:gap-8 text-center md:text-left">
+                  <div className="w-12 h-12 md:w-16 md:h-16 bg-success rounded-xl md:rounded-2xl flex items-center justify-center shrink-0 shadow-lg shadow-success/20 group hover:rotate-12 transition-transform">
+                     <ShieldCheck className="text-white" size={28} />
                   </div>
                   <div>
-                     <h4 className="text-sm font-black uppercase tracking-widest text-success mb-2">GARANTIA INCONDICIONAL DE 30 DIAS</h4>
-                     <p className="text-xs text-gray-400 font-bold leading-relaxed">Se você não sentir evolução na sua escrita em 30 dias, devolvemos 100% do seu dinheiro. Sem perguntas, sem burocracia.</p>
+                     <h4 className="text-xs md:text-sm font-black uppercase tracking-widest text-success mb-1 md:mb-2">GARANTIA DE 7 DIAS</h4>
+                     <p className="text-[10px] md:text-xs text-gray-400 font-bold leading-relaxed">Se não gostar do método, devolvemos 100% do seu dinheiro imediatamente.</p>
                   </div>
                </div>
                
-               <div className="mt-20 flex justify-center gap-10 opacity-30 text-[10px] font-black uppercase tracking-[0.3em]">
+               <div className="mt-12 md:mt-20 flex justify-center gap-6 md:gap-10 opacity-30 text-[8px] md:text-[10px] font-black uppercase tracking-[0.3em]">
                   <span>● CHECKOUT SEGURO</span>
                   <span>● LIBERAÇÃO IMEDIATA</span>
-                  <span>● ACESSO VITALÍCIO</span>
                </div>
             </div>
          </div>
       </section>
 
-      {/* FAQ */}
-      <section id="faq" className="py-40 px-6">
+      {/* FAQ - Hidden on Mobile */}
+      <section id="faq" className="hidden md:block py-40 px-6">
         <SectionHeader badge="SÓ RESPOSTA PENSADA" title="Ficou alguma dúvida?" />
         <div className="max-w-4xl mx-auto space-y-6">
           {[
