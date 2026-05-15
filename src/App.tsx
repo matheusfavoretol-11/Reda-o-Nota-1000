@@ -465,7 +465,7 @@ const TESTIMONIALS = [
 
 const VALUE_PROPS = [
   { icon: "🤖", title: "CORRETOR COM IA INTEGRADA", desc: "Envie sua redação e receba feedback em 2 minutos.", sub: "Identifica erros de estrutura, coesão e gramática" },
-  { icon: "✍️", title: "100 REDAÇÕES NOTA 1000", desc: "Modelos dos anos 2023-2024 analisados linha por linha.", sub: "Aprenda com quem já chegou no topo" },
+  { icon: "✍️", title: "REDAÇÕES NOTA 1000", desc: "Modelos dos anos 2023-2024 analisados linha por linha.", sub: "Aprenda com quem já chegou no topo" },
   { icon: "🎯", title: "ESTRUTURAS PRONTAS", desc: "Planilha com 5 modelos 'copy-paste' para qualquer tema.", sub: "Introdução, Desenvolvimento e Conclusão completas" },
   { icon: "🎁", title: "BÔNUS: GUIA DE REPERTÓRIOS", desc: "Citações e séries curingas que cabem em tudo.", sub: "Filosofia, Sociologia e Cultura Pop" },
   { icon: "🕒", title: "ACESSO VITALÍCIO", desc: "Pague uma vez e estude para sempre, sem mensalidade.", sub: "Atualizações inclusas todo ano" },
@@ -1922,21 +1922,154 @@ export default function App() {
       </section>
 
       {/* STATS */}
-      <section className="py-24 border-y border-white/5 bg-white/[0.01]">
-        <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-3 gap-16 text-center">
+      <section className="py-32 border-y border-white/5 bg-white/[0.01] relative overflow-hidden">
+        <div className="absolute inset-0 opacity-5 pointer-events-none">
+           <div className="absolute top-0 right-0 w-[500px] h-full bg-primary/20 blur-[120px]" />
+           <div className="absolute bottom-0 left-0 w-[500px] h-full bg-secondary/20 blur-[120px]" />
+        </div>
+        
+        <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-3 gap-24 relative z-10">
           {[
-            { v: "500+", l: "Alunos Pro" },
-            { v: "12.847", l: "Redações lidas" },
-            { v: "4.9/5", l: "Voto da Galera" }
+            { v: "500+", l: "Alunos Aprovados", sub: "Estudando com o método" },
+            { v: "12.847", l: "Análises de IA", sub: "Correções precisas MALU" },
+            { v: "4.9/5", l: "Satisfação Geral", sub: "Nota média dos usuários" }
           ].map((s, i) => (
-            <div key={i}>
-              <div className="text-6xl font-display font-black text-gradient block mb-2">
+            <div key={i} className="group">
+              <div className="text-7xl font-display font-black text-gradient block mb-4 group-hover:scale-110 transition-transform">
                 <AnimatedCounter value={s.v} />
               </div>
-              <div className="text-[11px] font-black uppercase tracking-[0.3em] opacity-30">{s.l}</div>
+              <div className="text-[12px] font-black uppercase tracking-[0.3em] text-white mb-2">{s.l}</div>
+              <div className="text-[10px] font-medium uppercase tracking-widest opacity-30">{s.sub}</div>
             </div>
           ))}
         </div>
+      </section>
+
+      {/* PLATFORM PREVIEW - "PROOF" SECTION */}
+      <section className="py-40 px-6 relative overflow-hidden bg-bg-dark">
+         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
+         
+         <SectionHeader 
+           badge="PROVA DE COMO É" 
+           title="O Coração do Red 1000 Pro" 
+           subtitle="Esqueça plataformas confusas. Aqui você tem um ecossistema completo focado em uma única coisa: Sua Aprovação."
+         />
+         
+         <div className="max-w-7xl mx-auto relative group">
+            <div className="absolute -inset-1 bg-gradient-to-r from-primary/20 via-secondary/20 to-accent/20 rounded-[52px] blur-2xl opacity-50 group-hover:opacity-100 transition-opacity duration-1000" />
+            
+            <div className="glass rounded-[50px] border-white/5 p-4 animate-float relative z-10">
+               <div className="bg-[#050508] rounded-[42px] overflow-hidden border border-white/10 shadow-3xl">
+                  {/* Mock UI Header */}
+                  <div className="h-14 border-b border-white/5 flex items-center justify-between px-8 bg-white/[0.03]">
+                     <div className="flex gap-2">
+                        <div className="w-3 h-3 rounded-full bg-red-500/40" />
+                        <div className="w-3 h-3 rounded-full bg-yellow-500/40" />
+                        <div className="w-3 h-3 rounded-full bg-green-500/40" />
+                     </div>
+                     <div className="flex items-center gap-6">
+                        <div className="hidden sm:flex gap-4">
+                           <div className="w-20 h-2 bg-white/10 rounded-full" />
+                           <div className="w-20 h-2 bg-white/10 rounded-full" />
+                        </div>
+                        <div className="w-8 h-8 rounded-full bg-primary/20 border border-primary/20" />
+                     </div>
+                  </div>
+                  
+                  {/* Mock App Content */}
+                  <div className="flex flex-col md:flex-row h-[600px]">
+                     {/* Sidebar */}
+                     <div className="w-72 border-r border-white/5 p-8 space-y-8 hidden md:block bg-white/[0.01]">
+                        <div className="space-y-3">
+                           <div className="h-2 w-1/3 bg-primary/30 rounded-full" />
+                           <div className="h-8 w-full bg-white/5 rounded-xl" />
+                        </div>
+                        <div className="space-y-6 pt-8">
+                           {[1,2,3,4,5].map(i => (
+                              <div key={i} className="flex gap-4 items-center opacity-40">
+                                 <div className="w-8 h-8 rounded-lg bg-white/5" />
+                                 <div className="h-2 flex-1 bg-white/5 rounded-full" />
+                              </div>
+                           ))}
+                        </div>
+                     </div>
+                     
+                     {/* Main Area */}
+                     <div className="flex-1 p-8 md:p-12 overflow-hidden flex flex-col">
+                        <div className="flex justify-between items-start mb-12">
+                           <div className="space-y-3">
+                              <div className="h-10 w-64 bg-white/10 rounded-2xl" />
+                              <div className="h-4 w-48 bg-white/5 rounded-lg" />
+                           </div>
+                           <div className="px-6 py-3 bg-success/20 text-success rounded-full text-[10px] font-black uppercase tracking-widest border border-success/20">
+                              Módulo Concluído
+                           </div>
+                        </div>
+                        
+                        <div className="grid md:grid-cols-12 gap-10 flex-1">
+                           <div className="md:col-span-12 lg:col-span-7 space-y-6">
+                              <div className="p-8 bg-white/5 rounded-[32px] border border-white/5 space-y-4 h-full">
+                                 <div className="h-2 w-1/4 bg-primary/40 rounded-full" />
+                                 <div className="space-y-3 pt-4">
+                                    <div className="h-3 w-full bg-white/5 rounded-full" />
+                                    <div className="h-3 w-full bg-white/5 rounded-full" />
+                                    <div className="h-3 w-3/4 bg-white/5 rounded-full" />
+                                    <div className="h-3 w-full bg-white/5 rounded-full opacity-50" />
+                                    <div className="h-3 w-5/6 bg-white/5 rounded-full opacity-20" />
+                                 </div>
+                              </div>
+                           </div>
+                           <div className="hidden lg:flex lg:col-span-5 flex-col gap-6">
+                              <div className="p-8 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-[32px] border border-white/10 flex flex-col items-center justify-center text-center space-y-4 flex-1">
+                                 <div className="text-6xl font-display font-black text-white italic">980</div>
+                                 <div className="text-[10px] font-black text-primary uppercase tracking-[0.2em]">Sua Nota Estimada</div>
+                              </div>
+                              <div className="p-6 bg-[#0A0A0F] rounded-[32px] border border-white/10 space-y-4">
+                                 <div className="flex gap-2">
+                                    <div className="w-2 h-2 rounded-full bg-success" />
+                                    <div className="w-2 h-2 rounded-full bg-success opacity-50" />
+                                    <div className="w-2 h-2 rounded-full bg-success opacity-20" />
+                                 </div>
+                                 <p className="text-[11px] text-gray-400 font-medium italic leading-relaxed">
+                                    "Malu detectou que sua C3 está perfeita, mas podemos melhorar um pouco a coesão no 2º parágrafo para chegar no 1000 absoluto."
+                                 </p>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               
+               {/* Decorative Floaters */}
+               <motion.div 
+                  animate={{ y: [0, -20, 0] }}
+                  transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                  className="absolute -top-12 -left-12 glass p-6 rounded-3xl border-primary/20 shadow-2xl z-20 hidden xl:block"
+               >
+                  <div className="flex items-center gap-4">
+                     <div className="w-12 h-12 bg-primary/20 rounded-2xl flex items-center justify-center"><Zap size={24} className="text-primary" /></div>
+                     <div>
+                        <div className="text-xs font-black text-white">IA Corretora</div>
+                        <div className="text-[9px] font-black uppercase opacity-40">Malu Ativa</div>
+                     </div>
+                  </div>
+               </motion.div>
+               
+               <motion.div 
+                  animate={{ y: [0, 20, 0] }}
+                  transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                  className="absolute -bottom-10 -right-10 glass p-6 rounded-3xl border-secondary/20 shadow-2xl z-20 hidden xl:block"
+               >
+                  <div className="flex items-center gap-4">
+                     <div className="w-12 h-12 bg-secondary/20 rounded-2xl flex items-center justify-center"><BookOpen size={24} className="text-secondary" /></div>
+                     <div>
+                        <div className="text-xs font-black text-white">Guia 1000</div>
+                        <div className="text-[9px] font-black uppercase opacity-40">30 Págs de Ouro</div>
+                     </div>
+                  </div>
+               </motion.div>
+            </div>
+         </div>
       </section>
 
       {/* THE BENTO SECTION */}
@@ -1962,7 +2095,7 @@ export default function App() {
             <div className="md:col-span-4 bento-card flex flex-col justify-between group">
                <div className="text-6xl group-hover:scale-125 transition-transform">📚</div>
                <div>
-                  <h3 className="text-2xl font-display font-black mb-3 italic">100 Redações Perfeitas</h3>
+                  <h3 className="text-2xl font-display font-black mb-3 italic">Redações Nota 1000</h3>
                   <p className="text-sm text-gray-400">Estude redações nota 950-1000 do ENEM 2023-2024. Cada uma com análise completa.</p>
                </div>
             </div>

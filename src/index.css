@@ -55,6 +55,10 @@
   animation: float 8s ease-in-out infinite;
 }
 
+.animate-float-slow {
+  animation: float 12s ease-in-out infinite;
+}
+
 /* Scrollbar Customization */
 ::-webkit-scrollbar {
   width: 6px;
