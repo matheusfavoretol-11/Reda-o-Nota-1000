@@ -383,7 +383,7 @@ export default function App() {
           
           {/* 7-WORD HEADLINE: [RESULTADO] + [TEMPO] + [GARANTIA] */}
           <h1 className="text-[44px] font-display font-black leading-[0.85] tracking-tighter italic uppercase text-white">
-            VOCÊ TIRA <span className="text-primary tracking-[-0.05em]">600-700?</span> <br/> AQUI VOCÊ <br/> SAI DE <span className="text-primary">950</span>
+            O segredo que <br/> <span className="text-primary">universidades federais</span> <br/> escondem
           </h1>
           
           {/* PARA QUEM É (TARGET) */}
@@ -522,8 +522,8 @@ export default function App() {
             </div>
             
             <h1 className="text-6xl md:text-[86px] font-display font-black leading-[0.85] mb-12 tracking-tighter italic uppercase">
-              VOCÊ TIRA <span className="text-primary tracking-[-0.05em]">600-700?</span> <br/>
-              AQUI VOCÊ <span className="text-gradient">SAI DE 950.</span>
+              O segredo que <br/>
+              <span className="text-gradient">universidades federais</span> <br/> escondem
             </h1>
             
             <h2 className="text-2xl text-gray-400 mb-16 leading-relaxed font-medium max-w-xl">
