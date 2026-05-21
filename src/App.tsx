@@ -60,71 +60,114 @@ const LoadingView = () => (
 
 // --- COMPONENTS ---
 
-const HowItWorks = ({ onAction }: { onAction: () => void }) => (
-  <section className="py-24 px-6 relative overflow-hidden">
-    <div className="absolute top-1/2 left-0 w-64 h-64 bg-primary/10 blur-[120px] rounded-full" />
-    <div className="max-w-7xl mx-auto space-y-16 relative z-10">
-      <div className="text-center space-y-4">
-        <span className="text-primary text-[10px] font-black uppercase tracking-[0.4em] mb-4 inline-block">MÉTODO RED 1000 PRO</span>
-        <h2 className="text-4xl md:text-7xl font-display font-black italic uppercase tracking-tighter">
-          COMO FUNCIONA <span className="text-gradient">POR DENTRO?</span>
-        </h2>
-        <p className="text-gray-400 text-lg md:text-xl font-medium max-w-2xl mx-auto leading-relaxed">
-          O atalho que os corretores do ENEM não querem que você descubra. Uma mistura de engenharia reversa e inteligência artificial.
-        </p>
-      </div>
+const HowItWorks = ({ onAction, isMobile = false }: { onAction: () => void; isMobile?: boolean }) => {
+  const steps = [
+    {
+      step: "01",
+      title: "Recursos Prontos",
+      desc: "Esqueletos indestrutíveis para qualquer tema.",
+      icon: <Scale className="text-primary" size={isMobile ? 18 : 24} />
+    },
+    {
+      step: "02",
+      title: "Treino Prático",
+      desc: "Micro-redações rápidas de 8 minutos.",
+      icon: <Zap className="text-secondary" size={isMobile ? 18 : 24} />
+    },
+    {
+      step: "03",
+      title: "IA Malu",
+      desc: "Correção instantânea que ensina a pensar.",
+      icon: <Sparkles className="text-accent" size={isMobile ? 18 : 24} />
+    }
+  ];
 
-      <div className="grid md:grid-cols-3 gap-8">
-        {[
-          {
-            step: "01",
-            title: "A Engenharia Reversa",
-            desc: "Dissecamos mais de 5.000 redações nota 1000 reais para isolar os padrões que SEMPRE recebem nota máxima. Criamos os 'esqueletos' indestrutíveis.",
-            icon: <Scale className="text-primary" />
-          },
-          {
-            step: "02",
-            title: "Treinamento Celular",
-            desc: "Exercícios de 'micro-redação' que treinam seu cérebro para gerar conectivos e repertórios de forma automática em menos de 8 minutos.",
-            icon: <Zap className="text-secondary" />
-          },
-          {
-            step: "03",
-            title: "Simbose com Malu IA",
-            desc: "Nossa IA exclusiva foi treinada exclusivamente com a grade de correção oficial do MEC. Ela não apenas corrige, ela te ensina a pensar como o corretor.",
-            icon: <Sparkles className="text-accent" />
-          }
-        ].map((step, i) => (
-          <motion.div 
-            key={i}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: i * 0.1 }}
-            className="glass p-10 rounded-[48px] border-white/5 bg-gradient-to-br from-white/[0.02] to-transparent relative group"
+  if (isMobile) {
+    return (
+      <section className="py-12 px-6 bg-white/[0.01]">
+        <div className="space-y-8">
+          <div className="space-y-2">
+            <span className="text-primary text-[9px] font-black uppercase tracking-[0.3em]">A Engenharia do 1000</span>
+            <h2 className="text-3xl font-display font-black italic uppercase">Como <span className="text-gradient">funciona?</span></h2>
+          </div>
+          
+          <div className="space-y-4">
+            {steps.map((step, i) => (
+              <motion.div 
+                key={i}
+                initial={{ opacity: 0, x: -10 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                className="flex items-center gap-4 bg-white/[0.02] border border-white/5 p-4 rounded-2xl"
+              >
+                <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center shrink-0">
+                  {step.icon}
+                </div>
+                <div>
+                  <h3 className="text-sm font-black italic uppercase">{step.title}</h3>
+                  <p className="text-[11px] text-gray-500 font-medium leading-tight">{step.desc}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          <button 
+            onClick={onAction}
+            className="w-full py-4 text-[10px] font-black uppercase tracking-widest text-primary border border-primary/20 rounded-xl"
           >
-            <div className="text-6xl font-display font-black opacity-10 mb-8 group-hover:text-primary transition-colors">{step.step}</div>
-            <div className="w-16 h-16 rounded-3xl bg-white/5 flex items-center justify-center mb-8 group-hover:scale-110 transition-transform">
-              {step.icon}
-            </div>
-            <h3 className="text-2xl font-display font-black mb-4 italic tracking-tight">{step.title}</h3>
-            <p className="text-gray-400 text-sm font-medium leading-relaxed italic">{step.desc}</p>
-          </motion.div>
-        ))}
+            VER MÉTODO COMPLETO ↓
+          </button>
+        </div>
+      </section>
+    );
+  }
+
+  return (
+    <section className="py-24 px-6 relative overflow-hidden">
+      <div className="absolute top-1/2 left-0 w-64 h-64 bg-primary/10 blur-[120px] rounded-full" />
+      <div className="max-w-7xl mx-auto space-y-16 relative z-10">
+        <div className="text-center space-y-4">
+          <span className="text-primary text-[10px] font-black uppercase tracking-[0.4em] mb-4 inline-block">MÉTODO RED 1000 PRO</span>
+          <h2 className="text-4xl md:text-7xl font-display font-black italic uppercase tracking-tighter">
+            COMO FUNCIONA <span className="text-gradient">POR DENTRO?</span>
+          </h2>
+          <p className="text-gray-400 text-lg md:text-xl font-medium max-w-2xl mx-auto leading-relaxed">
+            O atalho que os corretores do ENEM não querem que você descubra. Uma mistura de engenharia reversa e inteligência artificial.
+          </p>
+        </div>
+
+        <div className="grid md:grid-cols-3 gap-8">
+          {steps.map((step, i) => (
+            <motion.div 
+              key={i}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.1 }}
+              className="glass p-10 rounded-[48px] border-white/5 bg-gradient-to-br from-white/[0.02] to-transparent relative group"
+            >
+              <div className="text-6xl font-display font-black opacity-10 mb-8 group-hover:text-primary transition-colors">{step.step}</div>
+              <div className="w-16 h-16 rounded-3xl bg-white/5 flex items-center justify-center mb-8 group-hover:scale-110 transition-transform">
+                {step.icon}
+              </div>
+              <h3 className="text-2xl font-display font-black mb-4 italic tracking-tight">{step.title === "Recursos Prontos" ? "A Engenharia Reversa" : step.title === "Treino Prático" ? "Treinamento Celular" : "Simbose com Malu IA"}</h3>
+              <p className="text-gray-400 text-sm font-medium leading-relaxed italic">{step.title === "Recursos Prontos" ? "Dissecamos mais de 5.000 redações nota 1000 reais para isolar os padrões que SEMPRE recebem nota máxima." : step.title === "Treino Prático" ? "Exercícios de 'micro-redação' que treinam seu cérebro para gerar conectivos automaticamente." : "Nossa IA exclusiva foi treinada exclusivamente com a grade de correção oficial do MEC."}</p>
+            </motion.div>
+          ))}
+        </div>
+        
+        {/* MOBILE CTA WITHIN SECTION */}
+        <div className="pt-8 md:hidden">
+          <button 
+            onClick={onAction}
+            className="w-full bg-primary py-6 rounded-2xl font-black text-xs uppercase tracking-widest flex items-center justify-center gap-3"
+          >
+            QUERO ESTE MÉTODO <ArrowRight size={16} />
+          </button>
+        </div>
       </div>
-      
-      {/* MOBILE CTA WITHIN SECTION */}
-      <div className="pt-8 md:hidden">
-        <button 
-          onClick={onAction}
-          className="w-full bg-primary py-6 rounded-2xl font-black text-xs uppercase tracking-widest flex items-center justify-center gap-3"
-        >
-          QUERO ESTE MÉTODO <ArrowRight size={16} />
-        </button>
-      </div>
-    </div>
-  </section>
-);
+    </section>
+  );
+};
 // --- CONFIG ---
 const KIWIFY_CHECKOUT_URL = "https://pay.kiwify.com.br/AhSL8x0";
 
@@ -307,7 +350,7 @@ export default function App() {
   return (
     <div className="relative overflow-hidden">
       <Toaster position="bottom-right" theme="dark" />
-      <Nav onAction={handleCTA} />
+      <Nav onAction={handleCTA} onLogin={() => setShowAuth('login')} />
       
       <AnimatePresence>
         {showAuth && (
@@ -388,6 +431,13 @@ export default function App() {
             <span className="flex items-center gap-2">GARANTIR ACESSO AGORA <ArrowRight size={20} /></span>
             <span className="text-[10px] opacity-70 font-bold uppercase tracking-widest">Acesso vitalício à Malu IA</span>
           </button>
+
+          <button 
+            onClick={() => setShowAuth('login')}
+            className="w-full py-4 text-[10px] font-black uppercase tracking-[0.2em] opacity-60 hover:opacity-100 transition-opacity bg-white/5 rounded-xl border border-white/5"
+          >
+            Já tem acesso? <span className="text-secondary underline decoration-secondary/30 ml-1">Fazer Login</span>
+          </button>
           
           <div className="flex items-center justify-center gap-6 opacity-30">
             <div className="flex items-center gap-1"><ShieldCheck size={10} /> <span className="text-[8px] font-black uppercase">Garantia 7 Dias</span></div>
@@ -395,6 +445,11 @@ export default function App() {
           </div>
         </motion.div>
       </section>
+
+      {/* MOBILE-ONLY CONCISE HOW IT WORKS */}
+      <div className="md:hidden">
+        <HowItWorks onAction={handleCTA} isMobile />
+      </div>
 
       {/* QUICK PROOF STRIP (SOCIAL PROOF) */}
       <section className="md:hidden py-12 px-6 bg-white/[0.02] border-y border-white/5 space-y-6">
@@ -508,8 +563,15 @@ export default function App() {
               >
                 QUERO MINHA REDAÇÃO NOTA 10 <ArrowRight className="group-hover:translate-x-2 transition-transform" size={28} />
               </button>
+
+              <button 
+                onClick={() => setShowAuth('login')}
+                className="text-[11px] font-black uppercase tracking-[0.2em] text-white/60 hover:text-white transition-colors bg-white/5 px-6 py-2 rounded-full border border-white/5"
+              >
+                Já tem acesso? <span className="text-secondary underline decoration-secondary/30 ml-2">Fazer Login</span>
+              </button>
               
-              <div className="flex flex-col gap-2 items-center sm:items-start group">
+              <div className="flex flex-col gap-2 items-center sm:items-start group hidden lg:flex">
                 <div className="flex gap-1">
                   {[...Array(5)].map((_, i) => <Star key={i} size={16} className="fill-accent text-accent" />)}
                 </div>
@@ -971,18 +1033,15 @@ export default function App() {
         </div>
       </section>
 
-      <div className="md:hidden">
-        <HowItWorks onAction={handleCTA} />
-      </div>
-
       <footer className="mt-40 py-24 px-12 border-t border-white/5 opacity-50">
          <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-10">
             <div className="flex items-center gap-2">
                <Trophy size={20} className="text-primary" />
                <span className="font-display font-black text-xl tracking-tighter uppercase">RED 1000 PRO</span>
             </div>
-            <div className="flex gap-10 text-[10px] font-black uppercase tracking-widest text-gray-500">
+            <div className="flex flex-wrap justify-center gap-10 text-[10px] font-black uppercase tracking-widest text-gray-500">
                <span>© 2024 • MatheuS 1000 PRO</span>
+               <button onClick={() => setShowAuth('login')} className="hover:text-primary transition-colors">Área do Aluno</button>
                <a href="#" className="text-primary hover:underline">contato@redacao1000pro.com</a>
             </div>
          </div>
