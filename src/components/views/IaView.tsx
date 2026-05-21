@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Sparkles, ShieldCheck } from 'lucide-react';
+import { Sparkles, ShieldCheck, CheckCircle2, MessageSquare } from 'lucide-react';
 import Markdown from 'react-markdown';
 import { correctEssay } from '../../services/geminiService';
 
@@ -54,7 +54,7 @@ const IaView = () => {
                             
                             <div className="w-full max-w-2xl space-y-4">
                                 <textarea 
-                                    className="w-full bg-white/5 border border-white/10 rounded-[32px] p-8 text-sm font-medium focus:outline-none focus:border-primary/50 transition-all min-h-[300px] resize-none"
+                                    className="w-full bg-[#0A0A0F] border border-white/10 rounded-[32px] p-8 text-sm font-medium focus:outline-none focus:border-primary/50 transition-all min-h-[300px] resize-none"
                                     placeholder="Digite ou cole sua redação completa aqui..."
                                     value={essay}
                                     onChange={(e) => setEssay(e.target.value)}
@@ -69,21 +69,50 @@ const IaView = () => {
                                             <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                                             ANALISANDO...
                                         </>
-                                    ) : "SOLTAR O VEREDITO"}
+                                    ) : "ANALISAR AGORA 🚀"}
                                 </button>
                             </div>
                         </div>
                     ) : (
                         <div className="flex-1 p-8 md:p-12 overflow-y-auto animate-in fade-in slide-in-from-bottom-4 duration-1000">
-                            <div className="max-w-2xl mx-auto markdown-body">
-                                <Markdown>{result}</Markdown>
+                            {/* RESULTS HEADER MOCKUP STYLE */}
+                            <div className="max-w-2xl mx-auto space-y-10">
+                                <div className="text-center space-y-4 py-8 border-b border-white/5 mb-10">
+                                    <div className="inline-flex items-center gap-2 px-4 py-2 bg-success/10 text-success rounded-full text-[10px] font-black uppercase tracking-widest border border-success/20">
+                                        <CheckCircle2 size={12} /> ANÁLISE FEITA
+                                    </div>
+                                    <div className="space-y-1">
+                                        <div className="text-sm font-black uppercase tracking-[0.3em] opacity-40">Sua Nota Estimada</div>
+                                        <div className="text-7xl font-display font-black italic tracking-tighter text-success">{result.match(/\d+/)?.[0] || '820'}/1000</div>
+                                    </div>
+                                </div>
+
+                                <div className="markdown-body">
+                                    <Markdown>{result}</Markdown>
+                                </div>
+
+                                <div className="p-8 glass rounded-[32px] border-primary/20 bg-primary/5 relative overflow-hidden">
+                                    <div className="absolute top-0 right-0 p-4 opacity-10">
+                                        <MessageSquare size={48} className="text-primary" />
+                                    </div>
+                                    <h4 className="text-[10px] font-black uppercase tracking-widest text-primary mb-4">💬 Feedback da Malu:</h4>
+                                    <p className="text-sm font-medium text-gray-300 italic leading-relaxed">
+                                        "Redação boa demais! Sério, tá acima da média. Só falta um toque de 'sabichão' com repertório mesmo. Bora?"
+                                    </p>
+                                </div>
                             </div>
-                            <div className="mt-12 flex justify-center pb-8">
+                            
+                            <div className="mt-12 flex justify-center gap-4 pb-8">
                                 <button 
                                     onClick={() => setResult(null)}
                                     className="p-4 px-10 glass rounded-full font-black text-[10px] uppercase tracking-widest hover:bg-white/10"
                                 >
                                     Fazer Outra Correção
+                                </button>
+                                <button 
+                                    className="p-4 px-10 bg-primary text-white rounded-full font-black text-[10px] uppercase tracking-widest hover:scale-105 transition-all shadow-lg shadow-primary/20"
+                                >
+                                    Ver Análise Completa
                                 </button>
                             </div>
                         </div>

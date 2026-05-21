@@ -45,6 +45,7 @@ const IaView = lazy(() => import('./components/views/IaView'));
 const RepertoireView = lazy(() => import('./components/views/RepertoireView'));
 const ChallengesView = lazy(() => import('./components/views/ChallengesView'));
 const RedacoesView = lazy(() => import('./components/views/RedacoesView'));
+const DashboardOverview = lazy(() => import('./components/views/DashboardOverview'));
 
 // Loading Component
 const LoadingView = () => (
@@ -56,11 +57,77 @@ const LoadingView = () => (
   </div>
 );
 
+
+// --- COMPONENTS ---
+
+const HowItWorks = ({ onAction }: { onAction: () => void }) => (
+  <section className="py-24 px-6 relative overflow-hidden">
+    <div className="absolute top-1/2 left-0 w-64 h-64 bg-primary/10 blur-[120px] rounded-full" />
+    <div className="max-w-7xl mx-auto space-y-16 relative z-10">
+      <div className="text-center space-y-4">
+        <span className="text-primary text-[10px] font-black uppercase tracking-[0.4em] mb-4 inline-block">MÉTODO RED 1000 PRO</span>
+        <h2 className="text-4xl md:text-7xl font-display font-black italic uppercase tracking-tighter">
+          COMO FUNCIONA <span className="text-gradient">POR DENTRO?</span>
+        </h2>
+        <p className="text-gray-400 text-lg md:text-xl font-medium max-w-2xl mx-auto leading-relaxed">
+          O atalho que os corretores do ENEM não querem que você descubra. Uma mistura de engenharia reversa e inteligência artificial.
+        </p>
+      </div>
+
+      <div className="grid md:grid-cols-3 gap-8">
+        {[
+          {
+            step: "01",
+            title: "A Engenharia Reversa",
+            desc: "Dissecamos mais de 5.000 redações nota 1000 reais para isolar os padrões que SEMPRE recebem nota máxima. Criamos os 'esqueletos' indestrutíveis.",
+            icon: <Scale className="text-primary" />
+          },
+          {
+            step: "02",
+            title: "Treinamento Celular",
+            desc: "Exercícios de 'micro-redação' que treinam seu cérebro para gerar conectivos e repertórios de forma automática em menos de 8 minutos.",
+            icon: <Zap className="text-secondary" />
+          },
+          {
+            step: "03",
+            title: "Simbose com Malu IA",
+            desc: "Nossa IA exclusiva foi treinada exclusivamente com a grade de correção oficial do MEC. Ela não apenas corrige, ela te ensina a pensar como o corretor.",
+            icon: <Sparkles className="text-accent" />
+          }
+        ].map((step, i) => (
+          <motion.div 
+            key={i}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: i * 0.1 }}
+            className="glass p-10 rounded-[48px] border-white/5 bg-gradient-to-br from-white/[0.02] to-transparent relative group"
+          >
+            <div className="text-6xl font-display font-black opacity-10 mb-8 group-hover:text-primary transition-colors">{step.step}</div>
+            <div className="w-16 h-16 rounded-3xl bg-white/5 flex items-center justify-center mb-8 group-hover:scale-110 transition-transform">
+              {step.icon}
+            </div>
+            <h3 className="text-2xl font-display font-black mb-4 italic tracking-tight">{step.title}</h3>
+            <p className="text-gray-400 text-sm font-medium leading-relaxed italic">{step.desc}</p>
+          </motion.div>
+        ))}
+      </div>
+      
+      {/* MOBILE CTA WITHIN SECTION */}
+      <div className="pt-8 md:hidden">
+        <button 
+          onClick={onAction}
+          className="w-full bg-primary py-6 rounded-2xl font-black text-xs uppercase tracking-widest flex items-center justify-center gap-3"
+        >
+          QUERO ESTE MÉTODO <ArrowRight size={16} />
+        </button>
+      </div>
+    </div>
+  </section>
+);
 // --- CONFIG ---
 const KIWIFY_CHECKOUT_URL = "https://pay.kiwify.com.br/AhSL8x0";
 
-
-// Main App Component
 export default function App() {
   const [user, setUser] = useState<any>(null);
   const [profile, setProfile] = useState<{ status: string } | null>(null);
@@ -190,121 +257,28 @@ export default function App() {
           </div>
         </nav>
 
-        <main className="flex-1 p-6 md:p-12 overflow-y-auto">
+        <main className="flex-1 overflow-y-auto">
           <div className="max-w-7xl mx-auto">
-            {activeTab === 'overview' && (
-              <>
-                <motion.div 
-                  initial={{ y: 20, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  className="mb-12"
-                >
-                  <h1 className="text-5xl md:text-7xl font-display font-black mb-4 tracking-tighter">BORA PRO <span className="text-gradient italic">MIL?</span> 🚀</h1>
-                  <p className="text-gray-400 font-medium">Seu acesso completo está disponível. Por onde vamos começar hoje?</p>
-                </motion.div>
-
-                <div className="grid md:grid-cols-3 gap-8">
-                  <motion.div 
-                    initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.1 }}
-                    className="bento-card bg-primary/5 border-primary/20 flex flex-col justify-between group"
-                  >
-                      <BookOpen size={48} className="text-primary mb-12 group-hover:scale-110 transition-transform" />
-                      <div>
-                        <h3 className="text-2xl font-display font-black mb-2 italic">Ebook Emergencial</h3>
-                        <p className="text-sm text-gray-400 mb-6 font-medium">O manual exato de 30 páginas para salvar sua nota.</p>
-                        <button onClick={() => setActiveTab('ebook')} className="w-full bg-primary py-4 rounded-2xl font-black text-xs uppercase tracking-widest shadow-lg shadow-primary/20 transition-all hover:scale-105 active:scale-95">ESTUDAR AGORA</button>
-                      </div>
-                  </motion.div>
-
-                  <motion.div 
-                    initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }}
-                    className="bento-card bg-secondary/5 border-secondary/20 flex flex-col justify-between group"
-                  >
-                      <MessageSquare size={48} className="text-secondary mb-12 group-hover:scale-110 transition-transform" />
-                      <div>
-                        <h3 className="text-2xl font-display font-black mb-2 italic">Malu IA Corretora</h3>
-                        <p className="text-sm text-gray-400 mb-6 font-medium">Envie sua redação e receba os pontos de melhoria.</p>
-                        <button onClick={() => setActiveTab('ia')} className="w-full bg-secondary py-4 rounded-2xl font-black text-xs uppercase tracking-widest shadow-lg shadow-secondary/20 transition-all hover:scale-105 active:scale-95">CORRIGIR AGORA</button>
-                      </div>
-                  </motion.div>
-
-                  <motion.div 
-                    initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3 }}
-                    className="bento-card bg-accent/5 border-accent/20 flex flex-col justify-between group"
-                  >
-                      <Trophy size={48} className="text-accent mb-12 group-hover:scale-110 transition-transform" />
-                      <div>
-                        <h3 className="text-2xl font-display font-black mb-2 italic">Repertórios Curinga</h3>
-                        <p className="text-sm text-gray-400 mb-6 font-medium">Banco completo de citações que cabem em tudo.</p>
-                        <button onClick={() => setActiveTab('repertorios')} className="w-full bg-accent text-bg-dark py-4 rounded-2xl font-black text-xs uppercase tracking-widest shadow-lg shadow-accent/20 transition-all hover:scale-105 active:scale-95">VER REPERTÓRIOS</button>
-                      </div>
-                  </motion.div>
-
-                  <motion.div 
-                    initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.4 }}
-                    className="bento-card bg-success/5 border-success/20 flex flex-col justify-between group"
-                  >
-                      <CheckCircle2 size={48} className="text-success mb-12 group-hover:scale-110 transition-transform" />
-                      <div>
-                        <h3 className="text-2xl font-display font-black mb-2 italic">Redações 1000</h3>
-                        <p className="text-sm text-gray-400 mb-6 font-medium">Modelos nota 1000 comentados linha por linha.</p>
-                        <button onClick={() => setActiveTab('redacoes')} className="w-full bg-success py-4 rounded-2xl font-black text-xs uppercase tracking-widest shadow-lg shadow-success/20 transition-all hover:scale-105 active:scale-95">VER REDAÇÕES</button>
-                      </div>
-                  </motion.div>
-
-                  <motion.div 
-                    initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.5 }}
-                    className="bento-card bg-white/5 border-white/10 flex flex-col justify-between group"
-                  >
-                      <Plus size={48} className="text-white opacity-40 mb-12 group-hover:scale-110 transition-transform" />
-                      <div>
-                        <h3 className="text-2xl font-display font-black mb-2 italic">Exercícios Práticos</h3>
-                        <p className="text-sm text-gray-400 mb-6 font-medium">Mini-desafios para destravar sua criatividade.</p>
-                        <button onClick={() => setActiveTab('exercicios')} className="w-full bg-white/10 py-4 rounded-2xl font-black text-xs uppercase tracking-widest transition-all hover:bg-white/20">VER DESAFIOS</button>
-                      </div>
-                  </motion.div>
-                </div>
-
-                <div className="mt-12 p-8 glass border-white/5 rounded-[40px] flex flex-col md:flex-row items-center justify-between gap-8">
-                  <div className="flex items-center gap-6">
-                      <div className="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center">
-                        <ShieldCheck size={32} className="text-success shadow-[0_0_20px_rgba(0,255,153,0.3)]" />
-                      </div>
-                      <div>
-                        <h4 className="text-xl font-bold italic tracking-tighter">Precisa de ajuda urgente?</h4>
-                        <p className="text-sm text-gray-400">Suporte prioritário via WhatsApp disponível.</p>
-                      </div>
-                  </div>
-                  <button className="px-10 py-4 glass rounded-[20px] font-black text-[10px] uppercase tracking-widest hover:bg-white/10 transition-all border-white/10">CHAMAR NO WHATSAPP</button>
-                </div>
-              </>
-            )}
-
-            {activeTab === 'ebook' && (
-              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+            <Suspense fallback={<LoadingView />}>
+              {activeTab === 'overview' && (
+                <DashboardOverview user={user} onNavigate={(view) => setActiveTab(view)} />
+              )}
+              {activeTab === 'ebook' && (
                 <EbookView />
-              </motion.div>
-            )}
-            {activeTab === 'ia' && (
-              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+              )}
+              {activeTab === 'ia' && (
                 <IaView />
-              </motion.div>
-            )}
-            {activeTab === 'repertorios' && (
-              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+              )}
+              {activeTab === 'repertorios' && (
                 <RepertoireView />
-              </motion.div>
-            )}
-            {activeTab === 'redacoes' && (
-              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+              )}
+              {activeTab === 'redacoes' && (
                 <RedacoesView />
-              </motion.div>
-            )}
-            {activeTab === 'exercicios' && (
-              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+              )}
+              {activeTab === 'exercicios' && (
                 <ChallengesView />
-              </motion.div>
-            )}
+              )}
+            </Suspense>
           </div>
         </main>
       </div>
@@ -312,16 +286,11 @@ export default function App() {
   }
 
   const handleCTA = () => {
-    if (user) {
-      if (isPaid) setActiveTab('overview');
-      else {
-        const url = new URL(KIWIFY_CHECKOUT_URL);
-        url.searchParams.append('email', user.email);
-        window.location.href = url.toString();
-      }
-    } else {
-      setShowAuth('signup');
+    const url = new URL(KIWIFY_CHECKOUT_URL);
+    if (user?.email) {
+      url.searchParams.append('email', user.email);
     }
+    window.location.href = url.toString();
   };
 
   const manualVerify = async () => {
@@ -620,6 +589,10 @@ export default function App() {
           ))}
         </div>
       </section>
+
+      <div className="hidden md:block">
+        <HowItWorks onAction={handleCTA} />
+      </div>
 
       {/* PLATFORM PREVIEW - "PROOF" SECTION - Hidden on Mobile */}
       <section className="hidden md:block py-40 px-6 relative overflow-hidden bg-bg-dark">
@@ -997,6 +970,10 @@ export default function App() {
           ))}
         </div>
       </section>
+
+      <div className="md:hidden">
+        <HowItWorks onAction={handleCTA} />
+      </div>
 
       <footer className="mt-40 py-24 px-12 border-t border-white/5 opacity-50">
          <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-10">
