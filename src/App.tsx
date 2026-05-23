@@ -240,30 +240,40 @@ export default function App() {
   // Auth Listener
   useEffect(() => {
     const initAuth = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      const currentUser = session?.user ?? null;
-      setUser(currentUser);
-      
-      if (currentUser) {
-        setCheckingPayment(true);
-        await checkPaymentStatus(currentUser.email);
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        const currentUser = session?.user ?? null;
+        setUser(currentUser);
+        
+        if (currentUser) {
+          setCheckingPayment(true);
+          await checkPaymentStatus(currentUser.email);
+        }
+      } catch (e) {
+        console.error("Erro durante a inicialização do Auth:", e);
+      } finally {
         setCheckingPayment(false);
+        setLoading(false);
       }
-      setLoading(false);
     };
 
     initAuth();
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
-      const currentUser = session?.user ?? null;
-      setUser(currentUser);
-      
-      if (currentUser) {
-        setCheckingPayment(true);
-        await checkPaymentStatus(currentUser.email);
+      try {
+        const currentUser = session?.user ?? null;
+        setUser(currentUser);
+        
+        if (currentUser) {
+          setCheckingPayment(true);
+          await checkPaymentStatus(currentUser.email);
+        } else {
+          setProfile(null);
+        }
+      } catch (e) {
+        console.error("Erro nas mudanças de Auth:", e);
+      } finally {
         setCheckingPayment(false);
-      } else {
-        setProfile(null);
       }
     });
 
