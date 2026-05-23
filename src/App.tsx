@@ -172,6 +172,51 @@ export default function App() {
   const [activeTab, setActiveTab] = useState<'overview' | 'ebook' | 'ia' | 'repertorios' | 'redacoes' | 'exercicios'>('overview');
   const [showAuth, setShowAuth] = useState<'login' | 'signup' | null>(null);
   const [isVerifying, setIsVerifying] = useState(false);
+  
+  const [showTopBar, setShowTopBar] = useState(true);
+  const [viewers, setViewers] = useState(23);
+  const [compPrice1, setCompPrice1] = useState(89.90);
+  const [compPrice2, setCompPrice2] = useState(99.90);
+  const [compPrice3, setCompPrice3] = useState(129.90);
+
+  // Dynamic viewers updater (updates every 38 seconds)
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setViewers(prev => {
+        const change = Math.random() > 0.5 ? 1 : -1;
+        const next = prev + change;
+        if (next < 19) return 19;
+        if (next > 28) return 28;
+        return next;
+      });
+    }, 38000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Dynamic competition prices updater (updates every 45 seconds)
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCompPrice1(() => {
+        const diffs = [-2.00, -1.00, 0, 1.00, 2.00, 3.00];
+        const change = diffs[Math.floor(Math.random() * diffs.length)];
+        const next = 89.90 + change;
+        return Number(next.toFixed(2));
+      });
+      setCompPrice2(() => {
+        const diffs = [-4.00, -2.00, 0, 2.00, 4.00, 6.00];
+        const change = diffs[Math.floor(Math.random() * diffs.length)];
+        const next = 99.90 + change;
+        return Number(next.toFixed(2));
+      });
+      setCompPrice3(() => {
+        const diffs = [-8.00, -4.00, 0, 4.00, 8.00, 10.00];
+        const change = diffs[Math.floor(Math.random() * diffs.length)];
+        const next = 129.90 + change;
+        return Number(next.toFixed(2));
+      });
+    }, 45000);
+    return () => clearInterval(interval);
+  }, []);
 
   // Fetch Supabase Config from Server (Fix for AI Studio build-time environment variables)
   useEffect(() => {
@@ -343,7 +388,57 @@ export default function App() {
   return (
     <div className="relative overflow-hidden">
       <Toaster position="bottom-right" theme="dark" />
-      <Nav onAction={handleCTA} onLogin={() => setShowAuth('login')} />
+      
+      <AnimatePresence>
+        {showTopBar && (
+          <motion.div
+            initial={{ opacity: 0, y: -40 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -40 }}
+            transition={{ type: "spring", stiffness: 300, damping: 25 }}
+            className="fixed top-0 left-0 w-full z-[60] bg-gradient-to-r from-[#FF6B6B] to-[#FF8E53] shadow-[0_4px_20px_rgba(255,107,107,0.25)] select-none border-b border-white/10"
+          >
+            {/* Subtle background pulsive energy */}
+            <div className="absolute inset-0 bg-[#FF6B6B] opacity-10 animate-pulse pointer-events-none" />
+            
+            <div className="max-w-7xl mx-auto flex items-center justify-between px-3 md:px-6 py-1.5 md:py-2 relative z-10">
+              <div className="flex-1 flex items-center justify-center gap-1.5 md:gap-3.5 text-center text-white">
+                {/* Status Level */}
+                <div className="flex items-center gap-1.5 md:gap-3.5 text-[10px] md:text-xs font-bold uppercase tracking-wider">
+                  <span className="bg-red-700/50 text-white font-black text-[8px] md:text-[10px] px-1.5 py-0.5 rounded border border-white/10 tracking-wider flex items-center gap-1 shrink-0 animate-pulse">
+                    <span className="relative flex h-1.5 w-1.5">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-white"></span>
+                    </span>
+                    ⚠️ ÚLTIMAS VAGAS
+                  </span>
+                  
+                  <span className="text-white/30 text-[10px] select-none">|</span>
+
+                  <span className="text-white font-black flex items-center gap-1 text-[9px] md:text-xs whitespace-nowrap">
+                    👥 <span>{viewers} PESSOAS VENDO AGORA</span>
+                  </span>
+                </div>
+              </div>
+
+              {/* Little small indicator for closing */}
+              <button
+                onClick={() => setShowTopBar(false)}
+                className="p-1 rounded-full text-white/70 hover:text-white hover:bg-white/10 transition-colors pointer-events-auto shrink-0"
+                aria-label="Fechar alerta"
+              >
+                <X size={14} />
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <Nav 
+        onAction={handleCTA} 
+        onLogin={() => setShowAuth('login')} 
+        topOffset={showTopBar ? 'top-[36px] lg:top-[42px]' : 'top-0'} 
+      />
       
       <AnimatePresence>
         {showAuth && (
@@ -372,7 +467,7 @@ export default function App() {
       </div>
 
       {/* --- UNIFIED HIGH-CONVERTING LANDING PAGE (BG #1A1A1A) --- */}
-      <div className="relative z-10 bg-[#1A1A1A] text-white min-h-screen pt-24 pb-12 selection:bg-[#FF6B35]/30">
+      <div className={`relative z-10 bg-[#1A1A1A] text-white min-h-screen ${showTopBar ? 'pt-[106px] lg:pt-[122px]' : 'pt-24'} pb-12 transition-all duration-300 selection:bg-[#FF6B35]/30`}>
         
         {/* SEÇÃO 1: HERO (3-5 segundos) */}
         <section className="py-12 md:py-24 px-5 max-w-7xl mx-auto relative justify-center">
@@ -482,8 +577,8 @@ export default function App() {
           <HowItWorks onAction={handleCTA} isMobile />
           
           {/* USER SPECIFIC REQUEST 5: "Deixe o preço em baixo de como funciona" */}
-          <div className="mt-8 space-y-4 pt-4 bg-white/[0.01] border border-white/5 p-4 rounded-3xl text-left bg-gradient-to-b from-white/[0.01] to-[#FF6B35]/[0.02]">
-               <div className="flex items-center justify-between px-2">
+          <div className="mt-8 space-y-4 pt-4 bg-[#141414] border border-white/5 p-5 rounded-3xl text-left shadow-lg">
+               <div className="flex items-center justify-between px-1">
                   <div className="flex flex-col">
                      <span className="text-[9px] font-black uppercase tracking-widest text-[#00FF88] bg-[#00FF88]/15 px-2.5 py-1 rounded w-fit border border-[#00FF88]/20">Oferta Especial</span>
                      <span className="text-[8.5px] font-black text-[#FF6B35] uppercase tracking-wider mt-1.5 leading-none">Últimas vagas com desconto</span>
@@ -493,10 +588,20 @@ export default function App() {
                      <span className="text-3xl text-white font-black tracking-tight italic leading-none">R$ 29,90</span>
                   </div>
                </div>
+
+               {/* COMPARAÇÃO COM CONCORRÊNCIA */}
+               <div className="pt-3 border-t border-white/5 space-y-1.5">
+                  <span className="text-[8px] font-black text-white/40 tracking-wider block">⚠️ OUTROS CURSOS COBRAM ATÉ:</span>
+                  <div className="flex flex-wrap gap-1.5">
+                     <span className="line-through text-white/50 text-[10px] font-bold bg-white/5 px-2 py-0.5 rounded border border-white/5">R$ {compPrice1.toFixed(2).replace('.', ',')}</span>
+                     <span className="line-through text-white/50 text-[10px] font-bold bg-white/5 px-2 py-0.5 rounded border border-white/5">R$ {compPrice2.toFixed(2).replace('.', ',')}</span>
+                     <span className="line-through text-white/50 text-[10px] font-bold bg-white/5 px-2 py-0.5 rounded border border-white/5">R$ {compPrice3.toFixed(2).replace('.', ',')}</span>
+                  </div>
+               </div>
                
                <button 
                  onClick={handleCTA}
-                 className="group w-full bg-[#FF6B35] text-white py-5 rounded-2xl text-base font-display font-black shadow-[0_15px_35px_rgba(255,107,53,0.3)] active:scale-95 transition-all flex flex-col items-center justify-center gap-0 border-b-4 border-black/30"
+                 className="group w-full bg-[#FF6B35] text-white py-5 rounded-2xl text-base font-display font-black shadow-[0_15px_35px_rgba(255,107,53,0.3)] active:scale-95 transition-all flex flex-col items-center justify-center gap-0 border-b-4 border-[#FF6B35]/20"
                >
                  <span className="flex items-center gap-2">GARANTIR ACESSO AGORA <ArrowRight size={16} /></span>
                  <span className="text-[9px] opacity-70 font-bold uppercase tracking-widest">Acesso vitalício à Plataforma</span>
@@ -691,7 +796,7 @@ export default function App() {
             </h2>
           </div>
 
-          <div className="bg-[#111111] border border-white/10 rounded-[32px] p-8 md:p-12 text-center space-y-8 shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+          <div className="bg-[#111111] border border-white/10 rounded-[32px] p-6 md:p-12 text-center space-y-8 shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
             <div className="space-y-2">
               <span className="text-xs font-black uppercase tracking-widest bg-red-600 px-3 py-1 rounded inline-block text-white animate-pulse">
                 🔥 OFERTA ATIVA HOJE
@@ -699,6 +804,31 @@ export default function App() {
               <div className="flex items-center justify-center gap-4 pt-4">
                 <span className="text-lg md:text-xl line-through text-white/30 font-bold">R$ 197</span>
                 <span className="text-5xl md:text-6xl text-white font-black italic tracking-tighter">R$ 29,90</span>
+              </div>
+            </div>
+
+            {/* BOX DE COMPARAÇÃO COM A CONCORRÊNCIA */}
+            <div className="p-4 md:p-5 rounded-2xl bg-white/[0.02] border border-white/5 space-y-3.5 max-w-lg mx-auto text-left shadow-inner">
+              <span className="text-[10px] font-black uppercase tracking-widest text-[#FF6B35] block text-center">
+                📊 COMPARATIVO DE CUSTO-BENEFÍCIO
+              </span>
+              <div className="space-y-2">
+                <div className="flex justify-between items-center text-xs text-white/60 font-medium">
+                  <span>Concorrência (Plataformas e materiais)</span>
+                  <span className="line-through text-red-400 bg-red-500/10 px-2.5 py-0.5 rounded border border-red-500/10 font-bold">R$ {compPrice2.toFixed(2).replace('.', ',')}</span>
+                </div>
+                <div className="flex justify-between items-center text-xs text-white/60 font-medium border-b border-white/5 pb-2.5">
+                  <span>Mentorias &amp; Correções avulsas normais</span>
+                  <span className="line-through text-red-400 bg-red-500/10 px-2.5 py-0.5 rounded border border-red-500/10 font-bold">R$ {compPrice3.toFixed(2).replace('.', ',')}</span>
+                </div>
+                <div className="flex justify-between items-center pt-1">
+                  <span className="text-[#00FF88] flex items-center gap-1.5 font-black text-xs md:text-sm uppercase tracking-tight">
+                    ⚡ MÉTODO RED 1000 PRO
+                  </span>
+                  <span className="text-[#00FF88] bg-[#00FF88]/15 px-3 py-1 rounded-lg border border-[#00FF88]/20 font-black text-base md:text-lg">
+                    R$ 29,90
+                  </span>
+                </div>
               </div>
             </div>
 

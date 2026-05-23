@@ -41,6 +41,27 @@ export default defineConfig(({ mode }) => {
         '@': path.resolve(process.cwd(), '.'),
       },
     },
+    build: {
+      target: 'esnext',
+      minify: 'esbuild',
+      cssMinify: true,
+      rollupOptions: {
+        output: {
+          manualChunks(id) {
+            if (id.includes('node_modules')) {
+              if (id.includes('react') || id.includes('react-dom')) {
+                return 'vendor-core';
+              }
+              if (id.includes('@supabase') || id.includes('@google/genai')) {
+                return 'vendor-sdk';
+              }
+              return 'vendor-utils';
+            }
+          }
+        }
+      },
+      chunkSizeWarningLimit: 800,
+    },
     server: {
       host: true,
       port: 3000,

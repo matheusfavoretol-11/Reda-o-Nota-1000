@@ -4,9 +4,10 @@ import { Trophy, User } from 'lucide-react';
 interface NavProps {
   onAction: () => void;
   onLogin: () => void;
+  topOffset?: string;
 }
 
-const Nav = ({ onAction, onLogin }: NavProps) => {
+const Nav = ({ onAction, onLogin, topOffset }: NavProps) => {
   const [isScrolled, setIsScrolled] = useState(false);
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
@@ -15,7 +16,7 @@ const Nav = ({ onAction, onLogin }: NavProps) => {
   }, []);
 
   return (
-    <nav className={`fixed top-0 w-full z-50 transition-all duration-500 p-3 md:p-6`}>
+    <nav className={`fixed ${topOffset || 'top-0'} w-full z-50 transition-all duration-300 p-3 md:p-6`}>
       <div className={`max-w-7xl mx-auto flex justify-between items-center glass p-3 md:p-4 px-4 md:px-8 rounded-2xl md:rounded-[32px] ${isScrolled ? 'bg-white/10' : ''}`}>
         <div className="flex items-center gap-2 md:gap-3">
           <div className="bg-primary p-1.5 md:p-2 rounded-xl md:rounded-2xl rotate-3 shadow-[0_0_20px_rgba(255,0,102,0.4)]">

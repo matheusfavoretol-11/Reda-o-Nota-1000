@@ -5,6 +5,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { createClient } from "@supabase/supabase-js";
 import { GoogleGenAI } from "@google/genai";
+import compression from "compression";
 
 // Environment Setup
 const getEnvVar = (name: string): string => {
@@ -70,6 +71,7 @@ async function startServer() {
   const app = express();
   const PORT = 3000;
 
+  app.use(compression());
   app.use(express.json());
 
   console.log("--- SERVER INITIALIZATION ---");
@@ -242,8 +244,28 @@ async function startServer() {
     app.use(vite.middlewares);
   } else {
     const distPath = path.join(process.cwd(), "dist");
-    app.use(express.static(distPath));
+    
+    // Serve static files with proper cache-control headers as requested in Section 7
+    app.use(express.static(distPath, {
+      maxAge: '14d', // Default cache for generic assets
+      setHeaders: (res, filePath) => {
+        const ext = path.extname(filePath).toLowerCase();
+        if (['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg', '.ico'].includes(ext)) {
+          // Dynamic static images cache: 30 days
+          res.setHeader('Cache-Control', 'public, max-age=2592000');
+        } else if (['.css', '.js'].includes(ext)) {
+          // CSS and JS cache: 14 days
+          res.setHeader('Cache-Control', 'public, max-age=1209600');
+        } else if (filePath.endsWith('index.html')) {
+          // HTML cache: 1 hour (for updates)
+          res.setHeader('Cache-Control', 'public, max-age=3600');
+        }
+      }
+    }));
+
     app.get("*", (req, res) => {
+      // Set short caching for index.html SPA routing
+      res.setHeader('Cache-Control', 'public, max-age=3600');
       res.sendFile(path.join(distPath, "index.html"));
     });
   }
