@@ -11,9 +11,35 @@
     <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
     <link rel="dns-prefetch" href="https://connect.facebook.net" />
     
+    <!-- Parallel CSS and Font stylesheet preloading with font-display: swap to prevent layout block -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Bricolage+Grotesque:wght@400;700;800&display=swap" as="style" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Bricolage+Grotesque:wght@400;700;800&display=swap" />
+
+    <!-- Highly-optimized, non-blocking early config prefetch -->
+    <script>
+      (function() {
+        try {
+          window.__SUPABASE_DYNAMIC_CONFIG_READY__ = fetch('/api/config/supabase')
+            .then(function(res) { return res.json(); })
+            .then(function(data) {
+              if (data && data.url && data.key) {
+                window.__SUPABASE_DYNAMIC_CONFIG__ = data;
+              }
+              return data;
+            })
+            .catch(function(err) {
+              console.warn('Config dynamic prefetch warning:', err);
+              return null;
+            });
+        } catch (e) {
+          console.error(e);
+        }
+      })();
+    </script>
+    
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <title>RED 1000 PRO | Gabarite a Redação do ENEM</title>
-    <meta name="description" content="A plataforma definitiva para alcançar a nota 1000 na redação do ENEM com IA e correções detalhadas.">
+    <title>RED 1000 PRO | Gabarite a Redação no ENEM</title>
+    <meta name="description" content="A plataforma definitiva para alcançar a nota 1000 na redação no ENEM com IA e correções detalhadas.">
     
     <!-- Facebook Pixel Code (Deferred for 3 seconds to optimize First Contentful Paint as requested in Section 8) -->
     <script>

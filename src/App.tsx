@@ -57,6 +57,22 @@ const LoadingView = () => (
   </div>
 );
 
+// Helper helper to check cached session synchronously to skip blocking loader for landing page visitors
+const hasCachedSession = (): boolean => {
+  if (typeof window === 'undefined') return false;
+  try {
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key && (key.startsWith('sb-') || key.includes('supabase.auth.token'))) {
+        return true;
+      }
+    }
+  } catch (e) {
+    // ignore
+  }
+  return false;
+};
+
 
 // --- COMPONENTS ---
 
@@ -167,7 +183,7 @@ const KIWIFY_CHECKOUT_URL = "https://pay.kiwify.com.br/AhSL8x0";
 export default function App() {
   const [user, setUser] = useState<any>(null);
   const [profile, setProfile] = useState<{ status: string } | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(() => hasCachedSession());
   const [checkingPayment, setCheckingPayment] = useState(false);
   const [activeTab, setActiveTab] = useState<'overview' | 'ebook' | 'ia' | 'repertorios' | 'redacoes' | 'exercicios'>('overview');
   const [showAuth, setShowAuth] = useState<'login' | 'signup' | null>(null);
@@ -218,66 +234,98 @@ export default function App() {
     return () => clearInterval(interval);
   }, []);
 
-  // Fetch Supabase Config from Server (Fix for AI Studio build-time environment variables)
-  useEffect(() => {
-    const fetchConfig = async () => {
-      try {
-        const response = await fetch('/api/config/supabase');
-        const data = await response.json();
-        if (data.url && data.key) {
-          console.log("Configuração do Supabase carregada do servidor.");
-          updateSupabaseConfig(data.url, data.key);
-        }
-      } catch (e) {
-        console.error("Erro ao buscar configuração dinâmica:", e);
-      }
-    };
-    fetchConfig();
-  }, []);
-
   const isPaid = profile?.status === 'paid' || user?.email === 'matheusfavoretol@gmail.com';
 
-  // Auth Listener
+  // Dynamic combined config setup + auth check to completely optimize First Contentful Paint and prevent race-conditions
   useEffect(() => {
-    const initAuth = async () => {
+    let active = true;
+    let subscriptionObj: any = null;
+
+    const initializeFlow = async () => {
       try {
-        const { data: { session } } = await supabase.auth.getSession();
-        const currentUser = session?.user ?? null;
-        setUser(currentUser);
+        // 1. Tenta pegar a configuração pré-carregada do <head> (instantâneo) ou busca do servidor if not yet ready
+        let data = (window as any).__SUPABASE_DYNAMIC_CONFIG__;
+        if (!data && (window as any).__SUPABASE_DYNAMIC_CONFIG_READY__) {
+          data = await (window as any).__SUPABASE_DYNAMIC_CONFIG_READY__;
+        }
         
-        if (currentUser) {
-          setCheckingPayment(true);
-          await checkPaymentStatus(currentUser.email);
+        if (!data) {
+          const response = await fetch('/api/config/supabase');
+          data = await response.json();
+        }
+
+        if (data && data.url && data.key) {
+          updateSupabaseConfig(data.url, data.key);
+        }
+
+        if (!active) return;
+
+        // Se o Supabase estiver na URL fallback temporária, não tente sincronizar para evitar timeouts demorados
+        const finalClient = getSupabase();
+        if (finalClient && finalClient.supabaseUrl === "https://missing-url.supabase.co") {
+          setLoading(false);
+          return;
+        }
+
+        // 2. Tenta recuperar sessão existente apenas se houver sinal de token para evitar requisição pendente no landing
+        if (hasCachedSession()) {
+          const { data: { session } } = await supabase.auth.getSession();
+          const currentUser = session?.user ?? null;
+          if (active) setUser(currentUser);
+          
+          if (currentUser && active) {
+            setCheckingPayment(true);
+            await checkPaymentStatus(currentUser.email);
+          }
+        } else {
+          // Se não há sessão em cache, finalize o carregamento imediatamente para renderização instantânea
+          if (active) {
+            setUser(null);
+            setProfile(null);
+          }
         }
       } catch (e) {
-        console.error("Erro durante a inicialização do Auth:", e);
+        console.error("Erro na inicialização da aplicação:", e);
       } finally {
-        setCheckingPayment(false);
-        setLoading(false);
+        if (active) {
+          setCheckingPayment(false);
+          setLoading(false);
+        }
+      }
+
+      // 3. Registra o listener de mudanças de autênticação
+      try {
+        const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
+          try {
+            const currentUser = session?.user ?? null;
+            if (active) setUser(currentUser);
+            
+            if (currentUser) {
+              if (active) setCheckingPayment(true);
+              await checkPaymentStatus(currentUser.email);
+            } else {
+              if (active) setProfile(null);
+            }
+          } catch (e) {
+            console.error("Erro no listener de mudanças de Auth:", e);
+          } finally {
+            if (active) setCheckingPayment(false);
+          }
+        });
+        subscriptionObj = subscription;
+      } catch (err) {
+        console.error("Erro ao registrar onAuthStateChange:", err);
       }
     };
 
-    initAuth();
+    initializeFlow();
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
-      try {
-        const currentUser = session?.user ?? null;
-        setUser(currentUser);
-        
-        if (currentUser) {
-          setCheckingPayment(true);
-          await checkPaymentStatus(currentUser.email);
-        } else {
-          setProfile(null);
-        }
-      } catch (e) {
-        console.error("Erro nas mudanças de Auth:", e);
-      } finally {
-        setCheckingPayment(false);
+    return () => {
+      active = false;
+      if (subscriptionObj) {
+        subscriptionObj.unsubscribe();
       }
-    });
-
-    return () => subscription.unsubscribe();
+    };
   }, []);
 
   // Auto-verify every 3 seconds if on pending screen (faster for immediate access)
@@ -501,13 +549,13 @@ export default function App() {
 
               {/* Headline */}
               <h1 className="text-3xl sm:text-5xl md:text-6xl font-display font-black leading-[1.05] tracking-tight text-white uppercase italic">
-                De 550 para <span className="text-[#00FF88] block sm:inline">850+ em 90 Dias</span> <br/>
-                <span className="text-white/80 text-3xl sm:text-4xl md:text-5xl">(Sem Cursinho Caro)</span>
+                De 550 para <span className="text-[#00FF88] block sm:inline">900+ na Redação no ENEM</span> <br/>
+                <span className="text-white/80 text-3xl sm:text-4xl md:text-5xl">em 90 Dias</span>
               </h1>
 
               {/* Subheadline (Incorporando a Frase do Panico e o Texto Maior) */}
               <p className="text-xl sm:text-2xl text-white/95 leading-normal font-black text-[#FF6B35] tracking-tight py-1 bg-[#FF6B35]/5 rounded-xl px-4 border-l-4 border-[#FF6B35] max-w-2xl mx-auto xl:mx-0">
-                Finalmente: o fim do pânico na hora de escrever redação ENEM.
+                Finalmente: o fim do pânico na hora de escrever a Redação no ENEM.
               </p>
               
               <p className="text-sm sm:text-base text-white/80 leading-relaxed font-semibold max-w-2xl mx-auto xl:mx-0">
@@ -547,7 +595,7 @@ export default function App() {
 
                   <div className="flex justify-between items-center pt-3 border-t border-white/5">
                     <span className="text-xs font-black uppercase text-[#00FF88]">Depois do RED 1000 PRO</span>
-                    <span className="bg-[#00FF88]/15 text-[#00FF88] font-extrabold text-[10px] px-2.5 py-0.5 rounded-full border border-[#00FF88]/10">Média: 850+</span>
+                    <span className="bg-[#00FF88]/15 text-[#00FF88] font-extrabold text-[10px] px-2.5 py-0.5 rounded-full border border-[#00FF88]/10">Média: 900+</span>
                   </div>
                   <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden">
                     <div className="h-full bg-[#00FF88] rounded-full animate-pulse" style={{ width: '88%' }} />
@@ -777,7 +825,7 @@ export default function App() {
               {[
                 { q: "Quanto tempo por dia?", a: "Apenas 45 min, 4-5x por semana. Você estuda no seu tempo." },
                 { q: "Funciona junto com o cursinho presencial?", a: "Sim, serve como um impulsionador de nota. A maioria dos nossos alunos estuda assim." },
-                { q: "Quanto tempo para eu ver o resultado?", a: "4 a 6 semanas para notar alta consistência no 750+ e de 8 a 12 semanas para notas 850+." },
+                { q: "Quanto tempo para eu ver o resultado?", a: "4 a 6 semanas para notar alta consistência no 750+ e de 8 a 12 semanas para notas de 900+ na redação." },
                 { q: "Sou totalmente iniciante, vou entender?", a: "Sim, começamos do zero teórico absoluto. O Ebook tem um guia básico para redação." },
                 { q: "O acesso dura quanto tempo?", a: "Acesso vitalício. O método é seu de forma permanente." },
                 { q: "E se eu não gostar ou achar difícil?", a: "Garantia incondicional de 7 dias. Não gostou? Devolvemos 100% sem perguntas." }
