@@ -109,13 +109,6 @@ const HowItWorks = ({ onAction, isMobile = false }: { onAction: () => void; isMo
               </motion.div>
             ))}
           </div>
-
-          <button 
-            onClick={onAction}
-            className="w-full py-4 text-[10px] font-black uppercase tracking-widest text-primary border border-primary/20 rounded-xl"
-          >
-            VER MÉTODO COMPLETO ↓
-          </button>
         </div>
       </section>
     );
@@ -394,7 +387,7 @@ export default function App() {
           </div>
           
           {/* 7-WORD HEADLINE: [RESULTADO] + [TEMPO] + [GARANTIA] */}
-          <h1 className="text-[32px] xs:text-[38px] font-display font-black leading-[0.95] tracking-tighter italic uppercase text-white">
+          <h1 className="text-[38px] xs:text-[44px] font-display font-black leading-[0.95] tracking-tighter italic uppercase text-white">
             Finalmente: <br/> o fim do <span className="text-primary">pânico</span> na hora <br/> de escrever <br/> redação ENEM
           </h1>
           
@@ -429,11 +422,40 @@ export default function App() {
             </div>
           </div>
 
-          {/* LOWERED PRICING & CALL TO ACTION BLOCK */}
-          <div className="space-y-4 pt-1 bg-white/[0.01] border border-white/5 p-4 rounded-3xl text-left">
+          {/* DIRECT ACTION BUTTON (SCROLLS TO RECONCILED HOW IT WORKS & PRICE) */}
+          <button 
+            onClick={() => {
+              const el = document.getElementById("como-funciona-mobile");
+              el?.scrollIntoView({ behavior: 'smooth' });
+            }}
+            className="w-full bg-[#ff0066]/10 border border-[#ff0066]/30 text-primary hover:bg-[#ff0066]/20 py-4.5 rounded-2xl text-xs font-display font-black uppercase tracking-widest flex items-center justify-center gap-2 transition-all active:scale-95 shadow-[0_5px_15px_rgba(255,0,102,0.15)] animate-pulse"
+          >
+            VER COMO FUNCIONA AGORA <ArrowRight size={14} className="mt-0.5" />
+          </button>
+
+          <button 
+            onClick={() => setShowAuth('login')}
+            className="w-full py-4 text-[10px] font-black uppercase tracking-[0.2em] opacity-60 hover:opacity-100 transition-opacity bg-white/5 rounded-xl border border-white/5"
+          >
+            Já tem acesso? <span className="text-secondary underline decoration-secondary/30 ml-1">Fazer Login</span>
+          </button>
+          
+          <div className="flex items-center justify-center gap-6 opacity-30">
+            <div className="flex items-center gap-1"><ShieldCheck size={10} /> <span className="text-[8px] font-black uppercase">Garantia 7 Dias</span></div>
+            <div className="flex items-center gap-1"><Lock size={10} /> <span className="text-[8px] font-black uppercase">Checkout Seguro</span></div>
+          </div>
+        </motion.div>
+      </section>
+
+      {/* MOBILE-ONLY CONCISE HOW IT WORKS & PRICING */}
+      <div id="como-funciona-mobile" className="md:hidden px-5 pb-12 space-y-6 scroll-mt-24">
+        <HowItWorks onAction={handleCTA} isMobile />
+        
+        {/* LOWERED PRICING & CALL TO ACTION BLOCK */}
+        <div className="space-y-4 pt-1 bg-white/[0.01] border border-white/5 p-4 rounded-3xl text-left bg-gradient-to-b from-white/[0.01] to-[#ff0066]/[0.02]">
              <div className="flex items-center justify-between px-2">
                 <div className="flex flex-col">
-                   <span className="text-[9px] font-black uppercase tracking-widest text-[#050508] bg-success px-2 py-0.5 rounded w-fit">Preço Promocional</span>
+                   <span className="text-[9px] font-black uppercase tracking-widest text-white bg-success px-2 py-0.5 rounded w-fit">Preço Promocional</span>
                    <span className="text-[8.5px] font-black text-orange-500 uppercase tracking-wider mt-1.5 leading-none">Últimas 12 vagas disponíveis</span>
                 </div>
                 <div className="text-right flex flex-col justify-end">
@@ -453,25 +475,7 @@ export default function App() {
                <span className="flex items-center gap-2">GARANTIR ACESSO AGORA <ArrowRight size={18} /></span>
                <span className="text-[9px] opacity-70 font-bold uppercase tracking-widest">Acesso vitalício à Malu IA</span>
              </button>
-          </div>
-
-          <button 
-            onClick={() => setShowAuth('login')}
-            className="w-full py-4 text-[10px] font-black uppercase tracking-[0.2em] opacity-60 hover:opacity-100 transition-opacity bg-white/5 rounded-xl border border-white/5"
-          >
-            Já tem acesso? <span className="text-secondary underline decoration-secondary/30 ml-1">Fazer Login</span>
-          </button>
-          
-          <div className="flex items-center justify-center gap-6 opacity-30">
-            <div className="flex items-center gap-1"><ShieldCheck size={10} /> <span className="text-[8px] font-black uppercase">Garantia 7 Dias</span></div>
-            <div className="flex items-center gap-1"><Lock size={10} /> <span className="text-[8px] font-black uppercase">Checkout Seguro</span></div>
-          </div>
-        </motion.div>
-      </section>
-
-      {/* MOBILE-ONLY CONCISE HOW IT WORKS */}
-      <div className="md:hidden">
-        <HowItWorks onAction={handleCTA} isMobile />
+        </div>
       </div>
 
       {/* QUICK PROOF STRIP (SOCIAL PROOF) */}
