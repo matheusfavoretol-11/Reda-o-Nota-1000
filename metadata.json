@@ -2,5 +2,5 @@
   "name": "Redação 1000 PRO",
   "description": "Landing page de alta conversão para o curso Redação 1000 PRO com correção por IA e guia emergencial.",
   "requestFramePermissions": [],
-  "majorCapabilities": []
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

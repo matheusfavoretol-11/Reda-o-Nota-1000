@@ -250,7 +250,7 @@ async function startServer() {
       maxAge: '14d', // Default cache for generic assets
       setHeaders: (res, filePath) => {
         const ext = path.extname(filePath).toLowerCase();
-        const isAsset = filePath.includes('assets/') || filePath.includes('assets\\');
+        const isAsset = filePath.includes('assets');
         
         if (isAsset && ['.js', '.css', '.woff', '.woff2', '.ttf', '.eot'].includes(ext)) {
           // Immutable caching for Vite assets containing hash

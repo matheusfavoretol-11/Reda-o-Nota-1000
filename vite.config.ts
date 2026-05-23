@@ -41,6 +41,13 @@ export default defineConfig(({ mode }) => {
         '@': path.resolve(process.cwd(), '.'),
       },
     },
+    esbuild: {
+      minifyIdentifiers: true,
+      minifySyntax: true,
+      minifyWhitespace: true,
+      legalComments: 'none',
+      drop: ['console', 'debugger'],
+    },
     build: {
       target: 'esnext',
       minify: 'esbuild',

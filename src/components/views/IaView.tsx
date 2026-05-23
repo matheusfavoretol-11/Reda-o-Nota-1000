@@ -4,9 +4,26 @@ import Markdown from 'react-markdown';
 import { correctEssay } from '../../services/geminiService';
 
 const IaView = () => {
-    const [essay, setEssay] = useState("");
-    const [result, setResult] = useState<string | null>(null);
+    const [essay, setEssay] = useState(() => {
+        if (typeof window !== 'undefined') {
+            return localStorage.getItem('red1000_essay_draft') || "";
+        }
+        return "";
+    });
+    const [result, setResult] = useState<string | null>(() => {
+        if (typeof window !== 'undefined') {
+            return localStorage.getItem('red1000_last_analysis') || null;
+        }
+        return null;
+    });
     const [loading, setLoading] = useState(false);
+
+    const handleEssayChange = (value: string) => {
+        setEssay(value);
+        if (typeof window !== 'undefined') {
+            localStorage.setItem('red1000_essay_draft', value);
+        }
+    };
 
     const handleCorrect = async () => {
         if (!essay.trim()) return;
@@ -15,10 +32,22 @@ const IaView = () => {
         try {
             const feedback = await correctEssay(essay);
             setResult(feedback);
+            if (typeof window !== 'undefined') {
+                localStorage.setItem('red1000_last_analysis', feedback);
+            }
         } catch (e) {
             setResult("Eita! Ocorreu um erro. Tenta de novo.");
         } finally {
             setLoading(false);
+        }
+    };
+
+    const handleClear = () => {
+        setResult(null);
+        setEssay("");
+        if (typeof window !== 'undefined') {
+            localStorage.removeItem('red1000_essay_draft');
+            localStorage.removeItem('red1000_last_analysis');
         }
     };
 
@@ -38,7 +67,7 @@ const IaView = () => {
                         </div>
                         {result && (
                             <button 
-                                onClick={() => {setResult(null); setEssay("");}}
+                                onClick={handleClear}
                                 className="text-[10px] font-black uppercase tracking-widest opacity-40 hover:opacity-100 transition-opacity"
                             >
                                 [ Limpar Tudo ]
@@ -57,7 +86,7 @@ const IaView = () => {
                                     className="w-full bg-[#0A0A0F] border border-white/10 rounded-[32px] p-8 text-sm font-medium focus:outline-none focus:border-primary/50 transition-all min-h-[300px] resize-none"
                                     placeholder="Digite ou cole sua redação completa aqui..."
                                     value={essay}
-                                    onChange={(e) => setEssay(e.target.value)}
+                                    onChange={(e) => handleEssayChange(e.target.value)}
                                 />
                                 <button 
                                     onClick={handleCorrect}

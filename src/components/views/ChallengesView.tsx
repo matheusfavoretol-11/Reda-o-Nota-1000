@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { ArrowRight, Clock, RefreshCw, Zap, CheckCircle2 } from 'lucide-react';
 import Markdown from 'react-markdown';
@@ -15,6 +15,25 @@ const ChallengesView = () => {
     const [loadingFeedback, setLoadingFeedback] = useState(false);
 
     const activeChallenge = (CHALLENGES_DATA as any)[level]?.find((c: any) => c.id === selectedId);
+
+    useEffect(() => {
+        if (typeof window !== 'undefined' && selectedId) {
+            setAnswer(localStorage.getItem(`red1000_challenge_${selectedId}_answer`) || "");
+            setFeedback(localStorage.getItem(`red1000_challenge_${selectedId}_feedback`) || null);
+            setShowGabarito(localStorage.getItem(`red1000_challenge_${selectedId}_gabarito`) === 'true');
+        } else {
+            setAnswer("");
+            setFeedback(null);
+            setShowGabarito(false);
+        }
+    }, [selectedId]);
+
+    const handleAnswerChange = (value: string) => {
+        setAnswer(value);
+        if (typeof window !== 'undefined' && selectedId) {
+            localStorage.setItem(`red1000_challenge_${selectedId}_answer`, value);
+        }
+    };
 
     const handleFeedback = async () => {
         if (!answer.trim()) return;
@@ -33,6 +52,10 @@ const ChallengesView = () => {
             const result = await correctEssay(prompt);
             setFeedback(result);
             setShowGabarito(true);
+            if (typeof window !== 'undefined' && selectedId) {
+                localStorage.setItem(`red1000_challenge_${selectedId}_feedback`, result);
+                localStorage.setItem(`red1000_challenge_${selectedId}_gabarito`, 'true');
+            }
         } catch (e) {
             toast.error("Erro ao gerar feedback.");
         } finally {
@@ -40,11 +63,23 @@ const ChallengesView = () => {
         }
     }
 
+    const handleClearChallenge = () => {
+        if (typeof window !== 'undefined' && selectedId) {
+            localStorage.removeItem(`red1000_challenge_${selectedId}_answer`);
+            localStorage.removeItem(`red1000_challenge_${selectedId}_feedback`);
+            localStorage.removeItem(`red1000_challenge_${selectedId}_gabarito`);
+        }
+        setSelectedId(null);
+        setAnswer("");
+        setShowGabarito(false);
+        setFeedback(null);
+    };
+
     if (selectedId && activeChallenge) {
         return (
             <div className="max-w-4xl mx-auto space-y-12 mt-12 mb-20 animate-in fade-in slide-in-from-bottom-4 duration-700">
                 <button 
-                  onClick={() => {setSelectedId(null); setAnswer(""); setShowGabarito(false); setFeedback(null);}}
+                  onClick={() => setSelectedId(null)}
                   className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest opacity-40 hover:opacity-100 mb-8"
                 >
                     <ArrowRight className="rotate-180" size={14} /> Voltar aos Desafios
@@ -65,12 +100,22 @@ const ChallengesView = () => {
                    </div>
 
                    <div className="space-y-6">
-                      <div className="text-[10px] font-black uppercase tracking-widest opacity-30 px-4">Sua Resposta:</div>
+                      <div className="flex justify-between items-center px-4">
+                         <div className="text-[10px] font-black uppercase tracking-widest opacity-30">Sua Resposta:</div>
+                         {answer && (
+                            <button 
+                               onClick={handleClearChallenge}
+                               className="text-[10px] font-black uppercase tracking-widest opacity-40 hover:opacity-100 transition-opacity"
+                            >
+                               [ Limpar Resposta ]
+                            </button>
+                         )}
+                      </div>
                       <textarea 
                         className="w-full bg-[#0A0A0F] border border-white/10 rounded-[32px] p-8 text-sm font-medium focus:outline-none focus:border-primary/50 transition-all min-h-[250px] resize-none shadow-2xl"
                         placeholder="Escreva sua resposta aqui..."
                         value={answer}
-                        onChange={(e) => setAnswer(e.target.value)}
+                        onChange={(e) => handleAnswerChange(e.target.value)}
                         disabled={showGabarito}
                       />
                       
@@ -118,7 +163,7 @@ const ChallengesView = () => {
                               <div className="flex justify-between items-center pt-8 border-t border-white/5">
                                  <div className="text-[10px] font-black uppercase text-accent">PRÓXIMO PASSO: {activeChallenge.gabarito.next}</div>
                                  <button 
-                                    onClick={() => {setSelectedId(null); setAnswer(""); setShowGabarito(false); setFeedback(null);}}
+                                    onClick={() => setSelectedId(null)}
                                     className="p-4 px-10 glass rounded-full font-black text-[10px] uppercase tracking-widest hover:bg-white/10"
                                  >
                                     Fazer Outro Desafio
