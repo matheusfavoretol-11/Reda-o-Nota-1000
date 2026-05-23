@@ -45,6 +45,7 @@ export default defineConfig(({ mode }) => {
       target: 'esnext',
       minify: 'esbuild',
       cssMinify: true,
+      cssCodeSplit: true,
       chunkSizeWarningLimit: 1000,
     },
     server: {

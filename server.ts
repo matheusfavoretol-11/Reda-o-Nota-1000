@@ -250,14 +250,19 @@ async function startServer() {
       maxAge: '14d', // Default cache for generic assets
       setHeaders: (res, filePath) => {
         const ext = path.extname(filePath).toLowerCase();
-        if (['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg', '.ico'].includes(ext)) {
+        const isAsset = filePath.includes('assets/') || filePath.includes('assets\\');
+        
+        if (isAsset && ['.js', '.css', '.woff', '.woff2', '.ttf', '.eot'].includes(ext)) {
+          // Immutable caching for Vite assets containing hash
+          res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+        } else if (['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg', '.ico'].includes(ext)) {
           // Dynamic static images cache: 30 days
           res.setHeader('Cache-Control', 'public, max-age=2592000');
         } else if (['.css', '.js'].includes(ext)) {
-          // CSS and JS cache: 14 days
+          // Fallback CSS and JS cache: 14 days
           res.setHeader('Cache-Control', 'public, max-age=1209600');
         } else if (filePath.endsWith('index.html')) {
-          // HTML cache: 1 hour (for updates)
+          // HTML main index cache: 1 hour (allows quick rollouts)
           res.setHeader('Cache-Control', 'public, max-age=3600');
         }
       }

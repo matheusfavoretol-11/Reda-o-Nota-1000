@@ -14,6 +14,9 @@
     <!-- Parallel CSS and Font stylesheet preloading with font-display: swap to prevent layout block -->
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Bricolage+Grotesque:wght@400;700;800&display=swap" as="style" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Bricolage+Grotesque:wght@400;700;800&display=swap" />
+    
+    <!-- Preload critical React bundle entry point earlier to optimize First Contentful Paint (FCP) and prevent layout visual lag -->
+    <link rel="modulepreload" href="/src/main.tsx" />
 
     <!-- Highly-optimized, non-blocking early config prefetch -->
     <script>
@@ -72,7 +75,7 @@
     <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1480419783413075&ev=PageView&noscript=1" /></noscript>
     
     <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
+    <script type="module" src="/src/main.tsx" fetchpriority="high"></script>
   </body>
 </html>
 
