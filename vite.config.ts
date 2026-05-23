@@ -41,40 +41,12 @@ export default defineConfig(({ mode }) => {
         '@': path.resolve(process.cwd(), '.'),
       },
     },
-    esbuild: {
-      minifyIdentifiers: true,
-      minifySyntax: true,
-      minifyWhitespace: true,
-      legalComments: 'none',
-      drop: ['console', 'debugger'],
-    },
     build: {
       target: 'esnext',
       minify: 'esbuild',
       cssMinify: true,
       cssCodeSplit: true,
       chunkSizeWarningLimit: 1000,
-      rollupOptions: {
-        output: {
-          manualChunks(id) {
-            if (id.includes('node_modules')) {
-              if (id.includes('react') || id.includes('scheduler') || id.includes('react-dom')) {
-                return 'vendor-react';
-              }
-              if (id.includes('lucide-react')) {
-                return 'vendor-icons';
-              }
-              if (id.includes('motion')) {
-                return 'vendor-motion';
-              }
-              if (id.includes('@supabase')) {
-                return 'vendor-supabase';
-              }
-              return 'vendor-others';
-            }
-          }
-        }
-      }
     },
     server: {
       host: true,
