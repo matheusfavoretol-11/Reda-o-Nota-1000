@@ -46,27 +46,6 @@ export default defineConfig(({ mode }) => {
       minify: 'esbuild',
       cssMinify: true,
       chunkSizeWarningLimit: 1000,
-      rollupOptions: {
-        output: {
-          manualChunks(id) {
-            if (id.includes('node_modules')) {
-              if (id.includes('lucide-react')) {
-                return 'vendor-icons';
-              }
-              if (id.includes('motion') || id.includes('@motionone')) {
-                return 'vendor-motion';
-              }
-              if (id.includes('@supabase') || id.includes('supabase-js')) {
-                return 'vendor-supabase';
-              }
-              if (id.includes('react') || id.includes('react-dom')) {
-                return 'vendor-react';
-              }
-              return 'vendor-core';
-            }
-          }
-        }
-      }
     },
     server: {
       host: true,
