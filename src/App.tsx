@@ -32,7 +32,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { useState, useEffect, Suspense, lazy } from 'react';
 import { Toaster, toast } from 'sonner';
 import { supabase, updateSupabaseConfig, getSupabase } from './lib/supabase';
-import { TESTIMONIALS, VALUE_PROPS, EBOOK_PAGES, REPERTORIOS_DATA, TOP_THEMES_REPERTOIRE, CHALLENGES_DATA, REDACOES_MODELO } from './data/constants';
+import { TESTIMONIALS, VALUE_PROPS } from './data/constants';
 import { SectionHeader, AnimatedCounter, Countdown } from './components/ui/Shared';
 import Nav from './components/ui/Nav';
 import AuthScreen from './components/auth/AuthScreen';
@@ -182,7 +182,13 @@ const KIWIFY_CHECKOUT_URL = "https://pay.kiwify.com.br/AhSL8x0";
 
 export default function App() {
   const [user, setUser] = useState<any>(null);
-  const [profile, setProfile] = useState<{ status: string } | null>(null);
+  const [profile, setProfile] = useState<{ status: string } | null>(() => {
+    if (typeof window === 'undefined') return null;
+    const cached = localStorage.getItem('red1000_is_paid_cache');
+    if (cached === 'true') return { status: 'paid' };
+    if (cached === 'false') return { status: 'pending' };
+    return null;
+  });
   const [loading, setLoading] = useState(() => hasCachedSession());
   const [checkingPayment, setCheckingPayment] = useState(false);
   const [activeTab, setActiveTab] = useState<'overview' | 'ebook' | 'ia' | 'repertorios' | 'redacoes' | 'exercicios'>('overview');
@@ -274,7 +280,10 @@ export default function App() {
           if (active) setUser(currentUser);
           
           if (currentUser && active) {
-            setCheckingPayment(true);
+            const hasStatus = localStorage.getItem('red1000_is_paid_cache') !== null;
+            if (!hasStatus) {
+              setCheckingPayment(true);
+            }
             await checkPaymentStatus(currentUser.email);
           }
         } else {
@@ -301,10 +310,16 @@ export default function App() {
             if (active) setUser(currentUser);
             
             if (currentUser) {
-              if (active) setCheckingPayment(true);
+              const hasStatus = localStorage.getItem('red1000_is_paid_cache') !== null;
+              if (!hasStatus && active) {
+                setCheckingPayment(true);
+              }
               await checkPaymentStatus(currentUser.email);
             } else {
-              if (active) setProfile(null);
+              if (active) {
+                setProfile(null);
+                localStorage.removeItem('red1000_is_paid_cache');
+              }
             }
           } catch (e) {
             console.error("Erro no listener de mudanças de Auth:", e);
@@ -348,8 +363,10 @@ export default function App() {
       const res = await fetch(`/api/check-payment?email=${encodeURIComponent(userEmail)}`);
       if (!res.ok) throw new Error("Falha ao verificar pagamento no servidor");
       const data = await res.json();
+      const prevCache = localStorage.getItem('red1000_is_paid_cache');
       setProfile({ status: data.isPaid ? 'paid' : 'pending' });
-      if (data.isPaid) {
+      localStorage.setItem('red1000_is_paid_cache', data.isPaid ? 'true' : 'false');
+      if (data.isPaid && prevCache !== 'true') {
         toast.success("Pagamento identificado! Seu acesso foi liberado.");
       }
     } catch (e) {
