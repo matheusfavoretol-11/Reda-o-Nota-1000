@@ -415,7 +415,7 @@ export default function App() {
                   onClick={handleCTA}
                   className="w-full sm:w-auto bg-[#FF6B35] hover:bg-[#ff7b46] text-white px-10 py-6 rounded-2xl text-lg sm:text-xl font-display font-black tracking-wider uppercase transition-all shadow-[0_15px_40px_rgba(255,107,53,0.35)] hover:scale-[1.03] active:scale-[0.97] flex items-center justify-center gap-3 mx-auto xl:mx-0 group border-b-4 border-black/30 animate-pulse"
                 >
-                  GARANTIR ACESSO - R$ 97
+                  GARANTIR ACESSO - R$ 29,90
                   <ArrowRight size={20} className="group-hover:translate-x-1.5 transition-transform" />
                 </button>
                 <p className="text-[#00FF88] text-xs font-extrabold uppercase tracking-wider">
@@ -490,7 +490,7 @@ export default function App() {
                   </div>
                   <div className="text-right flex flex-col justify-end">
                      <span className="text-xs line-through opacity-30 font-black block leading-none mb-1">R$ 197</span>
-                     <span className="text-3xl text-white font-black tracking-tight italic leading-none">R$ 97</span>
+                     <span className="text-3xl text-white font-black tracking-tight italic leading-none">R$ 29,90</span>
                   </div>
                </div>
                
@@ -698,7 +698,7 @@ export default function App() {
               </span>
               <div className="flex items-center justify-center gap-4 pt-4">
                 <span className="text-lg md:text-xl line-through text-white/30 font-bold">R$ 197</span>
-                <span className="text-5xl md:text-6xl text-white font-black italic tracking-tighter">R$ 97</span>
+                <span className="text-5xl md:text-6xl text-white font-black italic tracking-tighter">R$ 29,90</span>
               </div>
             </div>
 
