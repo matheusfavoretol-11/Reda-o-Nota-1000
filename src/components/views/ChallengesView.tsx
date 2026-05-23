@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { ArrowRight, Clock, RefreshCw, Zap, CheckCircle2 } from 'lucide-react';
 import Markdown from 'react-markdown';
 import { toast } from 'sonner';

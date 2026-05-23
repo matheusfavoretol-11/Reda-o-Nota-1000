@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 import { Trophy, ArrowRight, User, Hash } from 'lucide-react';
 import { REDACOES_MODELO } from '../../data/constants';
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { REPERTORIOS_DATA, TOP_THEMES_REPERTOIRE } from '../../data/constants';
 
 const RepertoireView = () => {
