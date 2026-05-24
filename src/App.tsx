@@ -28,16 +28,17 @@ import {
   Plus,
   RefreshCw
 } from 'lucide-react';
-import { motion, AnimatePresence } from 'motion/react';
 import { useState, useEffect, Suspense, lazy } from 'react';
 import { Toaster, toast } from 'sonner';
 import { supabase, updateSupabaseConfig, getSupabase } from './lib/supabase';
 import { TESTIMONIALS, VALUE_PROPS } from './data/constants';
 import { SectionHeader, AnimatedCounter, Countdown } from './components/ui/Shared';
 import Nav from './components/ui/Nav';
-import AuthScreen from './components/auth/AuthScreen';
-import BenefitsOffer from './components/offer/BenefitsOffer';
-import SuccessRedirect from './components/offer/SuccessRedirect';
+
+// Lazy load heavy components to ensure lightning fast initial mobile paint
+const AuthScreen = lazy(() => import('./components/auth/AuthScreen'));
+const BenefitsOffer = lazy(() => import('./components/offer/BenefitsOffer'));
+const SuccessRedirect = lazy(() => import('./components/offer/SuccessRedirect'));
 
 // Lazy load heavy views
 const EbookView = lazy(() => import('./components/views/EbookView'));
@@ -109,10 +110,8 @@ const HowItWorks = ({ onAction, isMobile = false }: { onAction: () => void; isMo
           
           <div className="space-y-4">
             {steps.map((step, i) => (
-              <motion.div 
+              <div 
                 key={i}
-                initial={{ opacity: 0, x: -10 }}
-                whileInView={{ opacity: 1, x: 0 }}
                 className="flex items-center gap-4 bg-white/[0.02] border border-white/5 p-4 rounded-2xl"
               >
                 <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center shrink-0">
@@ -122,7 +121,7 @@ const HowItWorks = ({ onAction, isMobile = false }: { onAction: () => void; isMo
                   <h3 className="text-sm font-black italic uppercase">{step.title}</h3>
                   <p className="text-[11px] text-gray-500 font-medium leading-tight">{step.desc}</p>
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
@@ -146,13 +145,9 @@ const HowItWorks = ({ onAction, isMobile = false }: { onAction: () => void; isMo
 
         <div className="grid md:grid-cols-3 gap-8">
           {steps.map((step, i) => (
-            <motion.div 
+            <div 
               key={i}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
-              className="glass p-10 rounded-[48px] border-white/5 bg-gradient-to-br from-white/[0.02] to-transparent relative group"
+              className="glass p-10 rounded-[48px] border-white/5 bg-gradient-to-br from-white/[0.02] to-transparent relative group hover:-translate-y-1 transition-all duration-300"
             >
               <div className="text-6xl font-display font-black opacity-10 mb-8 group-hover:text-primary transition-colors">{step.step}</div>
               <div className="w-16 h-16 rounded-3xl bg-white/5 flex items-center justify-center mb-8 group-hover:scale-110 transition-transform">
@@ -160,7 +155,7 @@ const HowItWorks = ({ onAction, isMobile = false }: { onAction: () => void; isMo
               </div>
               <h3 className="text-2xl font-display font-black mb-4 italic tracking-tight">{step.title === "Recursos Prontos" ? "A Engenharia Reversa" : step.title === "Treino Prático" ? "Treinamento Celular" : "Simbiose com Malu IA"}</h3>
               <p className="text-gray-400 text-sm font-medium leading-relaxed italic">{step.title === "Recursos Prontos" ? "Dissecamos mais de 5.000 redações nota 1000 reais para isolar os padrões que SEMPRE recebem nota máxima." : step.title === "Treino Prático" ? "Exercícios de 'micro-redação' que treinam seu cérebro para gerar conectivos automaticamente." : "Nossa IA exclusiva foi treinada exclusivamente com a grade de correção oficial do MEC."}</p>
-            </motion.div>
+            </div>
           ))}
         </div>
         
@@ -464,50 +459,45 @@ export default function App() {
     <div className="relative overflow-hidden">
       <Toaster position="bottom-right" theme="dark" />
       
-      <AnimatePresence>
-        {showTopBar && (
-          <motion.div
-            initial={{ opacity: 0, y: -40 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -40 }}
-            transition={{ type: "spring", stiffness: 300, damping: 25 }}
-            className="fixed top-0 left-0 w-full z-[60] bg-gradient-to-r from-[#FF6B6B] to-[#FF8E53] shadow-[0_4px_20px_rgba(255,107,107,0.25)] select-none border-b border-white/10"
-          >
-            {/* Subtle background pulsive energy */}
-            <div className="absolute inset-0 bg-[#FF6B6B] opacity-10 animate-pulse pointer-events-none" />
-            
-            <div className="max-w-7xl mx-auto flex items-center justify-between px-3 md:px-6 py-1.5 md:py-2 relative z-10">
-              <div className="flex-1 flex items-center justify-center gap-1.5 md:gap-3.5 text-center text-white">
-                {/* Status Level */}
-                <div className="flex items-center gap-1.5 md:gap-3.5 text-[10px] md:text-xs font-bold uppercase tracking-wider">
-                  <span className="bg-red-700/50 text-white font-black text-[8px] md:text-[10px] px-1.5 py-0.5 rounded border border-white/10 tracking-wider flex items-center gap-1 shrink-0 animate-pulse">
-                    <span className="relative flex h-1.5 w-1.5">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
-                      <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-white"></span>
-                    </span>
-                    ⚠️ ÚLTIMAS VAGAS
-                  </span>
-                  
-                  <span className="text-white/30 text-[10px] select-none">|</span>
+      {/* High-performance sliding banner bar with 0ms Main Thread overhead */}
+      <div
+        className={`fixed top-0 left-0 w-full z-[60] bg-gradient-to-r from-[#FF6B6B] to-[#FF8E53] shadow-[0_4px_20px_rgba(255,107,107,0.25)] select-none border-b border-white/10 transition-transform duration-500 ease-out ${
+          showTopBar ? 'translate-y-0' : '-translate-y-full'
+        }`}
+      >
+        {/* Subtle background pulsive energy */}
+        <div className="absolute inset-0 bg-[#FF6B6B] opacity-10 animate-pulse pointer-events-none" />
+        
+        <div className="max-w-7xl mx-auto flex items-center justify-between px-3 md:px-6 py-1.5 md:py-2 relative z-10">
+          <div className="flex-1 flex items-center justify-center gap-1.5 md:gap-3.5 text-center text-white">
+            {/* Status Level */}
+            <div className="flex items-center gap-1.5 md:gap-3.5 text-[10px] md:text-xs font-bold uppercase tracking-wider">
+              <span className="bg-red-700/50 text-white font-black text-[8px] md:text-[10px] px-1.5 py-0.5 rounded border border-white/10 tracking-wider flex items-center gap-1 shrink-0 animate-pulse">
+                <span className="relative flex h-1.5 w-1.5">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-white"></span>
+                </span>
+                ⚠️ ÚLTIMAS VAGAS
+              </span>
+              
+              <span className="text-white/30 text-[10px] select-none">|</span>
 
-                  <span className="text-white font-black flex items-center gap-1 text-[9px] md:text-xs whitespace-nowrap">
-                    👥 <span>{viewers} PESSOAS VENDO AGORA</span>
-                  </span>
-                </div>
-              </div>
-
-              {/* Little small indicator for closing */}
-              <button
-                onClick={() => setShowTopBar(false)}
-                className="p-1 rounded-full text-white/70 hover:text-white hover:bg-white/10 transition-colors pointer-events-auto shrink-0"
-                aria-label="Fechar alerta"
-              >
-                <X size={14} />
-              </button>
+              <span className="text-white font-black flex items-center gap-1 text-[9px] md:text-xs whitespace-nowrap">
+                👥 <span>{viewers} PESSOAS VENDO AGORA</span>
+              </span>
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          </div>
+
+          {/* Little small indicator for closing */}
+          <button
+            onClick={() => setShowTopBar(false)}
+            className="p-1 rounded-full text-white/70 hover:text-white hover:bg-white/10 transition-colors pointer-events-auto shrink-0"
+            aria-label="Fechar alerta"
+          >
+            <X size={14} />
+          </button>
+        </div>
+      </div>
 
       <Nav 
         onAction={handleCTA} 
@@ -515,7 +505,7 @@ export default function App() {
         topOffset={showTopBar ? 'top-[36px] lg:top-[42px]' : 'top-0'} 
       />
       
-      <AnimatePresence>
+      <Suspense fallback={null}>
         {showAuth && (
           <AuthScreen 
             mode={showAuth} 
@@ -533,7 +523,7 @@ export default function App() {
             checkoutUrl={KIWIFY_CHECKOUT_URL}
           />
         )}
-      </AnimatePresence>
+      </Suspense>
       
       {/* GLOWS */}
       <div className="fixed inset-0 z-0 pointer-events-none">

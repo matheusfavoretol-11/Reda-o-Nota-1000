@@ -1,36 +1,25 @@
 
 import React, { useState, useEffect } from 'react';
-import { motion } from 'motion/react';
 import { Clock } from 'lucide-react';
 
 export const SectionHeader = ({ badge, title, subtitle }: { badge: string, title: string, subtitle?: string }) => (
   <div className="text-center max-w-3xl mx-auto mb-20 px-6 font-sans">
-    <motion.span 
-      initial={{ opacity: 0, y: 10 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      className="inline-block px-4 py-1.5 bg-white/5 border border-white/10 rounded-full text-[10px] font-black uppercase tracking-[0.3em] text-primary mb-6 shadow-xl"
+    <span 
+      className="inline-block px-4 py-1.5 bg-white/5 border border-white/10 rounded-full text-[10px] font-black uppercase tracking-[0.3em] text-primary mb-6 shadow-xl transition-all duration-500 hover:border-primary/20"
     >
       {badge}
-    </motion.span>
-    <motion.h2 
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
+    </span>
+    <h2 
       className="text-5xl md:text-7xl font-display font-black mb-8 leading-[0.9] tracking-tighter"
     >
       {title}
-    </motion.h2>
+    </h2>
     {subtitle && (
-      <motion.p 
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ delay: 0.1 }}
+      <p 
         className="text-gray-400 text-xl font-medium leading-relaxed"
       >
         {subtitle}
-      </motion.p>
+      </p>
     )}
   </div>
 );
