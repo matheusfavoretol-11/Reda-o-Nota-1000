@@ -1,38 +1,26 @@
 import * as React from 'react';
+import { useState, useEffect, Suspense, lazy } from 'react';
 import { 
-  CheckCircle2, 
-  ChevronRight, 
-  Menu, 
   X, 
-  Zap, 
-  AlertTriangle, 
-  Lightbulb, 
-  MessageSquare, 
   ArrowRight, 
   Star, 
-  Quote, 
-  Lock, 
-  ShieldCheck, 
-  FileText, 
-  BookOpen, 
-  Check, 
-  Clock, 
-  Smartphone,
-  Sparkles,
-  Target,
   Trophy,
-  History,
-  Scale,
-  Globe,
-  User,
-  Plus,
   RefreshCw
 } from 'lucide-react';
-import { useState, useEffect, Suspense, lazy } from 'react';
-import { Toaster, toast } from 'sonner';
 import { supabase, updateSupabaseConfig, getSupabase } from './lib/supabase';
 import { SectionHeader, AnimatedCounter, Countdown } from './components/ui/Shared';
 import Nav from './components/ui/Nav';
+
+// Dynamically import Toaster and toasts to shave off 25KB from initial mobile bundle
+const LazyToaster = lazy(() => import('sonner').then(m => ({ default: m.Toaster })));
+const showToast = {
+  success: (msg: string) => {
+    import('sonner').then(m => m.toast.success(msg));
+  },
+  info: (msg: string) => {
+    import('sonner').then(m => m.toast.info(msg));
+  }
+};
 
 // Lazy load heavy components to ensure lightning fast initial mobile paint
 const AuthScreen = lazy(() => import('./components/auth/AuthScreen'));
@@ -300,7 +288,7 @@ export default function App() {
       setProfile({ status: data.isPaid ? 'paid' : 'pending' });
       localStorage.setItem('red1000_is_paid_cache', data.isPaid ? 'true' : 'false');
       if (data.isPaid && prevCache !== 'true') {
-        toast.success("Pagamento identificado! Seu acesso foi liberado.");
+        showToast.success("Pagamento identificado! Seu acesso foi liberado.");
       }
     } catch (e) {
       console.error("Error checking payment:", e);
@@ -309,7 +297,7 @@ export default function App() {
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    toast.success("Sessão encerrada!");
+    showToast.success("Sessão encerrada!");
   };
 
   if (loading || checkingPayment) {
@@ -387,15 +375,17 @@ export default function App() {
     await checkPaymentStatus(user?.email);
     setIsVerifying(false);
     if (!profile?.status || profile.status === 'pending') {
-      toast.info("Ainda não identificamos seu pagamento. Pode levar alguns minutos.");
+      showToast.info("Ainda não identificamos seu pagamento. Pode levar alguns minutos.");
     } else {
-      toast.success("Pagamento identificado! Divirta-se.");
+      showToast.success("Pagamento identificado! Divirta-se.");
     }
   };
 
   return (
     <div className="relative overflow-hidden">
-      <Toaster position="bottom-right" theme="dark" />
+      <Suspense fallback={null}>
+        <LazyToaster position="bottom-right" theme="dark" />
+      </Suspense>
       
       {/* High-performance sliding banner bar with 0ms Main Thread overhead */}
       <div
