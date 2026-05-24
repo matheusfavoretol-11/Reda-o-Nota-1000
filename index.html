@@ -17,29 +17,22 @@
       <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Bricolage+Grotesque:wght@400;700;800&display=swap" />
     </noscript>
 
-    <!-- Highly-optimized, non-blocking early config prefetch -->
+    <!-- Highly-optimized, parallel early config prefetch -->
     <script>
       (function() {
         try {
-          var runConfig = function() {
-            window.__SUPABASE_DYNAMIC_CONFIG_READY__ = fetch('/api/config/supabase')
-              .then(function(res) { return res.json(); })
-              .then(function(data) {
-                if (data && data.url && data.key) {
-                  window.__SUPABASE_DYNAMIC_CONFIG__ = data;
-                }
-                return data;
-              })
-              .catch(function(err) {
-                console.warn('Config dynamic prefetch warning:', err);
-                return null;
-              });
-          };
-          if (window.requestIdleCallback) {
-            window.requestIdleCallback(runConfig);
-          } else {
-            setTimeout(runConfig, 1);
-          }
+          window.__SUPABASE_DYNAMIC_CONFIG_READY__ = fetch('/api/config/supabase')
+            .then(function(res) { return res.json(); })
+            .then(function(data) {
+              if (data && data.url && data.key) {
+                window.__SUPABASE_DYNAMIC_CONFIG__ = data;
+              }
+              return data;
+            })
+            .catch(function(err) {
+              console.warn('Config dynamic prefetch warning:', err);
+              return null;
+            });
         } catch (e) {
           console.error(e);
         }

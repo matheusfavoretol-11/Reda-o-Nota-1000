@@ -102,8 +102,8 @@ export default function App() {
       window.removeEventListener('mousemove', handleTrigger);
     };
     
-    // Auto-trigger load in 1800ms to guarantee smooth experience if no early interaction
-    const timer = setTimeout(handleTrigger, 1800);
+    // Auto-trigger load in 4800ms to guarantee smooth experience if no early interaction
+    const timer = setTimeout(handleTrigger, 4800);
     
     window.addEventListener('scroll', handleTrigger, { passive: true });
     window.addEventListener('touchstart', handleTrigger, { passive: true });
@@ -459,8 +459,8 @@ export default function App() {
         <div className="absolute bottom-[-10%] right-[-10%] w-[70%] h-[70%] bg-[#00FF88]/10 blur-[100px] md:blur-[180px] rounded-full md:animate-pulse" />
       </div>
 
-      {/* --- UNIFIED HIGH-CONVERTING LANDING PAGE (BG #1A1A1A) --- */}
-      <div className={`relative z-10 bg-[#1A1A1A] text-white min-h-screen ${showTopBar ? 'pt-[106px] lg:pt-[122px]' : 'pt-24'} pb-12 transition-[padding-top] duration-300 selection:bg-[#FF6B35]/30`}>
+      {/* --- UNIFIED HIGH-CONVERTING LANDING PAGE (BG #050508) --- */}
+      <div className={`relative z-10 bg-bg-dark text-white min-h-screen ${showTopBar ? 'pt-[106px] lg:pt-[122px]' : 'pt-24'} pb-12 transition-[padding-top] duration-300 selection:bg-[#FF6B35]/30`}>
         
         {/* SEÇÃO 1: HERO (3-5 segundos) */}
         <section className="py-12 md:py-24 px-5 max-w-7xl mx-auto relative justify-center">
