@@ -50,14 +50,17 @@ export default defineConfig(({ mode }) => {
       rollupOptions: {
         output: {
           manualChunks(id) {
-            // Separa apenas o React core que é estático e pesado
             if (id.includes('node_modules')) {
-              if (
-                id.includes('react/') || 
-                id.includes('react-dom/') || 
-                id.includes('scheduler/')
-              ) {
-                return 'vendor-react';
+              // Deixamos React e React-DOM no bundle principal para evitar quebras/tela preta.
+              // Isolamos as outras bibliotecas pesadas que não alteram a inicialização de render de base.
+              if (id.includes('@supabase') || id.includes('supabase-js')) {
+                return 'vendor-supabase';
+              }
+              if (id.includes('motion') || id.includes('framer-motion')) {
+                return 'vendor-motion';
+              }
+              if (id.includes('lucide-react')) {
+                return 'vendor-icons';
               }
             }
           }
