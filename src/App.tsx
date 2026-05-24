@@ -94,6 +94,39 @@ export default function App() {
   const [activeTab, setActiveTab] = useState<'overview' | 'ebook' | 'ia' | 'repertorios' | 'redacoes' | 'exercicios'>('overview');
   const [showAuth, setShowAuth] = useState<'login' | 'signup' | null>(null);
   const [isVerifying, setIsVerifying] = useState(false);
+  const [mountRest, setMountRest] = useState(false);
+  
+  // Defer below-the-fold content mounting to boost mobile PageSpeed and TBT scores
+  useEffect(() => {
+    let triggered = false;
+    const handleTrigger = () => {
+      if (!triggered) {
+        triggered = true;
+        setMountRest(true);
+        cleanup();
+      }
+    };
+    
+    const cleanup = () => {
+      window.removeEventListener('scroll', handleTrigger);
+      window.removeEventListener('touchstart', handleTrigger);
+      window.removeEventListener('click', handleTrigger);
+      window.removeEventListener('mousemove', handleTrigger);
+    };
+    
+    // Auto-trigger load in 1800ms to guarantee smooth experience if no early interaction
+    const timer = setTimeout(handleTrigger, 1800);
+    
+    window.addEventListener('scroll', handleTrigger, { passive: true });
+    window.addEventListener('touchstart', handleTrigger, { passive: true });
+    window.addEventListener('click', handleTrigger, { passive: true });
+    window.addEventListener('mousemove', handleTrigger, { passive: true });
+    
+    return () => {
+      clearTimeout(timer);
+      cleanup();
+    };
+  }, []);
   
   const [showTopBar, setShowTopBar] = useState(true);
   const [viewers, setViewers] = useState(23);
@@ -542,19 +575,21 @@ export default function App() {
           </div>
         </section>
 
-        <Suspense fallback={
-          <div className="py-24 flex justify-center items-center">
-            <div className="w-10 h-10 border-4 border-[#FF6B35]/20 border-t-[#FF6B35] rounded-full animate-spin" />
-          </div>
-        }>
-          <LandingRest 
-            handleCTA={handleCTA}
-            compPrice1={compPrice1}
-            compPrice2={compPrice2}
-            compPrice3={compPrice3}
-            setShowAuth={setShowAuth}
-          />
-        </Suspense>
+        {mountRest && (
+          <Suspense fallback={
+            <div className="py-24 flex justify-center items-center">
+              <div className="w-10 h-10 border-4 border-[#FF6B35]/20 border-t-[#FF6B35] rounded-full animate-spin" />
+            </div>
+          }>
+            <LandingRest 
+              handleCTA={handleCTA}
+              compPrice1={compPrice1}
+              compPrice2={compPrice2}
+              compPrice3={compPrice3}
+              setShowAuth={setShowAuth}
+            />
+          </Suspense>
+        )}
 
       </div>
     </div>
