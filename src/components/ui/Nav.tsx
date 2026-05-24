@@ -10,8 +10,15 @@ interface NavProps {
 const Nav = ({ onAction, onLogin, topOffset }: NavProps) => {
   const [isScrolled, setIsScrolled] = useState(false);
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 50);
-    window.addEventListener('scroll', handleScroll);
+    let scrolled = false;
+    const handleScroll = () => {
+      const isOver = window.scrollY > 50;
+      if (isOver !== scrolled) {
+        scrolled = isOver;
+        setIsScrolled(isOver);
+      }
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 

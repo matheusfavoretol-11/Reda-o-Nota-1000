@@ -11,28 +11,33 @@
     <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
     <link rel="dns-prefetch" href="https://connect.facebook.net" />
     
-    <!-- Parallel CSS and Font stylesheet preloading with non-blocking media="print" pattern to prevent layout block -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Bricolage+Grotesque:wght@400;700;800&display=swap" media="print" onload="this.media='all'" />
-    <noscript>
-      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Bricolage+Grotesque:wght@400;700;800&display=swap" />
-    </noscript>
+    <!-- Parallel CSS and Font stylesheet preloading with non-blocking high-priority preload pattern -->
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Bricolage+Grotesque:wght@400;700;800&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Bricolage+Grotesque:wght@400;700;800&display=swap" />
 
     <!-- Highly-optimized, non-blocking early config prefetch -->
     <script>
       (function() {
         try {
-          window.__SUPABASE_DYNAMIC_CONFIG_READY__ = fetch('/api/config/supabase')
-            .then(function(res) { return res.json(); })
-            .then(function(data) {
-              if (data && data.url && data.key) {
-                window.__SUPABASE_DYNAMIC_CONFIG__ = data;
-              }
-              return data;
-            })
-            .catch(function(err) {
-              console.warn('Config dynamic prefetch warning:', err);
-              return null;
-            });
+          var runConfig = function() {
+            window.__SUPABASE_DYNAMIC_CONFIG_READY__ = fetch('/api/config/supabase')
+              .then(function(res) { return res.json(); })
+              .then(function(data) {
+                if (data && data.url && data.key) {
+                  window.__SUPABASE_DYNAMIC_CONFIG__ = data;
+                }
+                return data;
+              })
+              .catch(function(err) {
+                console.warn('Config dynamic prefetch warning:', err);
+                return null;
+              });
+          };
+          if (window.requestIdleCallback) {
+            window.requestIdleCallback(runConfig);
+          } else {
+            setTimeout(runConfig, 1);
+          }
         } catch (e) {
           console.error(e);
         }

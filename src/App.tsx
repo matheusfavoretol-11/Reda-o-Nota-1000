@@ -527,12 +527,12 @@ export default function App() {
       
       {/* GLOWS */}
       <div className="fixed inset-0 z-0 pointer-events-none">
-        <div className="absolute top-[-10%] left-[-10%] w-[70%] h-[70%] bg-[#FF6B35]/10 blur-[180px] rounded-full animate-pulse" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[70%] h-[70%] bg-[#00FF88]/10 blur-[180px] rounded-full animate-pulse" />
+        <div className="absolute top-[-10%] left-[-10%] w-[70%] h-[70%] bg-[#FF6B35]/10 blur-[100px] md:blur-[180px] rounded-full md:animate-pulse" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[70%] h-[70%] bg-[#00FF88]/10 blur-[100px] md:blur-[180px] rounded-full md:animate-pulse" />
       </div>
 
       {/* --- UNIFIED HIGH-CONVERTING LANDING PAGE (BG #1A1A1A) --- */}
-      <div className={`relative z-10 bg-[#1A1A1A] text-white min-h-screen ${showTopBar ? 'pt-[106px] lg:pt-[122px]' : 'pt-24'} pb-12 transition-all duration-300 selection:bg-[#FF6B35]/30`}>
+      <div className={`relative z-10 bg-[#1A1A1A] text-white min-h-screen ${showTopBar ? 'pt-[106px] lg:pt-[122px]' : 'pt-24'} pb-12 transition-[padding-top] duration-300 selection:bg-[#FF6B35]/30`}>
         
         {/* SEÇÃO 1: HERO (3-5 segundos) */}
         <section className="py-12 md:py-24 px-5 max-w-7xl mx-auto relative justify-center">

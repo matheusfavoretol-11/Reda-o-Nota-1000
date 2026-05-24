@@ -63,13 +63,7 @@ export default defineConfig(({ mode }) => {
               if (
                 id.includes('react/') || 
                 id.includes('react-dom/') || 
-                id.includes('scheduler/') ||
-                id.includes('@supabase/') ||
-                id.includes('supabase-js') ||
-                id.includes('motion') ||
-                id.includes('framer-motion') ||
-                id.includes('lucide-react') ||
-                id.includes('sonner')
+                id.includes('scheduler/')
               ) {
                 return 'vendor-core';
               }
