@@ -41,18 +41,30 @@ export default defineConfig(({ mode }) => {
         '@': path.resolve(process.cwd(), '.'),
       },
     },
+    esbuild: {
+      pure: ['console.log', 'console.info', 'console.debug'], // Removes debug logging to reduce main thread load on mobile
+      legalComments: 'none',
+      treeShaking: true
+    },
     build: {
       target: 'esnext',
       minify: 'esbuild',
       cssMinify: true,
       cssCodeSplit: true,
-      chunkSizeWarningLimit: 1000,
+      assetsInlineLimit: 5120, // Inline icons and images <= 5KB to reduce HTTP handshakes
+      chunkSizeWarningLimit: 1200,
       rollupOptions: {
         output: {
           manualChunks(id) {
             if (id.includes('node_modules')) {
-              // Deixamos React e React-DOM no bundle principal para evitar quebras/tela preta.
-              // Isolamos as outras bibliotecas pesadas que não alteram a inicialização de render de base.
+              // Group React & rendering engine in main bundle or vendor-react for smooth loading page
+              if (
+                id.includes('react/') || 
+                id.includes('react-dom/') || 
+                id.includes('scheduler/')
+              ) {
+                return 'vendor-react';
+              }
               if (id.includes('@supabase') || id.includes('supabase-js')) {
                 return 'vendor-supabase';
               }
@@ -62,8 +74,16 @@ export default defineConfig(({ mode }) => {
               if (id.includes('lucide-react')) {
                 return 'vendor-icons';
               }
+              // Group remaining tools into a single utilities vendor to secure cache efficiency
+              return 'vendor-utils';
             }
           }
+        },
+        treeshake: {
+          preset: 'recommended',
+          moduleSideEffects: false, // Force aggressive dead code elimination on third-party libraries
+          propertyReadSideEffects: false,
+          tryCatchDeoptimization: false
         }
       }
     },

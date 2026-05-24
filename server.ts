@@ -71,7 +71,17 @@ async function startServer() {
   const app = express();
   const PORT = 3000;
 
-  app.use(compression());
+  app.use(compression({
+    level: 9, // Peak Huffman compression level for maximum bandwidth bytes savings on 4G
+    threshold: 512, // Compress any file greater than 512 bytes
+    filter: (req, res) => {
+      const contentType = res.getHeader('Content-Type');
+      if (contentType && typeof contentType === 'string') {
+        return /json|text|javascript|css|xml|svg/i.test(contentType);
+      }
+      return compression.filter(req, res);
+    }
+  }));
   app.use(express.json());
 
   console.log("--- SERVER INITIALIZATION ---");
