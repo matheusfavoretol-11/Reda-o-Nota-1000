@@ -82,39 +82,7 @@ export default function App() {
   const [activeTab, setActiveTab] = useState<'overview' | 'ebook' | 'ia' | 'repertorios' | 'redacoes' | 'exercicios'>('overview');
   const [showAuth, setShowAuth] = useState<'login' | 'signup' | null>(null);
   const [isVerifying, setIsVerifying] = useState(false);
-  const [mountRest, setMountRest] = useState(false);
-  
-  // Defer below-the-fold content mounting to boost mobile PageSpeed and TBT scores
-  useEffect(() => {
-    let triggered = false;
-    const handleTrigger = () => {
-      if (!triggered) {
-        triggered = true;
-        setMountRest(true);
-        cleanup();
-      }
-    };
-    
-    const cleanup = () => {
-      window.removeEventListener('scroll', handleTrigger);
-      window.removeEventListener('touchstart', handleTrigger);
-      window.removeEventListener('click', handleTrigger);
-      window.removeEventListener('mousemove', handleTrigger);
-    };
-    
-    // Auto-trigger load in 4800ms to guarantee smooth experience if no early interaction
-    const timer = setTimeout(handleTrigger, 4800);
-    
-    window.addEventListener('scroll', handleTrigger, { passive: true });
-    window.addEventListener('touchstart', handleTrigger, { passive: true });
-    window.addEventListener('click', handleTrigger, { passive: true });
-    window.addEventListener('mousemove', handleTrigger, { passive: true });
-    
-    return () => {
-      clearTimeout(timer);
-      cleanup();
-    };
-  }, []);
+  const [mountRest, setMountRest] = useState(true);
   
   const [showTopBar, setShowTopBar] = useState(true);
   const [viewers, setViewers] = useState(23);
@@ -482,28 +450,36 @@ export default function App() {
                 </div>
               </div>
 
-              {/* Headline */}
+              {/* Headline (Máx 8 palavras) */}
               <h1 className="text-3xl sm:text-5xl md:text-6xl font-display font-black leading-[1.05] tracking-tight text-white uppercase italic">
-                De 550 para <span className="text-[#00FF88] block sm:inline">900+ na Redação no ENEM</span> <br/>
-                <span className="text-white/80 text-3xl sm:text-4xl md:text-5xl">em 90 Dias</span>
+                Destrave sua <span className="text-[#00FF88] block sm:inline">Redação Nota 1000 Hoje!</span>
               </h1>
 
-              {/* Subheadline (Incorporando a Frase do Panico e o Texto Maior) */}
-              <p className="text-xl sm:text-2xl text-white/95 leading-normal font-black text-[#FF6B35] tracking-tight py-1 bg-[#FF6B35]/5 rounded-xl px-4 border-l-4 border-[#FF6B35] max-w-2xl mx-auto xl:mx-0">
-                Finalmente: o fim do pânico na hora de escrever a Redação no ENEM.
-              </p>
-              
-              <p className="text-sm sm:text-base text-white/80 leading-relaxed font-semibold max-w-2xl mx-auto xl:mx-0">
-                Ebook estruturado + IA que corrige em 30s + 3000 repertórios prontos
+              {/* O que a pessoa recebe (Máx 15 palavras) */}
+              <p className="text-sm sm:text-lg text-white/90 leading-relaxed font-semibold max-w-2xl mx-auto xl:mx-0">
+                Ebook prático, corretor IA rápido, repertórios coringas e exemplos comentados reais de sucesso.
               </p>
 
+              {/* 3 Benefícios Principais */}
+              <div className="space-y-3 max-w-xl mx-auto xl:mx-0 text-left bg-white/[0.01] border border-white/5 p-4 rounded-2xl select-none">
+                <div className="flex items-center gap-2.5 text-xs sm:text-sm font-bold text-white/95">
+                  <span className="text-primary shrink-0 text-base">⚡</span> <span>IA que Corrige em 30 Segundos</span>
+                </div>
+                <div className="flex items-center gap-2.5 text-xs sm:text-sm font-bold text-white/95">
+                  <span className="text-primary shrink-0 text-base">📚</span> <span>Repertórios e Esqueletos Coringas Prontos</span>
+                </div>
+                <div className="flex items-center gap-2.5 text-xs sm:text-sm font-bold text-white/95">
+                  <span className="text-primary shrink-0 text-base">🏆</span> <span>Exemplos Reais Comentados Nota 1000</span>
+                </div>
+              </div>
+
               {/* CTA Button */}
-              <div className="space-y-4 pt-4 text-center xl:text-left">
+              <div className="space-y-4 pt-2 text-center xl:text-left">
                 <button 
                   onClick={handleCTA}
-                  className="w-full sm:w-auto bg-[#FF6B35] hover:bg-[#ff7b46] text-white px-10 py-6 rounded-2xl text-lg sm:text-xl font-display font-black tracking-wider uppercase transition-all shadow-[0_15px_40px_rgba(255,107,53,0.35)] hover:scale-[1.03] active:scale-[0.97] flex items-center justify-center gap-3 mx-auto xl:mx-0 group border-b-4 border-black/30 animate-pulse"
+                  className="w-full sm:w-auto bg-[#FF6B35] hover:bg-[#ff7b46] text-white px-10 py-5 rounded-2xl text-lg font-display font-black tracking-wider uppercase transition-all shadow-[0_15px_40px_rgba(255,107,53,0.35)] hover:scale-[1.03] active:scale-[0.97] flex items-center justify-center gap-3 mx-auto xl:mx-0 group border-b-4 border-black/30 animate-pulse cursor-pointer"
                 >
-                  GARANTIR ACESSO - R$ 29,90
+                  DESTRAVAR MEU ACESSO IMEDIATO
                   <ArrowRight size={20} className="group-hover:translate-x-1.5 transition-transform" />
                 </button>
                 <p className="text-[#00FF88] text-xs font-extrabold uppercase tracking-wider">

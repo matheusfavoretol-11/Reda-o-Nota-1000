@@ -327,13 +327,6 @@ export default function LandingRest({
 
       {/* SEÇÃO 5: DECISÃO + URGÊNCIA */}
       <section className="py-16 md:py-28 px-5 max-w-3xl mx-auto space-y-10">
-        <div className="text-center space-y-3">
-          <span className="text-[#00FF88] text-xs font-black uppercase tracking-[0.2em]">O FUTURO É SEU</span>
-          <h2 className="text-4xl md:text-5xl font-display font-black uppercase italic text-white leading-none">
-            Você Está Pronto?
-          </h2>
-        </div>
-
         <div className="bg-[#111111] border border-white/10 rounded-[32px] p-6 md:p-12 text-center space-y-8 shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
           <div className="space-y-2">
             <span className="text-xs font-black uppercase tracking-widest bg-red-600 px-3 py-1 rounded inline-block text-white">
