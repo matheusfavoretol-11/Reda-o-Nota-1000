@@ -164,7 +164,7 @@ export default function LandingRest({
               <div className="space-y-1">
                 <h3 className="text-sm font-black uppercase text-white">EBOOK INICIANTE→AVANÇADO</h3>
                 <p className="text-xs sm:text-sm text-gray-300 leading-relaxed font-semibold">
-                  156 páginas. 5 pilares + estruturas que funcionam + 12 redações nota 1000 comentadas + 50+ repertórios.
+                  Ebook completo. Pilares fundamentais + estruturas que funcionam + redações nota 1000 comentadas + repertórios selecionados.
                 </p>
               </div>
             </div>
@@ -184,23 +184,14 @@ export default function LandingRest({
             <div className="glass p-6 rounded-3xl border-white/10 hover:border-[#FF6B35]/30 hover:bg-white/[0.02] transition-colors flex gap-4 items-start bg-[#1a1a1a]">
               <div className="p-3 bg-white/5 rounded-2xl text-xl text-[#FF6B35] shrink-0">📚</div>
               <div className="space-y-1">
-                <h3 className="text-sm font-black uppercase text-white">3000 REPERTÓRIOS PRONTOS</h3>
+                <h3 className="text-sm font-black uppercase text-white">REPERTÓRIOS</h3>
                 <p className="text-xs sm:text-sm text-gray-300 leading-relaxed font-semibold">
                   Filósofos, dados, histórias - tudo organizado por tema. Busca rápido e usa na hora.
                 </p>
               </div>
             </div>
 
-            {/* Card 4 */}
-            <div className="glass p-6 rounded-3xl border-white/10 hover:border-[#FF6B35]/30 hover:bg-white/[0.02] transition-colors flex gap-4 items-start bg-[#1a1a1a]">
-              <div className="p-3 bg-white/5 rounded-2xl text-xl text-[#FF6B35] shrink-0">⭐</div>
-              <div className="space-y-1">
-                <h3 className="text-sm font-black uppercase text-white">COMUNIDADE + MENTORIAS</h3>
-                <p className="text-xs sm:text-sm text-gray-300 leading-relaxed font-semibold">
-                  Dúvidas? Responde na comunidade privada. Mentorias coletivas 2x por semana.
-                </p>
-              </div>
-            </div>
+
           </div>
         </div>
       </section>
@@ -325,101 +316,9 @@ export default function LandingRest({
         </div>
       </section>
 
-      {/* SEÇÃO 5: DECISÃO + URGÊNCIA */}
-      <section className="py-16 md:py-28 px-5 max-w-3xl mx-auto space-y-10">
-        <div className="bg-[#111111] border border-white/10 rounded-[32px] p-6 md:p-12 text-center space-y-8 shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
-          <div className="space-y-2">
-            <span className="text-xs font-black uppercase tracking-widest bg-red-600 px-3 py-1 rounded inline-block text-white">
-              🔥 OFERTA ATIVA HOJE
-            </span>
-            <div className="flex items-center justify-center gap-4 pt-4">
-              <span className="text-lg md:text-xl line-through text-white/30 font-bold">R$ 197</span>
-              <span className="text-5xl md:text-6xl text-white font-black italic tracking-tighter">R$ 29,90</span>
-            </div>
-          </div>
 
-          {/* BOX DE COMPARAÇÃO COM A CONCORRÊNCIA */}
-          <div className="p-4 md:p-5 rounded-2xl bg-white/[0.02] border border-white/5 space-y-3.5 max-w-lg mx-auto text-left shadow-inner">
-            <span className="text-[10px] font-black uppercase tracking-widest text-[#FF6B35] block text-center">
-              📊 COMPARATIVO DE CUSTO-BENEFÍCIO
-            </span>
-            <div className="space-y-2">
-              <div className="flex justify-between items-center text-xs text-white/60 font-medium">
-                <span>Concorrência (Plataformas e materiais)</span>
-                <span className="line-through text-red-400 bg-red-500/10 px-2.5 py-0.5 rounded border border-red-500/10 font-bold">R$ {compPrice2.toFixed(2).replace('.', ',')}</span>
-              </div>
-              <div className="flex justify-between items-center text-xs text-white/60 font-medium border-b border-white/5 pb-2.5">
-                <span>Mentorias &amp; Correções avulsas normais</span>
-                <span className="line-through text-red-400 bg-red-500/10 px-2.5 py-0.5 rounded border border-red-500/10 font-bold">R$ {compPrice3.toFixed(2).replace('.', ',')}</span>
-              </div>
-              <div className="flex justify-between items-center pt-1">
-                <span className="text-[#00FF88] flex items-center gap-1.5 font-black text-xs md:text-sm uppercase tracking-tight">
-                  ⚡ MÉTODO RED 1000 PRO
-                </span>
-                <span className="text-[#00FF88] bg-[#00FF88]/15 px-3 py-1 rounded-lg border border-[#00FF88]/20 font-black text-base md:text-lg">
-                  R$ 29,90
-                </span>
-              </div>
-            </div>
-          </div>
 
-          <p className="text-[#00FF88] font-black text-xs md:text-sm uppercase tracking-widest border border-[#00FF88]/20 py-2.5 rounded-xl bg-[#00FF88]/5 inline-block px-6">
-            ⏰ APENAS 7 VAGAS DISPONÍVEIS
-          </p>
 
-          <div className="grid grid-cols-3 gap-2 pt-4 text-center text-[10px] md:text-xs text-white/80 font-bold border-t border-white/5 max-w-lg mx-auto">
-            <div className="flex items-center justify-center gap-1.5">
-              <span className="text-[#00FF88] text-lg">✓</span> 7 dias de garantia
-            </div>
-            <div className="flex items-center justify-center gap-1.5">
-              <span className="text-[#00FF88] text-lg">✓</span> Acesso vitalício
-            </div>
-            <div className="flex items-center justify-center gap-1.5">
-              <span className="text-[#00FF88] text-lg">✓</span> Sem mensalidade
-            </div>
-          </div>
-
-          <div className="pt-4">
-            <button 
-              onClick={handleCTA}
-              className="w-full bg-[#FF6B35] hover:bg-[#ff7b46] text-white py-6 rounded-2xl text-lg sm:text-xl font-display font-black tracking-wider uppercase transition-all shadow-[0_15px_35px_rgba(255,107,53,0.4)] hover:scale-[1.03] active:scale-[0.97] border-b-4 border-black/30"
-            >
-              GARANTIR MEU ACESSO AGORA
-            </button>
-            <p className="text-[10px] text-white/40 uppercase tracking-widest mt-3 font-mono">
-              🔒 PAGAMENTO ÚNICO • DADOS TOTALMENTE CRIPTOGRAFADOS
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* SEÇÃO 6: PÓS-COMPRA */}
-      <section className="py-12 md:py-16 px-5 max-w-2xl mx-auto">
-        <div className="bg-[#151515] border border-white/5 rounded-2xl p-6 sm:p-8 space-y-4 text-center md:text-left">
-          <h3 className="text-base sm:text-lg font-black uppercase text-[#00FF88] flex items-center justify-center md:justify-start gap-2">
-            <span>👉</span> Pronto! Você receberá acesso em 2 minutos:
-          </h3>
-          
-          <div className="grid grid-cols-4 gap-3 text-xs font-bold text-white/90 text-center">
-            <div className="p-3 bg-[#111] border border-white/5 rounded-xl">
-              <span className="block text-lg mb-1">📧</span> Login IA
-            </div>
-            <div className="p-3 bg-[#111] border border-white/5 rounded-xl">
-              <span className="block text-lg mb-1">📘</span> Ebook
-            </div>
-            <div className="p-3 bg-[#111] border border-white/5 rounded-xl">
-              <span className="block text-lg mb-1">👥</span> Comunidade
-            </div>
-            <div className="p-3 bg-[#111] border border-white/5 rounded-xl">
-              <span className="block text-lg mb-1">🧠</span> Mentorias
-            </div>
-          </div>
-
-          <p className="text-[11px] sm:text-xs text-[#FF6B35] font-black text-center md:text-left tracking-wider uppercase pt-2">
-            PRÓXIMO PASSO: Baixe seu material → Escreva sua redação piloto → Mande para a Malu criar seu plano
-          </p>
-        </div>
-      </section>
 
       {/* Footer */}
       <footer className="mt-20 py-16 px-12 border-t border-white/5 opacity-50 bg-[#121212]">
