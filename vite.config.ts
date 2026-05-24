@@ -47,6 +47,22 @@ export default defineConfig(({ mode }) => {
       cssMinify: true,
       cssCodeSplit: true,
       chunkSizeWarningLimit: 1000,
+      rollupOptions: {
+        output: {
+          manualChunks(id) {
+            // Separa apenas o React core que é estático e pesado
+            if (id.includes('node_modules')) {
+              if (
+                id.includes('react/') || 
+                id.includes('react-dom/') || 
+                id.includes('scheduler/')
+              ) {
+                return 'vendor-react';
+              }
+            }
+          }
+        }
+      }
     },
     server: {
       host: true,

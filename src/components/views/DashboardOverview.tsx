@@ -28,7 +28,7 @@ const DashboardOverview: React.FC<DashboardOverviewProps> = ({ user, onNavigate 
 
   const quickActions = [
     { label: "Ler Ebook", icon: <BookOpen className="w-5 h-5" />, view: 'ebook', color: 'primary', desc: "Guia de 30 páginas" },
-    { label: "Fazer Exercício", icon: <ClipboardList className="w-5 h-5" />, view: 'treinos', color: 'secondary', desc: "Treinos curtos" },
+    { label: "Fazer Exercício", icon: <ClipboardList className="w-5 h-5" />, view: 'exercicios', color: 'secondary', desc: "Treinos curtos" },
     { label: "Analisar Redação", icon: <Sparkles className="w-5 h-5" />, view: 'ia', color: 'accent', desc: "Malu IA Corretora" },
   ];
 
