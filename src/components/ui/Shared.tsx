@@ -37,11 +37,33 @@ export const SectionHeader = ({ badge, title, subtitle }: { badge: string, title
 
 export const AnimatedCounter = ({ value, duration = 2 }: { value: string, duration?: number }) => {
   const [count, setCount] = useState(0);
+  const [isVisible, setIsVisible] = useState(false);
+  const elementRef = React.useRef<HTMLSpanElement>(null);
+  
   const targetStr = value.replace(/[^0-9.]/g, '');
   const target = parseFloat(targetStr) || 0;
   const suffix = value.replace(/[0-9.]/g, '');
 
   useEffect(() => {
+    const el = elementRef.current;
+    if (!el) return;
+    
+    if (typeof window !== 'undefined' && 'IntersectionObserver' in window) {
+      const observer = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      }, { threshold: 0.1 });
+      observer.observe(el);
+      return () => observer.disconnect();
+    } else {
+      setIsVisible(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!isVisible) return;
     let startTime: number | null = null;
     const animate = (currentTime: number) => {
       if (!startTime) startTime = currentTime;
@@ -50,9 +72,9 @@ export const AnimatedCounter = ({ value, duration = 2 }: { value: string, durati
       if (progress < 1) requestAnimationFrame(animate);
     };
     requestAnimationFrame(animate);
-  }, [target, duration]);
+  }, [isVisible, target, duration]);
 
-  return <span>{Math.floor(count).toLocaleString()}{suffix}</span>;
+  return <span ref={elementRef}>{Math.floor(count).toLocaleString()}{suffix}</span>;
 };
 
 export const Countdown = ({ compact = false }: { compact?: boolean }) => {
