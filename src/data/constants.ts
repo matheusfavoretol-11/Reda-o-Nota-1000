@@ -234,7 +234,7 @@ export const REDACOES_MODELO = [
 
 export const TESTIMONIALS = [
   { 
-    name: "João Silva", 
+    name: "Bernardo Alves", 
     age: 18, 
     note: 950, 
     text: "Entrei com nota 650 e saí com 950. Consegui bolsa integral na USP! O método de estruturas prontas salvou meu tempo.", 
