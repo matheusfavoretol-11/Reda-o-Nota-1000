@@ -168,12 +168,23 @@ export default function App() {
         // 1. Tenta pegar a configuração pré-carregada do <head> (instantâneo) ou busca do servidor if not yet ready
         let data = (window as any).__SUPABASE_DYNAMIC_CONFIG__;
         if (!data && (window as any).__SUPABASE_DYNAMIC_CONFIG_READY__) {
-          data = await (window as any).__SUPABASE_DYNAMIC_CONFIG_READY__;
+          try {
+            data = await (window as any).__SUPABASE_DYNAMIC_CONFIG_READY__;
+          } catch (e) {
+            // Ignorado, usará fallbacks
+          }
         }
         
         if (!data) {
-          const response = await fetch('/api/config/supabase');
-          data = await response.json();
+          try {
+            const response = await fetch('/api/config/supabase');
+            const contentType = response.headers.get("content-type");
+            if (response.ok && contentType && contentType.includes("application/json")) {
+              data = await response.json();
+            }
+          } catch (e) {
+            // Ignorado, usará fallbacks
+          }
         }
 
         const { updateSupabaseConfig, getSupabase, supabase } = await import('./lib/supabase');

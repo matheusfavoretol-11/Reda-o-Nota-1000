@@ -21,14 +21,17 @@ const AuthScreen = ({ mode, onClose, setMode, checkoutUrl }: { mode: 'login' | '
 
     try {
       const response = await fetch('/api/config/supabase');
-      const data = await response.json();
-      if (data.url && data.key && !data.url.includes("your-project-id")) {
-        url = data.url;
-        key = data.key;
-        updateSupabaseConfig(url, key);
+      const contentType = response.headers.get("content-type");
+      if (response.ok && contentType && contentType.includes("application/json")) {
+        const data = await response.json();
+        if (data && data.url && data.key && !data.url.includes("your-project-id")) {
+          url = data.url;
+          key = data.key;
+          updateSupabaseConfig(url, key);
+        }
       }
     } catch (err) {
-      console.warn("⚠️ Fail", err);
+      // Ignorado, usará fallbacks
     }
 
     if (!url) {

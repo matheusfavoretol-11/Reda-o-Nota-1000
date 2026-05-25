@@ -13,7 +13,13 @@
       (function() {
         try {
           window.__SUPABASE_DYNAMIC_CONFIG_READY__ = fetch('/api/config/supabase')
-            .then(function(res) { return res.json(); })
+            .then(function(res) {
+              var contentType = res.headers.get("content-type");
+              if (res.ok && contentType && contentType.indexOf("application/json") !== -1) {
+                return res.json();
+              }
+              return null;
+            })
             .then(function(data) {
               if (data && data.url && data.key) {
                 window.__SUPABASE_DYNAMIC_CONFIG__ = data;
@@ -21,11 +27,11 @@
               return data;
             })
             .catch(function(err) {
-              console.warn('Config dynamic prefetch warning:', err);
+              // Gracefully handle any network errors or missing backend with zero console alarm
               return null;
             });
         } catch (e) {
-          console.error(e);
+          // Zero ops
         }
       })();
     </script>
