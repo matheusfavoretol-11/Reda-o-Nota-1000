@@ -227,10 +227,10 @@ export default function LandingRest({
           
           <button 
             onClick={handleCTA}
-            className="group w-full bg-[#FF6B35] text-white py-5 rounded-2xl text-base font-display font-black shadow-[0_15px_35px_rgba(255,107,53,0.3)] active:scale-95 transition-all flex flex-col items-center justify-center gap-0 border-b-4 border-[#FF6B35]/20"
+            className="group w-full bg-[#FF6B35] text-white py-5 rounded-2xl text-base font-display font-black shadow-[0_15px_35px_rgba(255,107,53,0.3)] active:scale-95 transition-all flex items-center justify-center gap-2 border-b-4 border-[#FF6B35]/20"
           >
-            <span className="flex items-center gap-2">GARANTIR ACESSO AGORA <ArrowRight size={16} /></span>
-            <span className="text-[9px] opacity-70 font-bold uppercase tracking-widest">Acesso vitalício à Plataforma</span>
+            <span>QUERO MINHA REDAÇÃO NOTA 1000</span>
+            <ArrowRight size={16} />
           </button>
         </div>
       </section>

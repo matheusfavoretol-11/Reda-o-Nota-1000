@@ -509,7 +509,7 @@ export default function App() {
                   onClick={handleCTA}
                   className="w-full sm:w-auto bg-[#FF6B35] hover:bg-[#ff7b46] text-white px-10 py-5 rounded-2xl text-lg font-display font-black tracking-wider uppercase transition-all shadow-[0_15px_40px_rgba(255,107,53,0.35)] hover:scale-[1.03] active:scale-[0.97] flex items-center justify-center gap-3 mx-auto xl:mx-0 group border-b-4 border-black/30 animate-pulse cursor-pointer"
                 >
-                  DESTRAVAR MEU ACESSO IMEDIATO
+                  QUERO MINHA REDAÇÃO NOTA 1000
                   <ArrowRight size={20} className="group-hover:translate-x-1.5 transition-transform" />
                 </button>
                 <p className="text-[#00FF88] text-xs font-extrabold uppercase tracking-wider">

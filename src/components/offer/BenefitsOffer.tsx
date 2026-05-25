@@ -94,7 +94,7 @@ const BenefitsOffer = ({ user, onLogout, manualVerify, isVerifying, checkoutUrl 
                 onClick={goToCheckout}
                 className="w-full bg-primary text-white py-8 rounded-[32px] text-2xl font-display font-black hover:scale-105 active:scale-95 transition-all shadow-[0_20px_60px_rgba(255,0,102,0.4)] flex items-center justify-center gap-4 group"
               >
-                DESBLOQUEAR TUDO <ArrowRight className="group-hover:translate-x-2 transition-transform" />
+                QUERO MINHA REDAÇÃO NOTA 1000 <ArrowRight className="group-hover:translate-x-2 transition-transform" />
               </button>
               
               <div className="flex flex-col gap-4">
