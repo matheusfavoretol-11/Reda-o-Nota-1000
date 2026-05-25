@@ -7,7 +7,6 @@ import {
   Trophy,
   RefreshCw
 } from 'lucide-react';
-import { supabase, updateSupabaseConfig, getSupabase } from './lib/supabase';
 import { SectionHeader, AnimatedCounter, Countdown } from './components/ui/Shared';
 import Nav from './components/ui/Nav';
 
@@ -176,6 +175,8 @@ export default function App() {
           data = await response.json();
         }
 
+        const { updateSupabaseConfig, getSupabase, supabase } = await import('./lib/supabase');
+
         if (data && data.url && data.key) {
           updateSupabaseConfig(data.url, data.key);
         }
@@ -209,6 +210,36 @@ export default function App() {
             setProfile(null);
           }
         }
+
+        // 3. Registra o listener de mudanças de autênticação
+        try {
+          const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
+            try {
+              const currentUser = session?.user ?? null;
+              if (active) setUser(currentUser);
+              
+              if (currentUser) {
+                const hasStatus = localStorage.getItem('red1000_is_paid_cache') !== null;
+                if (!hasStatus && active) {
+                  setCheckingPayment(true);
+                }
+                await checkPaymentStatus(currentUser.email);
+              } else {
+                if (active) {
+                  setProfile(null);
+                  localStorage.removeItem('red1000_is_paid_cache');
+                }
+              }
+            } catch (e) {
+              console.error("Erro no listener de mudanças de Auth:", e);
+            } finally {
+              if (active) setCheckingPayment(false);
+            }
+          });
+          subscriptionObj = subscription;
+        } catch (err) {
+          console.error("Erro ao registrar onAuthStateChange:", err);
+        }
       } catch (e) {
         console.error("Erro na inicialização da aplicação:", e);
       } finally {
@@ -216,36 +247,6 @@ export default function App() {
           setCheckingPayment(false);
           setLoading(false);
         }
-      }
-
-      // 3. Registra o listener de mudanças de autênticação
-      try {
-        const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
-          try {
-            const currentUser = session?.user ?? null;
-            if (active) setUser(currentUser);
-            
-            if (currentUser) {
-              const hasStatus = localStorage.getItem('red1000_is_paid_cache') !== null;
-              if (!hasStatus && active) {
-                setCheckingPayment(true);
-              }
-              await checkPaymentStatus(currentUser.email);
-            } else {
-              if (active) {
-                setProfile(null);
-                localStorage.removeItem('red1000_is_paid_cache');
-              }
-            }
-          } catch (e) {
-            console.error("Erro no listener de mudanças de Auth:", e);
-          } finally {
-            if (active) setCheckingPayment(false);
-          }
-        });
-        subscriptionObj = subscription;
-      } catch (err) {
-        console.error("Erro ao registrar onAuthStateChange:", err);
       }
     };
 
@@ -291,6 +292,7 @@ export default function App() {
   };
 
   const handleLogout = async () => {
+    const { supabase } = await import('./lib/supabase');
     await supabase.auth.signOut();
     showToast.success("Sessão encerrada!");
   };
