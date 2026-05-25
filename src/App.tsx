@@ -5,7 +5,8 @@ import {
   ArrowRight, 
   Star, 
   Trophy,
-  RefreshCw
+  RefreshCw,
+  ShieldCheck
 } from 'lucide-react';
 import { SectionHeader, AnimatedCounter, Countdown } from './components/ui/Shared';
 import Nav from './components/ui/Nav';
@@ -569,6 +570,20 @@ export default function App() {
             </div>
           </div>
         </section>
+
+        {/* Selo de Garantia de 7 Dias - Minimalista */}
+        <div className="max-w-4xl mx-auto px-5 pb-12 relative z-10">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 py-3.5 px-6 rounded-2xl bg-white/[0.01] border border-white/5 max-w-2xl mx-auto">
+            <div className="flex items-center gap-2 text-[#00FF88] font-display font-black text-xs uppercase tracking-wider shrink-0">
+              <ShieldCheck size={16} />
+              <span>Garantia de 7 Dias</span>
+            </div>
+            <span className="hidden sm:inline text-white/10 text-xs">|</span>
+            <p className="text-white/50 text-xs font-medium text-center sm:text-left leading-normal">
+              Risco zero: se não se adaptar em até 7 dias, devolvemos seu investimento integralmente.
+            </p>
+          </div>
+        </div>
 
         {mountRest && (
           <Suspense fallback={
