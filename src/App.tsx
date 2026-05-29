@@ -493,12 +493,12 @@ export default function App() {
 
               {/* Headline (Máx 8 palavras) */}
               <h1 className="text-3xl sm:text-5xl md:text-6xl font-display font-black leading-[1.05] tracking-tight text-white uppercase italic">
-                Destrave sua <span className="text-[#00FF88] block sm:inline">Redação Nota 1000 Hoje!</span>
+                Alcance <span className="text-[#00FF88] block sm:inline">900+ na Redação do ENEM</span> com a IA que Corrige seu Texto em 30 Segundos.
               </h1>
 
               {/* O que a pessoa recebe (Máx 15 palavras) */}
               <p className="text-sm sm:text-lg text-white/90 leading-relaxed font-semibold max-w-2xl mx-auto xl:mx-0">
-                Ebook prático, corretor IA rápido, repertórios coringas e exemplos comentados reais de sucesso.
+                Treine com a Malu IA — a única treinada na grade oficial do MEC — e receba feedbacks instantâneos 24h por dia. O atalho tecnológico para sua nota de elite.
               </p>
 
               {/* 3 Benefícios Principais */}
