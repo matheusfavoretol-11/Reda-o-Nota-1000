@@ -6,29 +6,28 @@ import {
   Scale, 
   Zap, 
   Sparkles,
-  CheckCircle2,
-  Users,
-  Clock
+  ShieldCheck
 } from 'lucide-react';
 
+// Moved HowItWorks inside LandingRest so it is loaded lazily and doesn't pollute the core chunk
 const HowItWorks = ({ onAction, isMobile = false }: { onAction: () => void; isMobile?: boolean }) => {
   const steps = [
     {
       step: "01",
-      title: "Engenharia Reversa",
-      desc: "Dissecamos os padrões das notas 1000 reais.",
+      title: "Recursos Prontos",
+      desc: "Esqueletos indestrutíveis para qualquer tema.",
       icon: <Scale className="text-primary" size={isMobile ? 18 : 24} />
     },
     {
       step: "02",
-      title: "Treino Celular",
-      desc: "Exercícios rápidos para automatizar conectivos.",
+      title: "Treino Prático",
+      desc: "Micro-redações rápidas de 8 minutos.",
       icon: <Zap className="text-secondary" size={isMobile ? 18 : 24} />
     },
     {
       step: "03",
-      title: "Malu IA 3.0",
-      desc: "Correção oficial do MEC em 30 segundos.",
+      title: "IA Malu",
+      desc: "Correção instantânea que ensina a pensar.",
       icon: <Sparkles className="text-accent" size={isMobile ? 18 : 24} />
     }
   ];
@@ -68,10 +67,10 @@ const HowItWorks = ({ onAction, isMobile = false }: { onAction: () => void; isMo
         <div className="text-center space-y-4">
           <span className="text-primary text-[10px] font-black uppercase tracking-[0.4em] mb-4 inline-block">MÉTODO RED 1000 PRO</span>
           <h2 className="text-4xl md:text-7xl font-display font-black italic uppercase tracking-tighter">
-            A CIÊNCIA POR TRÁS DO <span className="text-gradient">900+</span>
+            COMO FUNCIONA <span className="text-gradient">POR DENTRO?</span>
           </h2>
           <p className="text-gray-400 text-lg md:text-xl font-medium max-w-2xl mx-auto leading-relaxed">
-            O atalho tecnológico que os corretores do ENEM não querem que você descubra. Uma mistura de engenharia reversa e inteligência artificial de elite.
+            O atalho que os corretores do ENEM não querem que você descubra. Uma mistura de engenharia reversa e inteligência artificial.
           </p>
         </div>
 
@@ -85,12 +84,8 @@ const HowItWorks = ({ onAction, isMobile = false }: { onAction: () => void; isMo
               <div className="w-16 h-16 rounded-3xl bg-white/5 flex items-center justify-center mb-8 group-hover:scale-110 transition-transform">
                 {step.icon}
               </div>
-              <h3 className="text-2xl font-display font-black mb-4 italic tracking-tight">{step.title}</h3>
-              <p className="text-gray-400 text-sm font-medium leading-relaxed italic">
-                {step.title === "Engenharia Reversa" ? "Isolamos os padrões matemáticos das redações nota 1000 para criar esqueletos que funcionam em qualquer tema." : 
-                 step.title === "Treino Celular" ? "Exercícios de 'micro-redação' que treinam seu cérebro para gerar argumentos nota máxima automaticamente." : 
-                 "Nossa IA exclusiva foi treinada com a grade de correção oficial do MEC para te dar o feedback real em segundos."}
-              </p>
+              <h3 className="text-2xl font-display font-black mb-4 italic tracking-tight">{step.title === "Recursos Prontos" ? "A Engenharia Reversa" : step.title === "Treino Prático" ? "Treinamento Celular" : "Simbiose com Malu IA"}</h3>
+              <p className="text-gray-400 text-sm font-medium leading-relaxed italic">{step.title === "Recursos Prontos" ? "Dissecamos mais de 5.000 redações nota 1000 reais para isolar os padrões que SEMPRE recebem nota máxima." : step.title === "Treino Prático" ? "Exercícios de 'micro-redação' que treinam seu cérebro para gerar conectivos automaticamente." : "Nossa IA exclusiva foi treinada exclusivamente com a grade de correção oficial do MEC."}</p>
             </div>
           ))}
         </div>
@@ -99,36 +94,89 @@ const HowItWorks = ({ onAction, isMobile = false }: { onAction: () => void; isMo
   );
 };
 
-interface TestimonialProps {
+interface WhatsAppScreenshotProps {
   name: string;
-  result: string;
   text: string;
+  time: string;
   avatarBg?: string;
-  location?: string;
 }
 
-const TestimonialCard = ({ name, result, text, avatarBg = "bg-primary", location }: TestimonialProps) => {
+const WhatsAppScreenshot = ({ name, text, time, avatarBg = "bg-[#FF3366]" }: WhatsAppScreenshotProps) => {
   return (
-    <div className="glass p-8 rounded-[32px] border-white/5 bg-[#1a1a1a] flex flex-col gap-6 hover:border-primary/30 transition-all group">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <div className={`w-12 h-12 rounded-2xl ${avatarBg} flex items-center justify-center font-black text-white shadow-lg`}>
-            {name.charAt(0)}
+    <div className="w-full rounded-2xl overflow-hidden border border-white/5 bg-[#0b141a] shadow-xl text-left select-none max-w-sm mx-auto flex flex-col">
+      {/* Header bar */}
+      <div className="bg-[#1f2c34] px-4 py-3 flex items-center justify-between border-b border-[#2a3942]/20">
+        <div className="flex items-center gap-3">
+          {/* Back Arrow */}
+          <span className="text-white/70 text-sm cursor-pointer hover:text-white">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+              <path fillRule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+            </svg>
+          </span>
+          {/* Avatar with status indicator */}
+          <div className="relative">
+            <div className={`w-9 h-9 rounded-full ${avatarBg} flex items-center justify-center font-black text-xs text-white`}>
+              {name.split(" ")[0].substring(0, 2).toUpperCase()}
+            </div>
+            <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-[#00e676] rounded-full border-2 border-[#1f2c34]" />
           </div>
-          <div>
-            <h4 className="text-white font-bold text-sm leading-none">{name}</h4>
-            <p className="text-gray-500 text-[10px] font-black uppercase tracking-widest mt-1">{location || 'Aluno Pro'}</p>
+          {/* Name & custom status */}
+          <div className="flex flex-col">
+            <span className="text-white font-bold text-xs sm:text-sm leading-none flex items-center gap-1.5">
+              {name}
+            </span>
+            <span className="text-[#00e676] text-[10px] font-semibold flex items-center gap-1 mt-0.5">
+              <span className="w-1 h-1 bg-[#00e676] rounded-full animate-pulse inline-block" />
+              online
+            </span>
           </div>
         </div>
-        <div className="bg-primary/10 border border-primary/20 px-3 py-1 rounded-full text-[9px] font-black text-primary uppercase tracking-tighter">
-          {result}
+        {/* Call icons right side */}
+        <div className="flex items-center gap-3.5 text-white/50">
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" viewBox="0 0 16 16" className="cursor-pointer hover:text-white transition-colors">
+            <path fillRule="evenodd" d="M0 5a2 2 0 0 1 2-2h7.5a2 2 0 0 1 1.983 1.738l3.11-1.382A1 1 0 0 1 16 4.269v7.462a1 1 0 0 1-1.406.913l-3.111-1.382A2 2 0 0 1 9.5 13H2a2 2 0 0 1-2-2V5zm11.5 5.175 3.5 1.556V4.269l-3.5 1.556v4.35zM2 4a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h7.5a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1H2z"/>
+          </svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16" className="cursor-pointer hover:text-white transition-colors">
+            <path d="M1.885.511a1.745 1.745 0 0 1 2.61.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.678.678 0 0 0 .178.643l2.457 2.457a.678.678 0 0 0 .644.178l2.189-.547a1.745 1.745 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.634 18.634 0 0 1-7.01-4.42 18.634 18.634 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877L1.885.511z"/>
+          </svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16" className="cursor-pointer hover:text-white transition-colors">
+            <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
+          </svg>
         </div>
       </div>
-      <p className="text-gray-300 text-sm font-semibold leading-relaxed italic">
-        "{text}"
-      </p>
-      <div className="flex gap-1">
-        {[1,2,3,4,5].map(s => <Star key={s} size={10} className="fill-primary text-primary" />)}
+      
+      {/* Screen body wallpaper */}
+      <div 
+        className="p-4 min-h-[140px] relative flex flex-col justify-end gap-3"
+        style={{
+          backgroundColor: '#0b141a',
+          backgroundImage: 'radial-gradient(rgba(32, 44, 51, 0.4) 1px, transparent 0)',
+          backgroundSize: '16px 16px'
+        }}
+      >
+        {/* Subtle decorative "Doodle-like" transparent vectors */}
+        <div className="absolute inset-0 bg-black/15 mix-blend-overlay opacity-30 pointer-events-none" />
+
+        {/* Message Bubble (Left / Received) */}
+        <div className="relative max-w-[88%] bg-[#202c33] text-white py-2 px-3.5 rounded-2xl rounded-tl-none border-b border-[#2a3942]/10 self-start shadow-[0_1px_0.5px_rgba(0,0,0,0.13)]">
+          {/* Arrow pointing left */}
+          <div className="absolute -left-1.5 top-0 w-0 h-0 border-y-[6px] border-y-transparent border-r-[8px] border-r-[#202c33]" />
+          
+          <p className="text-xs sm:text-[13.5px] leading-relaxed font-semibold text-[#e9edef] antialiased">
+            {text}
+          </p>
+
+          {/* Time & Bubble Ticks */}
+          <div className="flex items-center justify-end gap-1 mt-1 text-[9px] text-[#8696a0] select-none font-semibold leading-none">
+            <span>{time}</span>
+            <span className="text-[#53bdeb]">
+              {/* Double Blue Checked Symbol */}
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="currentColor" viewBox="0 0 16 16" className="inline-block">
+                <path d="M12.354 4.354a.5.5 0 0 0-.708-.708L5 10.293 1.854 7.146a.5.5 0 1 0-.708.708l3.5 3.5a.5.5 0 0 0 .708 0l7-7zm-4.208 7-.5.5a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L7.354 10.5l3.5-3.5a.5.5 0 0 1 .708.708l-4 4z"/>
+              </svg>
+            </span>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -151,15 +199,16 @@ export default function LandingRest({
 }: LandingRestProps) {
   return (
     <>
-      {/* MOBILE OFFER SECTION */}
+      {/* MOBILE VER_COMO_FUNCIONA AUTO-PROMOTIONAL SCROLLER (REQUEST 1, 2) */}
       <section id="como-funciona-mobile" className="md:hidden pt-4 pb-8 px-5 bg-black/10 border-t border-white/5 scroll-mt-20">
         <HowItWorks onAction={handleCTA} isMobile />
         
+        {/* USER SPECIFIC REQUEST 5: "Deixe o preço em baixo de como funciona" */}
         <div className="mt-8 space-y-4 pt-4 bg-[#141414] border border-white/5 p-5 rounded-3xl text-left shadow-lg">
           <div className="flex items-center justify-between px-1">
             <div className="flex flex-col">
-              <span className="text-[9px] font-black uppercase tracking-widest text-primary bg-primary/15 px-2.5 py-1 rounded w-fit border border-primary/20">Oferta Especial</span>
-              <span className="text-[8.5px] font-black text-secondary uppercase tracking-wider mt-1.5 leading-none">Vagas limitadas para o ENEM 2026</span>
+              <span className="text-[9px] font-black uppercase tracking-widest text-[#00FF88] bg-[#00FF88]/15 px-2.5 py-1 rounded w-fit border border-[#00FF88]/20">Oferta Especial</span>
+              <span className="text-[8.5px] font-black text-[#FF6B35] uppercase tracking-wider mt-1.5 leading-none">Últimas vagas com desconto</span>
             </div>
             <div className="text-right flex flex-col justify-end">
               <span className="text-xs line-through opacity-30 font-black block leading-none mb-1">R$ 197</span>
@@ -167,165 +216,159 @@ export default function LandingRest({
             </div>
           </div>
 
+          {/* COMPARAÇÃO COM CONCORRÊNCIA */}
           <div className="pt-3 border-t border-white/5 space-y-1.5">
-            <span className="text-[8px] font-black text-white/40 tracking-wider block uppercase">Economia real frente a cursinhos:</span>
+            <span className="text-[8px] font-black text-white/40 tracking-wider block">⚠️ OUTROS CURSOS COBRAM ATÉ:</span>
             <div className="flex flex-wrap gap-1.5">
               <span className="line-through text-white/50 text-[10px] font-bold bg-white/5 px-2 py-0.5 rounded border border-white/5">R$ {compPrice1.toFixed(2).replace('.', ',')}</span>
               <span className="line-through text-white/50 text-[10px] font-bold bg-white/5 px-2 py-0.5 rounded border border-white/5">R$ {compPrice2.toFixed(2).replace('.', ',')}</span>
+              <span className="line-through text-white/50 text-[10px] font-bold bg-white/5 px-2 py-0.5 rounded border border-white/5">R$ {compPrice3.toFixed(2).replace('.', ',')}</span>
             </div>
           </div>
           
-          <button 
-            onClick={handleCTA}
-            className="group w-full bg-primary text-white py-5 rounded-2xl text-base font-display font-black shadow-[0_15px_35px_rgba(255,51,102,0.3)] active:scale-95 transition-all flex items-center justify-center gap-2 border-b-4 border-black/20"
-          >
-            <span>QUERO MINHA REDAÇÃO NOTA 1000</span>
-            <ArrowRight size={16} />
-          </button>
+          <div className="space-y-3">
+            <button 
+              onClick={handleCTA}
+              className="group w-full bg-[#FF6B35] text-white py-5 rounded-2xl text-base font-display font-black shadow-[0_15px_35px_rgba(255,107,53,0.3)] active:scale-95 transition-all flex items-center justify-center gap-2 border-b-4 border-[#FF6B35]/20"
+            >
+              <span>QUERO MINHA REDAÇÃO NOTA 1000</span>
+              <ArrowRight size={16} />
+            </button>
+            <div className="flex items-center justify-center gap-2 bg-[#00FF88]/5 border border-[#00FF88]/10 py-2.5 px-3 rounded-xl">
+              <ShieldCheck size={14} className="text-[#00FF88] shrink-0" />
+              <span className="text-[10px] sm:text-[11px] font-extrabold uppercase tracking-widest text-[#00FF88] text-center">Garantia de 7 Dias Incondicional</span>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* SEÇÃO: VOCÊ RECEBE */}
+      {/* SEÇÃO 2: VOCÊ RECEBE (O QUE COMPRA) */}
       <section className="py-16 md:py-24 px-5 bg-[#151515] border-y border-white/5">
         <div className="max-w-7xl mx-auto space-y-12">
           <div className="text-center space-y-3">
-            <span className="text-primary text-xs font-black uppercase tracking-[0.2em]">O ARSENAL COMPLETO</span>
+            <span className="text-[#FF6B35] text-xs font-black uppercase tracking-[0.2em]">CONTEÚDO DO MÉTODO</span>
             <h2 className="text-3xl md:text-5xl font-display font-black uppercase italic text-white">
-              Tudo que você precisa para o 900+
+              Exatamente o Que Você Ganha
             </h2>
           </div>
 
           <div className="grid md:grid-cols-2 gap-6 md:gap-8">
-            <div className="glass p-6 rounded-3xl border-white/10 hover:border-primary/30 transition-all flex gap-4 items-start bg-[#1a1a1a]">
-              <div className="p-3 bg-white/5 rounded-2xl text-xl text-primary shrink-0">📖</div>
+            {/* Card 1 */}
+            <div className="glass p-6 rounded-3xl border-white/10 hover:border-[#FF6B35]/30 hover:bg-white/[0.02] transition-colors flex gap-4 items-start bg-[#1a1a1a]">
+              <div className="p-3 bg-white/5 rounded-2xl text-xl text-[#FF6B35] shrink-0">📖</div>
               <div className="space-y-1">
-                <h3 className="text-sm font-black uppercase text-white">Guia Emergencial Nota 1000</h3>
+                <h3 className="text-sm font-black uppercase text-white">EBOOK INICIANTE→AVANÇADO</h3>
                 <p className="text-xs sm:text-sm text-gray-300 leading-relaxed font-semibold">
-                  O atalho de 30 páginas com as fórmulas prontas, pilares fundamentais e estruturas que funcionam de verdade.
+                  Ebook completo. Pilares fundamentais + estruturas que funcionam + redações nota 1000 comentadas + repertórios selecionados.
                 </p>
               </div>
             </div>
 
-            <div className="glass p-6 rounded-3xl border-white/10 hover:border-primary/30 transition-all flex gap-4 items-start bg-[#1a1a1a]">
-              <div className="p-3 bg-white/5 rounded-2xl text-xl text-primary shrink-0">🤖</div>
+            {/* Card 2 */}
+            <div className="glass p-6 rounded-3xl border-white/10 hover:border-[#FF6B35]/30 hover:bg-white/[0.02] transition-colors flex gap-4 items-start bg-[#1a1a1a]">
+              <div className="p-3 bg-white/5 rounded-2xl text-xl text-[#FF6B35] shrink-0">🤖</div>
               <div className="space-y-1">
-                <h3 className="text-sm font-black uppercase text-white">Malu IA: Correção 24/7</h3>
+                <h3 className="text-sm font-black uppercase text-white">IA QUE CORRIGE 24/7</h3>
                 <p className="text-xs sm:text-sm text-gray-300 leading-relaxed font-semibold">
-                  Mande sua redação e receba nota por competência, erros específicos e sugestões em 30 segundos. Ilimitado.
+                  Manda sua redação. Em 30 segundos recebe: nota em cada competência, erros específicos, sugestões de melhoria. Ilimitado.
                 </p>
               </div>
             </div>
 
-            <div className="glass p-6 rounded-3xl border-white/10 hover:border-primary/30 transition-all flex gap-4 items-start bg-[#1a1a1a]">
-              <div className="p-3 bg-white/5 rounded-2xl text-xl text-primary shrink-0">📚</div>
+            {/* Card 3 */}
+            <div className="glass p-6 rounded-3xl border-white/10 hover:border-[#FF6B35]/30 hover:bg-white/[0.02] transition-colors flex gap-4 items-start bg-[#1a1a1a]">
+              <div className="p-3 bg-white/5 rounded-2xl text-xl text-[#FF6B35] shrink-0">📚</div>
               <div className="space-y-1">
-                <h3 className="text-sm font-black uppercase text-white">Arsenal de Repertórios</h3>
+                <h3 className="text-sm font-black uppercase text-white">REPERTÓRIOS</h3>
                 <p className="text-xs sm:text-sm text-gray-300 leading-relaxed font-semibold">
-                  Filósofos, dados e citações "curingas" organizados por tema para você usar em qualquer redação.
+                  Filósofos, dados, histórias - tudo organizado por tema. Busca rápido e usa na hora.
                 </p>
               </div>
             </div>
 
-            <div className="glass p-6 rounded-3xl border-white/10 hover:border-primary/30 transition-all flex gap-4 items-start bg-[#1a1a1a]">
-              <div className="p-3 bg-white/5 rounded-2xl text-xl text-primary shrink-0">🏆</div>
-              <div className="space-y-1">
-                <h3 className="text-sm font-black uppercase text-white">Redações Nota 1000 Reais</h3>
-                <p className="text-xs sm:text-sm text-gray-300 leading-relaxed font-semibold">
-                  Exemplos reais comentados linha por linha para você entender exatamente o que o corretor quer ver.
-                </p>
-              </div>
-            </div>
+
           </div>
         </div>
       </section>
 
-      {/* SEÇÃO: PROVA SOCIAL MELHORADA */}
-      <section className="py-16 md:py-24 px-5 max-w-7xl mx-auto space-y-16">
-        <div className="flex flex-col md:flex-row justify-between items-end gap-6">
-          <div className="space-y-3 text-left">
-            <span className="text-accent text-xs font-black uppercase tracking-[0.2em] flex items-center gap-2">
-              <Users size={14} /> RESULTADOS COMPROVADOS
-            </span>
-            <h2 className="text-3xl md:text-6xl font-display font-black uppercase italic text-white leading-[0.9]">
-              Quem usa o <span className="text-gradient">Método</span>,<br/>chega no topo.
-            </h2>
-          </div>
-          <div className="bg-white/5 border border-white/10 p-6 rounded-[32px] flex items-center gap-6">
-            <div className="text-center">
-              <div className="text-2xl font-display font-black text-primary">2.8k+</div>
-              <div className="text-[8px] font-black uppercase tracking-widest opacity-40">Alunos</div>
-            </div>
-            <div className="w-px h-8 bg-white/10" />
-            <div className="text-center">
-              <div className="text-2xl font-display font-black text-secondary">92%</div>
-              <div className="text-[8px] font-black uppercase tracking-widest opacity-40">com 750+</div>
-            </div>
-          </div>
+      {/* SEÇÃO 3: PROVA SOCIAL */}
+      <section className="py-16 md:py-24 px-5 max-w-7xl mx-auto space-y-12">
+        <div className="text-center space-y-3">
+          <span className="text-[#00FF88] text-xs font-black uppercase tracking-[0.2em]">PROVA REAL OUVIDA DOS ALUNOS</span>
+          <h2 className="text-3xl md:text-5xl font-display font-black uppercase italic text-white leading-none">
+            O Que Eles Dizem Sem Censura
+          </h2>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          <TestimonialCard 
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+          {/* Depoimento 1 - Bernardo Alves */}
+          <WhatsAppScreenshot 
             name="Bernardo Alves"
-            location="Aprovado em Direito"
-            result="+180 PONTOS"
-            text="Saí de 640 para 820 em 8 semanas! As estruturas prontas ajudaram demais, perdi o medo de travar na hora da escrita."
-            avatarBg="bg-pink-500"
+            text="nossa mto bom, sai de 640 pra 820 em 8 semanas! 😱 as estruturas prontas ajudaram dms, nem tive aquela ansiedade de travar na hora da escrita do ENEM"
+            time="14:32"
+            avatarBg="bg-[#FF3366]"
           />
-          <TestimonialCard 
-            name="Maria Eduarda"
-            location="Rio de Janeiro, RJ"
-            result="NOTA 940"
-            text="Melhor investimento do ano. O arsenal de repertórios salvou minha aprovação. A Malu IA é surreal de rápida!"
-            avatarBg="bg-purple-500"
-          />
-          <TestimonialCard 
-            name="Gabriela M."
-            location="Salvador, BA"
-            result="DE 600 PARA 920"
-            text="Estava travada no 600 e tirei 920 no último ENEM. A correção instantânea me permitiu ajustar os erros na hora."
-            avatarBg="bg-blue-500"
-          />
-        </div>
 
-        {/* TRUST BAR */}
-        <div className="pt-12 border-t border-white/5 flex flex-wrap justify-center gap-12 opacity-30 grayscale">
-           <div className="flex items-center gap-2 font-black uppercase tracking-widest text-[10px]">
-             <CheckCircle2 size={16} /> Grade Oficial MEC
-           </div>
-           <div className="flex items-center gap-2 font-black uppercase tracking-widest text-[10px]">
-             <Clock size={16} /> Correção em 30s
-           </div>
-           <div className="flex items-center gap-2 font-black uppercase tracking-widest text-[10px]">
-             <Trophy size={16} /> +2.800 Aprovados
-           </div>
+          {/* Depoimento 2 - Maria, RJ */}
+          <WhatsAppScreenshot 
+            name="Maria • RJ"
+            text="melhor investimento do ano real! o arsenal de repertório pronto salvou minha aprovação 🥹"
+            time="18:05"
+            avatarBg="bg-[#7C3AED]"
+          />
+
+          {/* Depoimento 3 - Carlos (Pai), MG */}
+          <WhatsAppScreenshot 
+            name="Carlos (Pai) • MG"
+            text="meu filho subiu mais de 230 pontos treinando com a corretora Malu. recomendo dms para todos os pais q tao estressados 👍"
+            time="11:24"
+            avatarBg="bg-[#00FF88]"
+          />
+
+          {/* Depoimento 4 - Bruna K., PR */}
+          <WhatsAppScreenshot 
+            name="Bruna K. • PR"
+            text="as correções da Malu em 30 segundos me permitiram ajustar meus erros na hora. economiza muito dinheiro!"
+            time="09:41"
+            avatarBg="bg-[#FF6B35]"
+          />
+
+          {/* Depoimento 5 - Gabriela M., BA */}
+          <WhatsAppScreenshot 
+            name="Gabriela M. • BA"
+            text="estava travada na nota 600 em redações e tirei 920 pontos na redação de 2025!! mto grata ❤️"
+            time="22:15"
+            avatarBg="bg-[#3B82F6]"
+          />
         </div>
       </section>
 
-      {/* SEÇÃO: FAQ */}
+      {/* SEÇÃO 4: OBJEÇÕES + FAQ */}
       <section className="py-16 md:py-24 px-5 bg-[#151515] border-y border-white/5">
         <div className="max-w-4xl mx-auto space-y-12">
           <div className="text-center space-y-3">
-            <span className="text-primary text-xs font-black uppercase tracking-[0.2em]">PRINCIPAIS OBJEÇÕES</span>
+            <span className="text-[#FF6B35] text-xs font-black uppercase tracking-[0.2em]">PRINCIPAIS OBJEÇÕES</span>
             <h2 className="text-3xl md:text-5xl font-display font-black uppercase italic text-white">
-              Ainda com dúvidas?
+              Dúvidas?
             </h2>
           </div>
 
           <div className="grid gap-4">
             {[
-              { q: "A IA Malu é realmente confiável?", a: "Sim! Nossa IA foi treinada especificamente com a grade de correção oficial do MEC e milhares de redações nota 1000 reais. Ela avalia as 5 competências com precisão cirúrgica." },
-              { q: "Quanto tempo por dia preciso estudar?", a: "Apenas 45 min, 4-5x por semana. O método foi feito para quem tem rotina apertada e precisa de eficiência." },
-              { q: "Funciona para quem é iniciante do zero?", a: "Com certeza. Começamos do zero absoluto, ensinando desde a estrutura básica até os repertórios mais avançados." },
-              { q: "O acesso é vitalício?", a: "Sim. Pagamento único e acesso para sempre. Você pode usar para o ENEM deste ano e de todos os próximos se precisar." },
-              { q: "E se eu não gostar?", a: "Garantia incondicional de 7 dias. Se não sentir que sua nota vai subir, devolvemos 100% do seu dinheiro." }
+              { q: "Quanto tempo por dia?", a: "Apenas 45 min, 4-5x por semana. Você estuda no seu tempo." },
+              { q: "Funciona junto com o cursinho presencial?", a: "Sim, serve como um impulsionador de nota. A maioria dos nossos alunos estuda assim." },
+              { q: "Quanto tempo para eu ver o resultado?", a: "4 a 6 semanas para notar alta consistência no 750+ e de 8 a 12 semanas para notas de 900+ na redação." },
+              { q: "Sou totalmente iniciante, vou entender?", a: "Sim, começamos do zero teórico absoluto. O Ebook tem um guia básico para redação." },
+              { q: "O acesso dura quanto tempo?", a: "Acesso vitalício. O método é seu de forma permanente." },
+              { q: "E se eu não gostar ou achar difícil?", a: "Garantia incondicional de 7 dias. Não gostou? Devolvemos 100% sem perguntas." }
             ].map((obj, i) => (
-              <div key={i} className="glass p-6 rounded-2xl border-white/5 bg-[#1a1a1a] flex flex-col gap-2">
+              <div key={i} className="glass p-5 rounded-2xl border-white/5 bg-[#1a1a1a] flex flex-col gap-2 shadow-sm">
                 <div className="flex items-start gap-2.5 text-white font-bold text-sm sm:text-base">
-                  <span className="text-primary shrink-0">❓</span>
+                  <span className="text-[#FF6B35] shrink-0">❓</span>
                   <span>{obj.q}</span>
                 </div>
                 <div className="flex items-start gap-2.5 text-gray-400 text-xs sm:text-sm font-semibold pl-6">
-                  <span className="text-secondary shrink-0">✅</span>
+                  <span className="text-[#00FF88] shrink-0">✅</span>
                   <span>{obj.a}</span>
                 </div>
               </div>
@@ -334,13 +377,18 @@ export default function LandingRest({
         </div>
       </section>
 
+
+
+
+
+      {/* Footer */}
       <footer className="mt-20 py-16 px-12 border-t border-white/5 opacity-50 bg-[#121212]">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
           <div className="flex items-center gap-2">
-            <Trophy size={18} className="text-primary" />
+            <Trophy size={18} className="text-[#FF6B35]" />
             <span className="font-display font-black text-lg tracking-tighter uppercase">RED 1000 PRO</span>
           </div>
-          <div className="flex flex-wrap justify-center gap-8 text-[10px] font-black uppercase tracking-widest text-primary">
+          <div className="flex flex-wrap justify-center gap-8 text-[10px] font-black uppercase tracking-widest text-[#FF6B35]">
             <span>© 2026 • MatheuS 1000 PRO</span>
             <button onClick={() => setShowAuth('login')} className="hover:text-white transition-colors">Área do Aluno</button>
             <a href="mailto:contato@redacao1000pro.com" className="hover:underline text-gray-400">contato@redacao1000pro.com</a>

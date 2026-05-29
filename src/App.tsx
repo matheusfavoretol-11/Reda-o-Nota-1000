@@ -493,12 +493,12 @@ export default function App() {
 
               {/* Headline (Máx 8 palavras) */}
               <h1 className="text-3xl sm:text-5xl md:text-6xl font-display font-black leading-[1.05] tracking-tight text-white uppercase italic">
-                Alcance <span className="text-[#00FF88] block sm:inline">900+ na Redação do ENEM</span> com a IA que Corrige seu Texto em 30 Segundos.
+                Destrave sua <span className="text-[#00FF88] block sm:inline">Redação Nota 1000 Hoje!</span>
               </h1>
 
               {/* O que a pessoa recebe (Máx 15 palavras) */}
               <p className="text-sm sm:text-lg text-white/90 leading-relaxed font-semibold max-w-2xl mx-auto xl:mx-0">
-                Treine com a Malu IA — a única treinada na grade oficial do MEC — e receba feedbacks instantâneos 24h por dia. O atalho tecnológico para sua nota de elite.
+                Ebook prático, corretor IA rápido, repertórios coringas e exemplos comentados reais de sucesso.
               </p>
 
               {/* 3 Benefícios Principais */}
@@ -523,9 +523,16 @@ export default function App() {
                   QUERO MINHA REDAÇÃO NOTA 1000
                   <ArrowRight size={20} className="group-hover:translate-x-1.5 transition-transform" />
                 </button>
-                <p className="text-[#00FF88] text-xs font-extrabold uppercase tracking-wider">
-                  ⏰ Apenas 7 vagas restantes nesta oferta
-                </p>
+                <div className="flex flex-col sm:flex-row items-center justify-center xl:justify-start gap-4">
+                  <p className="text-[#00FF88] text-xs font-extrabold uppercase tracking-wider">
+                    ⏰ Apenas 7 vagas restantes nesta oferta
+                  </p>
+                  <span className="hidden sm:inline text-white/10 text-xs">|</span>
+                  <div className="flex items-center gap-1.5 text-[#00FF88] font-display font-black text-[11px] uppercase tracking-wider">
+                    <ShieldCheck size={14} className="text-[#00FF88]" />
+                    <span>Garantia de 7 Dias Incondicional</span>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -582,17 +589,33 @@ export default function App() {
           </div>
         </section>
 
-        {/* Selo de Garantia de 7 Dias - Minimalista */}
-        <div className="max-w-4xl mx-auto px-5 pb-12 relative z-10">
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 py-3.5 px-6 rounded-2xl bg-white/[0.01] border border-white/5 max-w-2xl mx-auto">
-            <div className="flex items-center gap-2 text-[#00FF88] font-display font-black text-xs uppercase tracking-wider shrink-0">
-              <ShieldCheck size={16} />
-              <span>Garantia de 7 Dias</span>
+        {/* Selo de Garantia de 7 Dias - Minimalista e Verde */}
+        <div className="max-w-4xl mx-auto px-5 pb-16 pt-4 relative z-10 animate-fade-in">
+          <div className="relative overflow-hidden rounded-2xl border border-[#00FF88]/10 bg-black/40 p-6 md:p-8 backdrop-blur-sm">
+            
+            <div className="flex flex-col md:flex-row items-center gap-6 relative z-10">
+              
+              {/* Minimal Icon Badge */}
+              <div className="flex items-center justify-center w-16 h-16 rounded-2xl bg-[#00FF88]/5 border border-[#00FF88]/20 shrink-0 text-[#00FF88]">
+                <ShieldCheck size={32} className="stroke-1" />
+              </div>
+
+              {/* Text Description */}
+              <div className="space-y-2 text-center md:text-left flex-1">
+                <div className="flex flex-col md:flex-row md:items-center gap-x-3 gap-y-1 justify-center md:justify-start">
+                  <span className="text-[#00FF88] text-[9px] font-black uppercase tracking-[0.2em]">GARANTIA INCONDICIONAL</span>
+                  <span className="hidden md:inline text-white/20 text-xs">•</span>
+                  <span className="text-white/60 text-xs font-medium">7 Dias de Risco Zero</span>
+                </div>
+                <h3 className="text-lg md:text-xl font-display font-bold text-white tracking-tight">
+                  Sua satisfação garantida ou <span className="text-[#00FF88]">reembolso integral</span>
+                </h3>
+                <p className="text-xs sm:text-sm text-gray-400 font-medium leading-relaxed max-w-2xl">
+                  Experimente o método por até 7 dias. Use a correção de redação Inteligente à vontade. Se não perceber sua evolução na escrita para o ENEM, basta pedir o cancelamento e devolvemos cada centavo, sem perguntas ou burocracia.
+                </p>
+              </div>
+
             </div>
-            <span className="hidden sm:inline text-white/10 text-xs">|</span>
-            <p className="text-white/50 text-xs font-medium text-center sm:text-left leading-normal">
-              Risco zero: se não se adaptar em até 7 dias, devolvemos seu investimento integralmente.
-            </p>
           </div>
         </div>
 
