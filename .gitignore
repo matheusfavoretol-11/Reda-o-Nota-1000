@@ -6,8 +6,17 @@ coverage/
 *.log
 .env*
 !.env.example
-public/video.mp4
-git reset --soft HEAD~1
-git add .
-git commit -m "feat: atualizando landing page"
-git push
+
+# Media and large assets
+*.mp4
+*.mov
+*.avi
+*.wmv
+*.mkv
+*.webm
+*.zip
+*.tar.gz
+*.rar
+*.7z
+*.mp3
+*.wav

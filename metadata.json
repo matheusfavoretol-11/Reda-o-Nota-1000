@@ -1,0 +1,12 @@
+{
+  "name": "Red 1000 Pro",
+  "description": "Destrave sua Redação Nota 1000 Hoje com a corretora Malu Inteligência Artificial!",
+  "requestFramePermissions": [
+    "camera",
+    "microphone",
+    "geolocation"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

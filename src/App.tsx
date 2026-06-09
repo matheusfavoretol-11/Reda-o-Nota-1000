@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import { SectionHeader, AnimatedCounter, Countdown } from './components/ui/Shared';
 import Nav from './components/ui/Nav';
+import { WhatsAppScreenshot } from './components/landing/WhatsAppScreenshot';
 
 // Dynamically import Toaster and toasts to shave off 25KB from initial mobile bundle
 const LazyToaster = lazy(() => import('sonner').then(m => ({ default: m.Toaster })));
@@ -501,13 +502,43 @@ export default function App() {
 
               {/* Headline (Máx 8 palavras) */}
               <h1 className="text-3xl sm:text-5xl md:text-6xl font-display font-black leading-[1.05] tracking-tight text-white uppercase italic">
-                Destrave sua <span className="text-[#00FF88] block sm:inline">Redação Nota 1000 Hoje!</span>
+                O segredo que <span className="text-[#00FF88] block sm:inline">ninguém te conta</span> sobre a redação do ENEM
               </h1>
 
               {/* O que a pessoa recebe (Máx 15 palavras) */}
               <p className="text-sm sm:text-lg text-white/90 leading-relaxed font-semibold max-w-2xl mx-auto xl:mx-0">
                 Ebook prático, corretor IA rápido, repertórios coringas e exemplos comentados reais de sucesso.
               </p>
+
+              {/* Video Mockup - Posicionado logo abaixo da frase/descrição */}
+              <div id="demo-video" className="relative max-w-[280px] sm:max-w-[310px] mx-auto xl:mx-0 rounded-[48px] border-[10px] border-neutral-900 bg-black shadow-[0_0_50px_rgba(0,255,136,0.12),0_25px_60px_-15px_rgba(0,0,0,0.8)] ring-1 ring-white/10 overflow-hidden group my-6 animate-fade-in">
+                
+                {/* Front Camera Notch / Speaker */}
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-neutral-900 rounded-b-2xl z-30 flex items-center justify-center">
+                  <div className="w-10 h-1 bg-neutral-800 rounded-full" />
+                  <div className="w-2 h-2 bg-neutral-950 rounded-full ml-2 border border-neutral-800/50" />
+                </div>
+
+                {/* Video Player Box with 9:16 aspect ratio */}
+                <div className="relative aspect-[9/16] bg-neutral-950 overflow-hidden">
+                  <video 
+                    src="/video.mp4"
+                    className="w-full h-full object-cover relative z-10"
+                    autoPlay 
+                    muted 
+                    loop 
+                    playsInline 
+                    controls
+                    poster="/favicon.svg"
+                  />
+                  
+                  {/* Overlay reflection for realism */}
+                  <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/[0.02] to-transparent pointer-events-none z-20" />
+                </div>
+
+                {/* Home indicator bar */}
+                <div className="absolute bottom-1 w-24 h-1 bg-white/20 rounded-full left-1/2 -translate-x-1/2 z-30 pointer-events-none" />
+              </div>
 
               {/* 3 Benefícios Principais */}
               <div className="space-y-3 max-w-xl mx-auto xl:mx-0 text-left bg-white/[0.01] border border-white/5 p-4 rounded-2xl select-none">
@@ -597,56 +628,70 @@ export default function App() {
           </div>
         </section>
 
-        {/* SEÇÃO 2: VÍDEO DEMONSTRAÇÃO DO MÉTODO EM AÇÃO */}
-        <section className="py-8 pb-20 px-5 max-w-4xl mx-auto relative z-10 text-center animate-fade-in" id="demo-video">
-          <div className="space-y-4 mb-10">
-            <div className="inline-flex items-center gap-1.5 bg-[#00FF88]/5 border border-[#00FF88]/20 px-3.5 py-1.5 rounded-full">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#00FF88] animate-pulse" />
-              <span className="text-[#00FF88] text-[10px] font-black uppercase tracking-[0.2em]">DEMONSTRAÇÃO REAL</span>
-            </div>
-            <h2 className="text-3xl md:text-4xl font-display font-black uppercase italic text-white tracking-tight leading-none">
-              Conheça a Plataforma <span className="text-[#00FF88]">Por Dentro</span>
+        {/* SEÇÃO 2: PROVA SOCIAL */}
+        <section className="py-12 pb-16 px-5 max-w-7xl mx-auto relative z-10 space-y-10 text-center animate-fade-in" id="prova-social">
+          <div className="space-y-3">
+            <span className="text-[#00FF88] text-xs font-black uppercase tracking-[0.2em] bg-[#00FF88]/10 px-3.5 py-1.5 rounded-full border border-[#00FF88]/20 inline-block">
+              PROVA REAL OUVIDA DOS ALUNOS
+            </span>
+            <h2 className="text-3xl md:text-5xl font-display font-black uppercase italic text-white leading-tight">
+              O Que Eles Dizem <span className="text-[#00FF88]">Sem Censura</span>
             </h2>
             <p className="text-sm text-gray-400 font-semibold max-w-xl mx-auto leading-relaxed">
-              Assista ao vídeo e veja como é fácil e rápido acelerar sua evolução rumo à redação nota 1000 com o nosso método exclusivo.
+              Veja o resultado de estudantes reais que saíram do absoluto zero e alcançaram notas excelentes em tempo recorde.
             </p>
           </div>
 
-          {/* Interactive Mobile Device Mockup for Portrait 9:16 Video */}
-          <div className="relative max-w-[310px] mx-auto rounded-[48px] border-[10px] border-neutral-900 bg-black shadow-[0_0_50px_rgba(0,255,136,0.12),0_25px_60px_-15px_rgba(0,0,0,0.8)] ring-1 ring-white/10 overflow-hidden group">
-            
-            {/* Front Camera Notch / Speaker */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-neutral-900 rounded-b-2xl z-30 flex items-center justify-center">
-              <div className="w-10 h-1 bg-neutral-800 rounded-full" />
-              <div className="w-2 h-2 bg-neutral-950 rounded-full ml-2 border border-neutral-800/50" />
-            </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-6xl mx-auto">
+            {/* Depoimento 1 - Bernardo Alves */}
+            <WhatsAppScreenshot 
+              name="Bernardo Alves"
+              text="nossa mto bom, sai de 640 pra 820 em 8 semanas! 😱 as estruturas prontas ajudaram dms, nem tive aquela ansiedade de travar na hora da escrita do ENEM"
+              time="14:32"
+              avatarBg="bg-[#FF3366]"
+            />
 
-            {/* Video Player Box with 9:16 aspect ratio */}
-            <div className="relative aspect-[9/16] bg-neutral-950 overflow-hidden">
-              <video 
-                src="/video.mp4"
-                className="w-full h-full object-cover relative z-10"
-                autoPlay 
-                muted 
-                loop 
-                playsInline 
-                controls
-                poster="/favicon.svg"
-              />
-              
-              {/* Overlay reflection for realism */}
-              <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/[0.02] to-transparent pointer-events-none z-20" />
-            </div>
+            {/* Depoimento 2 - Maria, RJ */}
+            <WhatsAppScreenshot 
+              name="Maria • RJ"
+              text="melhor investimento do ano real! o arsenal de repertório pronto salvou minha aprovação 🥹"
+              time="18:05"
+              avatarBg="bg-[#7C3AED]"
+            />
 
-            {/* Home indicator bar */}
-            <div className="absolute bottom-1 w-24 h-1 bg-white/20 rounded-full left-1/2 -translate-x-1/2 z-30 pointer-events-none" />
+            {/* Depoimento 3 - Carlos (Pai), MG */}
+            <WhatsAppScreenshot 
+              name="Carlos (Pai) • MG"
+              text="meu filho subiu mais de 230 pontos treinando com a corretora Malu. recomendo dms para todos os pais q tao estressados 👍"
+              time="11:24"
+              avatarBg="bg-[#00FF88]"
+            />
+
+            {/* Depoimento 4 - Bruna K., PR */}
+            <WhatsAppScreenshot 
+              name="Bruna K. • PR"
+              text="as correções da Malu em 30 segundos me permitiram ajustar meus erros na hora. economiza muito dinheiro!"
+              time="09:41"
+              avatarBg="bg-[#FF6B35]"
+            />
+
+            {/* Depoimento 5 - Gabriela M., BA */}
+            <WhatsAppScreenshot 
+              name="Gabriela M. • BA"
+              text="estava travada na nota 600 em redações e tirei 920 pontos na redação de 2025!! mto grata ❤️"
+              time="22:15"
+              avatarBg="bg-[#3B82F6]"
+            />
           </div>
+        </section>
 
-          {/* Key showcase feature list pointing to elements of the video */}
-          <div className="grid md:grid-cols-3 gap-4 max-w-3xl mx-auto mt-10 text-left">
+        {/* SEÇÃO 3: RECURSOS COMPLEMENTARES DA PLATAFORMA */}
+        <section className="py-8 pb-16 px-5 max-w-4xl mx-auto relative z-10 text-center animate-fade-in" id="features">
+          {/* Key showcase feature list */}
+          <div className="grid md:grid-cols-3 gap-4 max-w-3xl mx-auto text-left">
             <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/5 space-y-2">
               <div className="text-[#00FF88] text-xs font-black uppercase tracking-wider flex items-center gap-1.5">
-                📖 AREA DO ALUNO
+                📖 ÁREA DO ALUNO
               </div>
               <p className="text-xs text-gray-400 font-medium leading-relaxed">
                 Acesse o Guia de 30 páginas e esqueletos coringas diretamente na plataforma para acelerar sua redação.
