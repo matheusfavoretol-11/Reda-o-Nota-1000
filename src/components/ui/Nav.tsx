@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Trophy, User, Sparkles } from 'lucide-react';
+import { Trophy, User } from 'lucide-react';
 
 interface NavProps {
   onAction: () => void;
   onLogin: () => void;
-  onTest: () => void;
   topOffset?: string;
 }
 
-const Nav = ({ onAction, onLogin, onTest, topOffset }: NavProps) => {
+const Nav = ({ onAction, onLogin, topOffset }: NavProps) => {
   const [isScrolled, setIsScrolled] = useState(false);
   useEffect(() => {
     let scrolled = false;
@@ -41,14 +40,6 @@ const Nav = ({ onAction, onLogin, onTest, topOffset }: NavProps) => {
 
         <div className="flex items-center gap-2 md:gap-4">
           <button 
-            onClick={onTest}
-            className="flex items-center gap-1.5 bg-[#00FF88]/10 hover:bg-[#00FF88]/20 border border-[#00FF88]/30 text-[#00FF88] px-3 md:px-5 py-2 md:py-2.5 rounded-full font-display font-black text-[9px] md:text-xs uppercase tracking-widest transition-all hover:scale-105 active:scale-95 shadow-[0_0_15px_rgba(0,255,136,0.15)] animate-pulse shrink-0"
-          >
-            <Sparkles size={12} className="text-[#00FF88]" />
-            <span>TESTAR GRÁTIS</span>
-          </button>
-
-          <button 
             onClick={onLogin}
             className="flex items-center gap-1.5 md:gap-2 text-[9px] md:text-[10px] font-black uppercase tracking-widest opacity-60 hover:opacity-100 transition-opacity px-2"
           >
@@ -57,7 +48,7 @@ const Nav = ({ onAction, onLogin, onTest, topOffset }: NavProps) => {
           
           <button 
             onClick={onAction}
-            className="hidden sm:block bg-white text-bg-dark px-4 md:px-8 py-2.5 md:py-3 rounded-full font-display font-black text-[9px] md:text-xs uppercase tracking-widest hover:bg-accent transition-all hover:scale-105 active:scale-95 shadow-lg shadow-white/5 whitespace-nowrap"
+            className="bg-white text-bg-dark px-4 md:px-8 py-2.5 md:py-3 rounded-full font-display font-black text-[9px] md:text-xs uppercase tracking-widest hover:bg-accent transition-all hover:scale-105 active:scale-95 shadow-lg shadow-white/5 whitespace-nowrap"
           >
             QUERO A NOTA 1000
           </button>

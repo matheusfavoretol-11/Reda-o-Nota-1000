@@ -52,9 +52,6 @@ const LoadingView = () => (
 const hasCachedSession = (): boolean => {
   if (typeof window === 'undefined') return false;
   try {
-    if (localStorage.getItem('red1000_free_test') === 'true') {
-      return true;
-    }
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
       if (key && (key.startsWith('sb-') || key.includes('supabase.auth.token'))) {
@@ -159,22 +156,7 @@ export default function App() {
     return () => clearInterval(interval);
   }, []);
 
-  const isPaid = profile?.status === 'paid' || user?.email === 'matheusfavoretol@gmail.com' || (user?.email && (user.email.includes('teste') || user.email.endsWith('@red1000.pro'))) || localStorage.getItem('red1000_free_test') === 'true';
-
-  const handleInstantFreeTest = () => {
-    localStorage.setItem('red1000_free_test', 'true');
-    localStorage.setItem('red1000_is_paid_cache', 'true');
-    setUser({
-      email: 'usuario.teste@red1000.pro',
-      id: 'mock-test-id-free-access',
-      app_metadata: { provider: 'test' },
-      user_metadata: { full_name: 'Estudante de Teste' }
-    });
-    setProfile({ status: 'paid' });
-    setActiveTab('overview');
-    setShowAuth(null);
-    showToast.success("Acesso de Teste Grátis Ativado! Todas as funções foram liberadas.");
-  };
+  const isPaid = profile?.status === 'paid' || user?.email === 'matheusfavoretol@gmail.com';
 
   // Dynamic combined config setup + auth check to completely optimize First Contentful Paint and prevent race-conditions
   useEffect(() => {
@@ -222,28 +204,16 @@ export default function App() {
 
         // 2. Tenta recuperar sessão existente apenas se houver sinal de token para evitar requisição pendente no landing
         if (hasCachedSession()) {
-          if (localStorage.getItem('red1000_free_test') === 'true') {
-            if (active) {
-              setUser({
-                email: 'usuario.teste@red1000.pro',
-                id: 'mock-test-id-free-access',
-                app_metadata: { provider: 'test' },
-                user_metadata: { full_name: 'Estudante de Teste' }
-              });
-              setProfile({ status: 'paid' });
+          const { data: { session } } = await supabase.auth.getSession();
+          const currentUser = session?.user ?? null;
+          if (active) setUser(currentUser);
+          
+          if (currentUser && active) {
+            const hasStatus = localStorage.getItem('red1000_is_paid_cache') !== null;
+            if (!hasStatus) {
+              setCheckingPayment(true);
             }
-          } else {
-            const { data: { session } } = await supabase.auth.getSession();
-            const currentUser = session?.user ?? null;
-            if (active) setUser(currentUser);
-            
-            if (currentUser && active) {
-              const hasStatus = localStorage.getItem('red1000_is_paid_cache') !== null;
-              if (!hasStatus) {
-                setCheckingPayment(true);
-              }
-              await checkPaymentStatus(currentUser.email);
-            }
+            await checkPaymentStatus(currentUser.email);
           }
         } else {
           // Se não há sessão em cache, finalize o carregamento imediatamente para renderização instantânea
@@ -477,7 +447,6 @@ export default function App() {
       <Nav 
         onAction={handleCTA} 
         onLogin={() => setShowAuth('login')} 
-        onTest={handleInstantFreeTest}
         topOffset={showTopBar ? 'top-[36px] lg:top-[42px]' : 'top-0'} 
       />
       
@@ -488,7 +457,6 @@ export default function App() {
             onClose={() => setShowAuth(null)} 
             setMode={(m) => setShowAuth(m)}
             checkoutUrl={KIWIFY_CHECKOUT_URL}
-            onTest={handleInstantFreeTest}
           />
         )}
         {user && !isPaid && (
@@ -556,22 +524,13 @@ export default function App() {
 
               {/* CTA Button */}
               <div className="space-y-4 pt-2 text-center xl:text-left">
-                <div className="flex flex-col sm:flex-row items-center justify-center xl:justify-start gap-4">
-                  <button 
-                    onClick={handleCTA}
-                    className="w-full sm:w-auto bg-[#FF6B35] hover:bg-[#ff7b46] text-white px-10 py-5 rounded-2xl text-lg font-display font-black tracking-wider uppercase transition-all shadow-[0_15px_40px_rgba(255,107,53,0.35)] hover:scale-[1.03] active:scale-[0.97] flex items-center justify-center gap-3 group border-b-4 border-black/30 animate-pulse cursor-pointer"
-                  >
-                    QUERO MINHA REDAÇÃO NOTA 1000
-                    <ArrowRight size={20} className="group-hover:translate-x-1.5 transition-transform" />
-                  </button>
-                  <button 
-                    onClick={handleInstantFreeTest}
-                    className="w-full sm:w-auto bg-[#00FF88]/10 hover:bg-[#00FF88]/20 border border-[#00FF88]/30 text-[#00FF88] px-8 py-5 rounded-2xl text-sm font-display font-black tracking-wider uppercase transition-all hover:scale-[1.03] active:scale-[0.97] flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(0,255,136,0.1)] cursor-pointer"
-                  >
-                    <span>🧪 EXPERIMENTAR DE GRAÇA</span>
-                  </button>
-                </div>
-                
+                <button 
+                  onClick={handleCTA}
+                  className="w-full sm:w-auto bg-[#FF6B35] hover:bg-[#ff7b46] text-white px-10 py-5 rounded-2xl text-lg font-display font-black tracking-wider uppercase transition-all shadow-[0_15px_40px_rgba(255,107,53,0.35)] hover:scale-[1.03] active:scale-[0.97] flex items-center justify-center gap-3 mx-auto xl:mx-0 group border-b-4 border-black/30 animate-pulse cursor-pointer"
+                >
+                  QUERO MINHA REDAÇÃO NOTA 1000
+                  <ArrowRight size={20} className="group-hover:translate-x-1.5 transition-transform" />
+                </button>
                 <div className="flex flex-col sm:flex-row items-center justify-center xl:justify-start gap-4">
                   <p className="text-[#00FF88] text-xs font-extrabold uppercase tracking-wider">
                     ⏰ Apenas 7 vagas restantes nesta oferta
@@ -579,7 +538,7 @@ export default function App() {
                   <span className="hidden sm:inline text-white/10 text-xs">|</span>
                   <div className="flex items-center gap-1.5 text-[#00FF88] font-display font-black text-[11px] uppercase tracking-wider">
                     <ShieldCheck size={14} className="text-[#00FF88]" />
-                    <span>Garantia de 7 Dias + Teste Totalmente Grátis</span>
+                    <span>Garantia de 7 Dias Incondicional</span>
                   </div>
                 </div>
               </div>
@@ -634,6 +593,82 @@ export default function App() {
                 </div>
               </div>
 
+            </div>
+          </div>
+        </section>
+
+        {/* SEÇÃO 2: VÍDEO DEMONSTRAÇÃO DO MÉTODO EM AÇÃO */}
+        <section className="py-8 pb-20 px-5 max-w-4xl mx-auto relative z-10 text-center animate-fade-in" id="demo-video">
+          <div className="space-y-4 mb-10">
+            <div className="inline-flex items-center gap-1.5 bg-[#00FF88]/5 border border-[#00FF88]/20 px-3.5 py-1.5 rounded-full">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#00FF88] animate-pulse" />
+              <span className="text-[#00FF88] text-[10px] font-black uppercase tracking-[0.2em]">DEMONSTRAÇÃO REAL</span>
+            </div>
+            <h2 className="text-3xl md:text-4xl font-display font-black uppercase italic text-white tracking-tight leading-none">
+              Conheça a Plataforma <span className="text-[#00FF88]">Por Dentro</span>
+            </h2>
+            <p className="text-sm text-gray-400 font-semibold max-w-xl mx-auto leading-relaxed">
+              Assista ao vídeo e veja como é fácil e rápido acelerar sua evolução rumo à redação nota 1000 com o nosso método exclusivo.
+            </p>
+          </div>
+
+          {/* Interactive Mobile Device Mockup for Portrait 9:16 Video */}
+          <div className="relative max-w-[310px] mx-auto rounded-[48px] border-[10px] border-neutral-900 bg-black shadow-[0_0_50px_rgba(0,255,136,0.12),0_25px_60px_-15px_rgba(0,0,0,0.8)] ring-1 ring-white/10 overflow-hidden group">
+            
+            {/* Front Camera Notch / Speaker */}
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-neutral-900 rounded-b-2xl z-30 flex items-center justify-center">
+              <div className="w-10 h-1 bg-neutral-800 rounded-full" />
+              <div className="w-2 h-2 bg-neutral-950 rounded-full ml-2 border border-neutral-800/50" />
+            </div>
+
+            {/* Video Player Box with 9:16 aspect ratio */}
+            <div className="relative aspect-[9/16] bg-neutral-950 overflow-hidden">
+              <video 
+                src="/video.mp4"
+                className="w-full h-full object-cover relative z-10"
+                autoPlay 
+                muted 
+                loop 
+                playsInline 
+                controls
+                poster="/favicon.svg"
+              />
+              
+              {/* Overlay reflection for realism */}
+              <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/[0.02] to-transparent pointer-events-none z-20" />
+            </div>
+
+            {/* Home indicator bar */}
+            <div className="absolute bottom-1 w-24 h-1 bg-white/20 rounded-full left-1/2 -translate-x-1/2 z-30 pointer-events-none" />
+          </div>
+
+          {/* Key showcase feature list pointing to elements of the video */}
+          <div className="grid md:grid-cols-3 gap-4 max-w-3xl mx-auto mt-10 text-left">
+            <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/5 space-y-2">
+              <div className="text-[#00FF88] text-xs font-black uppercase tracking-wider flex items-center gap-1.5">
+                📖 AREA DO ALUNO
+              </div>
+              <p className="text-xs text-gray-400 font-medium leading-relaxed">
+                Acesse o Guia de 30 páginas e esqueletos coringas diretamente na plataforma para acelerar sua redação.
+              </p>
+            </div>
+            
+            <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/5 space-y-2">
+              <div className="text-[#00FF88] text-xs font-black uppercase tracking-wider flex items-center gap-1.5">
+                🧠 TREINO PRÁTICO
+              </div>
+              <p className="text-xs text-gray-400 font-medium leading-relaxed">
+                Exercícios e desafios rápidos com foco direto nas principais competências exigidas pela banca do ENEM.
+              </p>
+            </div>
+
+            <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/5 space-y-2">
+              <div className="text-[#00FF88] text-xs font-black uppercase tracking-wider flex items-center gap-1.5">
+                🤖 CORRETORA MALU IA
+              </div>
+              <p className="text-xs text-gray-400 font-medium leading-relaxed">
+                Escreva ou cole seu texto e receba correção, estimativa de nota e feedbacks detalhados em até 30 segundos.
+              </p>
             </div>
           </div>
         </section>

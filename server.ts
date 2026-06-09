@@ -215,8 +215,6 @@ async function startServer() {
       return res.status(400).json({ error: "Email is required" });
     }
 
-    const isTrialEmail = email.toLowerCase().includes('teste') || email.toLowerCase().includes('trial') || email.toLowerCase().includes('free') || email.toLowerCase().endsWith('@red1000.pro');
-
     try {
       if (!supabase) throw new Error("Supabase client not initialized");
       const { data, error } = await supabase
@@ -225,12 +223,12 @@ async function startServer() {
         .eq('email', email.toLowerCase())
         .single();
 
-      // For testing purposes, libere o acesso premium para o usuário matheusfavoretol@gmail.com ou contas de teste
-      const isPaid = (!!data && (data.status === "paid" || data.status === "approved" || data.status === "completed")) || email.toLowerCase() === 'matheusfavoretol@gmail.com' || isTrialEmail;
+      // For testing purposes, libere o acesso premium para o usuário matheusfavoretol@gmail.com
+      const isPaid = (!!data && (data.status === "paid" || data.status === "approved" || data.status === "completed")) || email.toLowerCase() === 'matheusfavoretol@gmail.com';
       res.json({ isPaid });
     } catch (e) {
-      // For testing purposes, libere o acesso premium para o usuário matheusfavoretol@gmail.com ou contas de teste
-      if (email.toLowerCase() === 'matheusfavoretol@gmail.com' || isTrialEmail) {
+      // For testing purposes, libere o acesso premium para o usuário matheusfavoretol@gmail.com
+      if (email.toLowerCase() === 'matheusfavoretol@gmail.com') {
         return res.json({ isPaid: true });
       }
       res.json({ isPaid: false });

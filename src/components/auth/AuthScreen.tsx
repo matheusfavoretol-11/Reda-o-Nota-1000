@@ -5,7 +5,7 @@ import { toast } from 'sonner';
 import { getSupabase, updateSupabaseConfig } from '../../lib/supabase';
 import SuccessRedirect from '../offer/SuccessRedirect';
 
-const AuthScreen = ({ mode, onClose, setMode, checkoutUrl, onTest }: { mode: 'login' | 'signup', onClose: () => void, setMode: (m: 'login' | 'signup') => void, checkoutUrl: string, onTest: () => void }) => {
+const AuthScreen = ({ mode, onClose, setMode, checkoutUrl }: { mode: 'login' | 'signup', onClose: () => void, setMode: (m: 'login' | 'signup') => void, checkoutUrl: string }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [authLoading, setAuthLoading] = useState(false);
@@ -146,25 +146,7 @@ const AuthScreen = ({ mode, onClose, setMode, checkoutUrl, onTest }: { mode: 'lo
             {authLoading ? <RefreshCw className="animate-spin" size={16} /> : mode === 'signup' ? 'CRIAR MINHA CONTA' : 'DESTRAVAR ACESSO'}
           </button>
 
-          <div className="relative py-2">
-            <div className="absolute inset-0 flex items-center" aria-hidden="true">
-              <div className="w-full border-t border-white/5"></div>
-            </div>
-            <div className="relative flex justify-center text-[10px] uppercase">
-              <span className="bg-[#050508] px-3 font-black text-[#555] tracking-widest">OU SE PREFERIR</span>
-            </div>
-          </div>
-
-          <button 
-            type="button"
-            onClick={onTest}
-            className="w-full bg-transparent hover:bg-[#00FF88]/5 text-[#00FF88] border border-dashed border-[#00FF88]/40 hover:border-[#00FF88]/70 py-5 rounded-2xl font-black text-[11px] uppercase tracking-widest transition-all hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(0,255,136,0.05)]"
-          >
-            <span className="animate-pulse">⚡</span>
-            <span>TESTAR GRÁTIS (CORRETOR E REPERTÓRIOS LIBERADOS)</span>
-          </button>
-
-          <div className="text-center pt-2">
+          <div className="text-center pt-4">
             <button 
               type="button"
               onClick={() => setMode(mode === 'login' ? 'signup' : 'login')}
