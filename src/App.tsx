@@ -52,6 +52,9 @@ const LoadingView = () => (
 const hasCachedSession = (): boolean => {
   if (typeof window === 'undefined') return false;
   try {
+    if (localStorage.getItem('red1000_free_test') === 'true') {
+      return true;
+    }
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
       if (key && (key.startsWith('sb-') || key.includes('supabase.auth.token'))) {
@@ -156,7 +159,22 @@ export default function App() {
     return () => clearInterval(interval);
   }, []);
 
-  const isPaid = profile?.status === 'paid' || user?.email === 'matheusfavoretol@gmail.com';
+  const isPaid = profile?.status === 'paid' || user?.email === 'matheusfavoretol@gmail.com' || (user?.email && (user.email.includes('teste') || user.email.endsWith('@red1000.pro'))) || localStorage.getItem('red1000_free_test') === 'true';
+
+  const handleInstantFreeTest = () => {
+    localStorage.setItem('red1000_free_test', 'true');
+    localStorage.setItem('red1000_is_paid_cache', 'true');
+    setUser({
+      email: 'usuario.teste@red1000.pro',
+      id: 'mock-test-id-free-access',
+      app_metadata: { provider: 'test' },
+      user_metadata: { full_name: 'Estudante de Teste' }
+    });
+    setProfile({ status: 'paid' });
+    setActiveTab('overview');
+    setShowAuth(null);
+    showToast.success("Acesso de Teste Grátis Ativado! Todas as funções foram liberadas.");
+  };
 
   // Dynamic combined config setup + auth check to completely optimize First Contentful Paint and prevent race-conditions
   useEffect(() => {
@@ -204,16 +222,28 @@ export default function App() {
 
         // 2. Tenta recuperar sessão existente apenas se houver sinal de token para evitar requisição pendente no landing
         if (hasCachedSession()) {
-          const { data: { session } } = await supabase.auth.getSession();
-          const currentUser = session?.user ?? null;
-          if (active) setUser(currentUser);
-          
-          if (currentUser && active) {
-            const hasStatus = localStorage.getItem('red1000_is_paid_cache') !== null;
-            if (!hasStatus) {
-              setCheckingPayment(true);
+          if (localStorage.getItem('red1000_free_test') === 'true') {
+            if (active) {
+              setUser({
+                email: 'usuario.teste@red1000.pro',
+                id: 'mock-test-id-free-access',
+                app_metadata: { provider: 'test' },
+                user_metadata: { full_name: 'Estudante de Teste' }
+              });
+              setProfile({ status: 'paid' });
             }
-            await checkPaymentStatus(currentUser.email);
+          } else {
+            const { data: { session } } = await supabase.auth.getSession();
+            const currentUser = session?.user ?? null;
+            if (active) setUser(currentUser);
+            
+            if (currentUser && active) {
+              const hasStatus = localStorage.getItem('red1000_is_paid_cache') !== null;
+              if (!hasStatus) {
+                setCheckingPayment(true);
+              }
+              await checkPaymentStatus(currentUser.email);
+            }
           }
         } else {
           // Se não há sessão em cache, finalize o carregamento imediatamente para renderização instantânea
@@ -304,8 +334,16 @@ export default function App() {
   };
 
   const handleLogout = async () => {
-    const { supabase } = await import('./lib/supabase');
-    await supabase.auth.signOut();
+    try {
+      const { supabase } = await import('./lib/supabase');
+      await supabase.auth.signOut();
+    } catch (e) {
+      // ignore
+    }
+    localStorage.removeItem('red1000_is_paid_cache');
+    localStorage.removeItem('red1000_free_test');
+    setUser(null);
+    setProfile(null);
     showToast.success("Sessão encerrada!");
   };
 
@@ -439,6 +477,7 @@ export default function App() {
       <Nav 
         onAction={handleCTA} 
         onLogin={() => setShowAuth('login')} 
+        onTest={handleInstantFreeTest}
         topOffset={showTopBar ? 'top-[36px] lg:top-[42px]' : 'top-0'} 
       />
       
@@ -449,6 +488,7 @@ export default function App() {
             onClose={() => setShowAuth(null)} 
             setMode={(m) => setShowAuth(m)}
             checkoutUrl={KIWIFY_CHECKOUT_URL}
+            onTest={handleInstantFreeTest}
           />
         )}
         {user && !isPaid && (
@@ -516,13 +556,22 @@ export default function App() {
 
               {/* CTA Button */}
               <div className="space-y-4 pt-2 text-center xl:text-left">
-                <button 
-                  onClick={handleCTA}
-                  className="w-full sm:w-auto bg-[#FF6B35] hover:bg-[#ff7b46] text-white px-10 py-5 rounded-2xl text-lg font-display font-black tracking-wider uppercase transition-all shadow-[0_15px_40px_rgba(255,107,53,0.35)] hover:scale-[1.03] active:scale-[0.97] flex items-center justify-center gap-3 mx-auto xl:mx-0 group border-b-4 border-black/30 animate-pulse cursor-pointer"
-                >
-                  QUERO MINHA REDAÇÃO NOTA 1000
-                  <ArrowRight size={20} className="group-hover:translate-x-1.5 transition-transform" />
-                </button>
+                <div className="flex flex-col sm:flex-row items-center justify-center xl:justify-start gap-4">
+                  <button 
+                    onClick={handleCTA}
+                    className="w-full sm:w-auto bg-[#FF6B35] hover:bg-[#ff7b46] text-white px-10 py-5 rounded-2xl text-lg font-display font-black tracking-wider uppercase transition-all shadow-[0_15px_40px_rgba(255,107,53,0.35)] hover:scale-[1.03] active:scale-[0.97] flex items-center justify-center gap-3 group border-b-4 border-black/30 animate-pulse cursor-pointer"
+                  >
+                    QUERO MINHA REDAÇÃO NOTA 1000
+                    <ArrowRight size={20} className="group-hover:translate-x-1.5 transition-transform" />
+                  </button>
+                  <button 
+                    onClick={handleInstantFreeTest}
+                    className="w-full sm:w-auto bg-[#00FF88]/10 hover:bg-[#00FF88]/20 border border-[#00FF88]/30 text-[#00FF88] px-8 py-5 rounded-2xl text-sm font-display font-black tracking-wider uppercase transition-all hover:scale-[1.03] active:scale-[0.97] flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(0,255,136,0.1)] cursor-pointer"
+                  >
+                    <span>🧪 EXPERIMENTAR DE GRAÇA</span>
+                  </button>
+                </div>
+                
                 <div className="flex flex-col sm:flex-row items-center justify-center xl:justify-start gap-4">
                   <p className="text-[#00FF88] text-xs font-extrabold uppercase tracking-wider">
                     ⏰ Apenas 7 vagas restantes nesta oferta
@@ -530,7 +579,7 @@ export default function App() {
                   <span className="hidden sm:inline text-white/10 text-xs">|</span>
                   <div className="flex items-center gap-1.5 text-[#00FF88] font-display font-black text-[11px] uppercase tracking-wider">
                     <ShieldCheck size={14} className="text-[#00FF88]" />
-                    <span>Garantia de 7 Dias Incondicional</span>
+                    <span>Garantia de 7 Dias + Teste Totalmente Grátis</span>
                   </div>
                 </div>
               </div>
