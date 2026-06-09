@@ -7,3 +7,7 @@ coverage/
 .env*
 !.env.example
 public/video.mp4
+git reset --soft HEAD~1
+git add .
+git commit -m "feat: atualizando landing page"
+git push
