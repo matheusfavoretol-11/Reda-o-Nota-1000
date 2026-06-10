@@ -8,7 +8,6 @@ coverage/
 !.env.example
 
 # Media and large assets
-*.mp4
 *.mov
 *.avi
 *.wmv

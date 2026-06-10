@@ -248,28 +248,42 @@ async function startServer() {
   // Dynamic /video.mp4 helper route
   app.get("/video.mp4", (req, res) => {
     try {
-      // 1. Check in dist (production)
-      const distVideoPath = path.join(process.cwd(), "dist", "video.mp4");
-      if (fs.existsSync(distVideoPath)) {
-        res.setHeader("Content-Type", "video/mp4");
-        return res.sendFile(distVideoPath);
+      const candidatePaths = [
+        // 1. Check process.cwd() bases
+        path.join(process.cwd(), "dist", "video.mp4"),
+        path.join(process.cwd(), "public", "video.mp4"),
+        path.join(process.cwd(), "video.mp4"),
+      ];
+
+      // 2. Add relative compilation locations (safe __dirname check)
+      try {
+        if (typeof __dirname !== "undefined") {
+          candidatePaths.push(
+            path.join(__dirname, "video.mp4"),
+            path.join(__dirname, "..", "public", "video.mp4"),
+            path.join(__dirname, "..", "dist", "video.mp4")
+          );
+        }
+      } catch (_) {
+        // Safe to ignore in ESM contexts before compilation
       }
 
-      // 2. Check in public (development/fallback)
-      const publicVideoPath = path.join(process.cwd(), "public", "video.mp4");
-      if (fs.existsSync(publicVideoPath)) {
-        res.setHeader("Content-Type", "video/mp4");
-        return res.sendFile(publicVideoPath);
+      for (const videoPath of candidatePaths) {
+        if (fs.existsSync(videoPath)) {
+          res.setHeader("Content-Type", "video/mp4");
+          return res.sendFile(videoPath);
+        }
       }
 
-      // 3. Scan public for any mp4 file
+      // 3. Scan public for any other mp4 file
       const publicPath = path.join(process.cwd(), "public");
       if (fs.existsSync(publicPath)) {
         const files = fs.readdirSync(publicPath);
         const mp4File = files.find(f => f.toLowerCase().endsWith(".mp4"));
         if (mp4File) {
+          const matchedPath = path.join(publicPath, mp4File);
           res.setHeader("Content-Type", "video/mp4");
-          return res.sendFile(path.join(publicPath, mp4File));
+          return res.sendFile(matchedPath);
         }
       }
     } catch (e) {
