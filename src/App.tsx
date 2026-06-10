@@ -117,7 +117,6 @@ export default function App() {
   const [compPrice1, setCompPrice1] = useState(89.90);
   const [compPrice2, setCompPrice2] = useState(99.90);
   const [compPrice3, setCompPrice3] = useState(129.90);
-  const [videoSrc, setVideoSrc] = useState("/video.mp4");
 
   // Dynamic viewers updater (updates every 38 seconds)
   useEffect(() => {
@@ -523,7 +522,6 @@ export default function App() {
                 {/* Video Player Box with 9:16 aspect ratio */}
                 <div className="relative aspect-[9/16] bg-neutral-950 overflow-hidden">
                   <video 
-                    src={videoSrc}
                     className="w-full h-full object-cover relative z-10"
                     autoPlay 
                     muted 
@@ -531,12 +529,11 @@ export default function App() {
                     playsInline 
                     controls
                     poster="/favicon.svg"
-                    onError={() => {
-                      if (videoSrc === "/video.mp4") {
-                        setVideoSrc("https://assets.mixkit.co/videos/preview/mixkit-girl-writing-in-a-notebook-41988-large.mp4");
-                      }
-                    }}
-                  />
+                  >
+                    <source src="/video.mp4" type="video/mp4" />
+                    <source src="https://assets.mixkit.co/videos/preview/mixkit-girl-writing-in-a-notebook-41988-large.mp4" type="video/mp4" />
+                    Seu navegador não suporta a reprodução deste vídeo.
+                  </video>
                   
                   {/* Overlay reflection for realism */}
                   <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/[0.02] to-transparent pointer-events-none z-20" />
