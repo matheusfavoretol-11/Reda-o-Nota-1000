@@ -521,6 +521,14 @@ export default function App() {
                 Ebook prático, corretor IA rápido, repertórios coringas e exemplos comentados reais de sucesso.
               </p>
 
+              {/* Title above cellphone mockup requested by user */}
+              <div className="text-center xl:text-left pt-4 -mb-2">
+                <h3 className="text-base sm:text-lg font-display font-black tracking-widest text-[#00FF88] uppercase inline-flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-[#00FF88] animate-pulse" />
+                  Como funciona
+                </h3>
+              </div>
+
               {/* Video Mockup - Posicionado logo abaixo da frase/descrição */}
               <div id="demo-video" className="relative max-w-[280px] sm:max-w-[310px] mx-auto xl:mx-0 rounded-[48px] border-[10px] border-neutral-900 bg-black shadow-[0_0_50px_rgba(0,255,136,0.12),0_25px_60px_-15px_rgba(0,0,0,0.8)] ring-1 ring-white/10 overflow-hidden group my-6 animate-fade-in">
                 
