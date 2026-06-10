@@ -248,14 +248,28 @@ async function startServer() {
   // Dynamic /video.mp4 helper route
   app.get("/video.mp4", (req, res) => {
     try {
+      // 1. Check in dist (production)
+      const distVideoPath = path.join(process.cwd(), "dist", "video.mp4");
+      if (fs.existsSync(distVideoPath)) {
+        res.setHeader("Content-Type", "video/mp4");
+        return res.sendFile(distVideoPath);
+      }
+
+      // 2. Check in public (development/fallback)
+      const publicVideoPath = path.join(process.cwd(), "public", "video.mp4");
+      if (fs.existsSync(publicVideoPath)) {
+        res.setHeader("Content-Type", "video/mp4");
+        return res.sendFile(publicVideoPath);
+      }
+
+      // 3. Scan public for any mp4 file
       const publicPath = path.join(process.cwd(), "public");
       if (fs.existsSync(publicPath)) {
         const files = fs.readdirSync(publicPath);
-        // Find any file ending with .mp4
         const mp4File = files.find(f => f.toLowerCase().endsWith(".mp4"));
         if (mp4File) {
-          const videoFilePath = path.join(publicPath, mp4File);
-          return res.sendFile(videoFilePath);
+          res.setHeader("Content-Type", "video/mp4");
+          return res.sendFile(path.join(publicPath, mp4File));
         }
       }
     } catch (e) {
