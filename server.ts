@@ -2,6 +2,7 @@ import "dotenv/config";
 import express from "express";
 import { createServer as createViteServer } from "vite";
 import path from "path";
+import fs from "fs";
 import { fileURLToPath } from "url";
 import { createClient } from "@supabase/supabase-js";
 import { GoogleGenAI } from "@google/genai";
@@ -242,6 +243,26 @@ async function startServer() {
     const dynamicKey = (getEnvVar("VITE_SUPABASE_ANON_KEY") || getEnvVar("SUPABASE_ANON_KEY") || "");
     
     res.json({ url: dynamicUrl, key: dynamicKey });
+  });
+
+  // Dynamic /video.mp4 helper route
+  app.get("/video.mp4", (req, res) => {
+    try {
+      const publicPath = path.join(process.cwd(), "public");
+      if (fs.existsSync(publicPath)) {
+        const files = fs.readdirSync(publicPath);
+        // Find any file ending with .mp4
+        const mp4File = files.find(f => f.toLowerCase().endsWith(".mp4"));
+        if (mp4File) {
+          const videoFilePath = path.join(publicPath, mp4File);
+          return res.sendFile(videoFilePath);
+        }
+      }
+    } catch (e) {
+      console.error("Error serving video.mp4 dynamically:", e);
+    }
+    // High-quality vertical study/writing stock video as fallback if no local video file is present
+    res.redirect("https://assets.mixkit.co/videos/preview/mixkit-girl-writing-in-a-notebook-41988-large.mp4");
   });
 
   // Vite integration
