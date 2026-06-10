@@ -525,7 +525,7 @@ export default function App() {
               <div className="text-center xl:text-left pt-4 -mb-2">
                 <h3 className="text-base sm:text-lg font-display font-black tracking-widest text-[#00FF88] uppercase inline-flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-[#00FF88] animate-pulse" />
-                  Como funciona
+                  Como funciona por dentro
                 </h3>
               </div>
 
