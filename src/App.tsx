@@ -112,7 +112,7 @@ export default function App() {
     return cleanup;
   }, []);
   
-  const [showTopBar, setShowTopBar] = useState(true);
+  const [showTopBar, setShowTopBar] = useState(false);
   const [viewers, setViewers] = useState(23);
   const [compPrice1, setCompPrice1] = useState(89.90);
   const [compPrice2, setCompPrice2] = useState(99.90);
@@ -416,50 +416,10 @@ export default function App() {
         <LazyToaster position="bottom-right" theme="dark" />
       </Suspense>
       
-      {/* High-performance sliding banner bar with 0ms Main Thread overhead */}
-      <div
-        className={`fixed top-0 left-0 w-full z-[60] bg-gradient-to-r from-[#FF6B6B] to-[#FF8E53] shadow-[0_4px_20px_rgba(255,107,107,0.25)] select-none border-b border-white/10 transition-transform duration-500 ease-out ${
-          showTopBar ? 'translate-y-0' : '-translate-y-full'
-        }`}
-      >
-        {/* Subtle background pulsive energy */}
-        <div className="absolute inset-0 bg-[#FF6B6B] opacity-10 animate-pulse pointer-events-none" />
-        
-        <div className="max-w-7xl mx-auto flex items-center justify-between px-3 md:px-6 py-1.5 md:py-2 relative z-10">
-          <div className="flex-1 flex items-center justify-center gap-1.5 md:gap-3.5 text-center text-white">
-            {/* Status Level */}
-            <div className="flex items-center gap-1.5 md:gap-3.5 text-[10px] md:text-xs font-bold uppercase tracking-wider">
-              <span className="bg-red-700/50 text-white font-black text-[8px] md:text-[10px] px-1.5 py-0.5 rounded border border-white/10 tracking-wider flex items-center gap-1 shrink-0 animate-pulse">
-                <span className="relative flex h-1.5 w-1.5">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-white"></span>
-                </span>
-                ⚠️ ÚLTIMAS VAGAS
-              </span>
-              
-              <span className="text-white/30 text-[10px] select-none">|</span>
-
-              <span className="text-white font-black flex items-center gap-1 text-[9px] md:text-xs whitespace-nowrap">
-                👥 <span>{viewers} PESSOAS VENDO AGORA</span>
-              </span>
-            </div>
-          </div>
-
-          {/* Little small indicator for closing */}
-          <button
-            onClick={() => setShowTopBar(false)}
-            className="p-1 rounded-full text-white/70 hover:text-white hover:bg-white/10 transition-colors pointer-events-auto shrink-0"
-            aria-label="Fechar alerta"
-          >
-            <X size={14} />
-          </button>
-        </div>
-      </div>
-
       <Nav 
         onAction={handleCTA} 
         onLogin={() => setShowAuth('login')} 
-        topOffset={showTopBar ? 'top-[36px] lg:top-[42px]' : 'top-0'} 
+        topOffset="top-0" 
       />
       
       <Suspense fallback={null}>
@@ -489,7 +449,7 @@ export default function App() {
       </div>
 
       {/* --- UNIFIED HIGH-CONVERTING LANDING PAGE (BG #050508) --- */}
-      <div className={`relative z-10 bg-bg-dark text-white min-h-screen ${showTopBar ? 'pt-[106px] lg:pt-[122px]' : 'pt-24'} pb-12 transition-[padding-top] duration-300 selection:bg-[#FF6B35]/30`}>
+      <div className="relative z-10 bg-bg-dark text-white min-h-screen pt-24 pb-12 selection:bg-[#FF6B35]/30">
         
         {/* SEÇÃO 1: HERO (3-5 segundos) */}
         <section className="py-12 md:py-24 px-5 max-w-7xl mx-auto relative justify-center">
