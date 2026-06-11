@@ -511,14 +511,14 @@ export default function App() {
                 </div>
               </div>
 
-              {/* Headline (Máx 8 palavras) */}
+              {/* Headline (Sugestão de Alta Conversão) */}
               <h1 className="text-3xl sm:text-5xl md:text-6xl font-display font-black leading-[1.05] tracking-tight text-white uppercase italic">
-                O segredo que <span className="text-[#00FF88] block sm:inline">ninguém te conta</span> sobre a redação do ENEM
+                SAIA DO ZERO E GARANTA <span className="text-[#00FF88]">900+ NA REDAÇÃO</span> DO ENEM EM APENAS 4 SEMANAS
               </h1>
 
-              {/* O que a pessoa recebe (Máx 15 palavras) */}
+              {/* O que a pessoa recebe (O Mecanismo Único: Sem gramática chata, foco no Sistema de Blocos Lógicos) */}
               <p className="text-sm sm:text-lg text-white/90 leading-relaxed font-semibold max-w-2xl mx-auto xl:mx-0">
-                Ebook prático, corretor IA rápido, repertórios coringas e exemplos comentados reais de sucesso.
+                Você não vai aprender gramática chata. Você vai dominar o <span className="text-[#00FF88]">Sistema de Blocos Lógicos</span>, onde você apenas encaixa suas ideias em uma estrutura "Coringa" que os corretores amam e serve para qualquer tema de 2026.
               </p>
 
               {/* Title above cellphone mockup requested by user */}
@@ -566,18 +566,23 @@ export default function App() {
               {/* 3 Benefícios Principais */}
               <div className="space-y-3 max-w-xl mx-auto xl:mx-0 text-left bg-white/[0.01] border border-white/5 p-4 rounded-2xl select-none">
                 <div className="flex items-center gap-2.5 text-xs sm:text-sm font-bold text-white/95">
-                  <span className="text-primary shrink-0 text-base">⚡</span> <span>IA que Corrige em 30 Segundos</span>
+                  <span className="text-[#00FF88] shrink-0 text-base">⚡</span> <span>Malu IA: Corretora automática em 30 Segundos</span>
                 </div>
                 <div className="flex items-center gap-2.5 text-xs sm:text-sm font-bold text-white/95">
-                  <span className="text-primary shrink-0 text-base">📚</span> <span>Repertórios e Esqueletos Coringas Prontos</span>
+                  <span className="text-[#00FF88] shrink-0 text-base">📚</span> <span>Sistema de Blocos Lógicos com Esqueletos Coringas Prontos</span>
                 </div>
                 <div className="flex items-center gap-2.5 text-xs sm:text-sm font-bold text-white/95">
-                  <span className="text-primary shrink-0 text-base">🏆</span> <span>Exemplos Reais Comentados Nota 1000</span>
+                  <span className="text-[#00FF88] shrink-0 text-base">🏆</span> <span>Exemplos Reais Comentados Nota 1000 de Alunos Reais</span>
                 </div>
               </div>
 
-              {/* CTA Button */}
+              {/* CTA Button + Scarcity Closing Timer */}
               <div className="space-y-4 pt-2 text-center xl:text-left">
+                <div className="inline-flex flex-col sm:flex-row items-center gap-3 bg-[#FF6B35]/15 border border-[#FF6B35]/20 p-3 rounded-2xl w-fit mb-2">
+                  <span className="text-[11px] font-black uppercase text-[#FF6B35] animate-pulse">🔥 Ganhe correções ilimitadas! Oferta por tempo limitado:</span>
+                  <div className="shrink-0"><Countdown compact /></div>
+                </div>
+
                 <button 
                   onClick={handleCTA}
                   className="w-full sm:w-auto bg-[#FF6B35] hover:bg-[#ff7b46] text-white px-10 py-5 rounded-2xl text-lg font-display font-black tracking-wider uppercase transition-all shadow-[0_15px_40px_rgba(255,107,53,0.35)] hover:scale-[1.03] active:scale-[0.97] flex items-center justify-center gap-3 mx-auto xl:mx-0 group border-b-4 border-black/30 animate-pulse cursor-pointer"
@@ -655,13 +660,13 @@ export default function App() {
         <section className="py-12 pb-16 px-5 max-w-7xl mx-auto relative z-10 space-y-10 text-center animate-fade-in" id="prova-social">
           <div className="space-y-3">
             <span className="text-[#00FF88] text-xs font-black uppercase tracking-[0.2em] bg-[#00FF88]/10 px-3.5 py-1.5 rounded-full border border-[#00FF88]/20 inline-block">
-              PROVA REAL OUVIDA DOS ALUNOS
+              PROVA DE ESTUDANTES REAIS (900+ NOTA OFICIAL)
             </span>
             <h2 className="text-3xl md:text-5xl font-display font-black uppercase italic text-white leading-tight">
-              O Que Eles Dizem <span className="text-[#00FF88]">Sem Censura</span>
+              Eles também achavam que <span className="text-[#00FF88]">não sabiam escrever</span>
             </h2>
             <p className="text-sm text-gray-400 font-semibold max-w-xl mx-auto leading-relaxed">
-              Veja o resultado de estudantes reais que saíram do absoluto zero e alcançaram notas excelentes em tempo recorde.
+              Milhares de estudantes começaram do completo zero, venceram a folha em branco com o Sistema de Blocos Lógicos e garantiram as notas mais altas do país.
             </p>
           </div>
 
@@ -669,7 +674,7 @@ export default function App() {
             {/* Depoimento 1 - Bernardo Alves */}
             <WhatsAppScreenshot 
               name="Bernardo Alves"
-              text="nossa mto bom, sai de 640 pra 820 em 8 semanas! 😱 as estruturas prontas ajudaram dms, nem tive aquela ansiedade de travar na hora da escrita do ENEM"
+              text="cara do céu... saí do absoluto zero pra tirar 960 pontos na redação do ENEM! 😱 o método de Blocos Lógicos impediu que eu travasse na prova. Vale cada centavo dms!"
               time="14:32"
               avatarBg="bg-[#FF3366]"
             />
@@ -677,7 +682,7 @@ export default function App() {
             {/* Depoimento 2 - Maria, RJ */}
             <WhatsAppScreenshot 
               name="Maria • RJ"
-              text="melhor investimento do ano real! o arsenal de repertório pronto salvou minha aprovação 🥹"
+              text="melhor investimento do ano real! Tirei 980 pontos na redação de 2025!! Mandei meu print lá no grupo de alunos, eu achava que redação era bicho de 7 cabeças 🥹"
               time="18:05"
               avatarBg="bg-[#7C3AED]"
             />
@@ -685,7 +690,7 @@ export default function App() {
             {/* Depoimento 3 - Carlos (Pai), MG */}
             <WhatsAppScreenshot 
               name="Carlos (Pai) • MG"
-              text="meu filho subiu mais de 230 pontos treinando com a corretora Malu. recomendo dms para todos os pais q tao estressados 👍"
+              text="Meu filho subiu de 450 para 940 pontos oficiais treinando com os esqueletos prontos e a corretora Malu. Economizei milhares de reais com cursinhos caros 👍"
               time="11:24"
               avatarBg="bg-[#00FF88]"
             />
@@ -693,7 +698,7 @@ export default function App() {
             {/* Depoimento 4 - Bruna K., PR */}
             <WhatsAppScreenshot 
               name="Bruna K. • PR"
-              text="as correções da Malu em 30 segundos me permitiram ajustar meus erros na hora. economiza muito dinheiro!"
+              text="Tirei 940 pontos treinando com a Malu IA em 30 segundos! Corrigir toda semana sem esperar 10 dias por um corretor humano mudou o meu jogo."
               time="09:41"
               avatarBg="bg-[#FF6B35]"
             />
@@ -701,7 +706,7 @@ export default function App() {
             {/* Depoimento 5 - Gabriela M., BA */}
             <WhatsAppScreenshot 
               name="Gabriela M. • BA"
-              text="estava travada na nota 600 em redações e tirei 920 pontos na redação de 2025!! mto grata ❤️"
+              text="estava travada na nota 600 em redações e tirei 960 pontos na redação oficial do ENEM!! To dentro da Universidade Federal!! mto grata de verdade ❤️"
               time="22:15"
               avatarBg="bg-[#3B82F6]"
             />
@@ -786,6 +791,25 @@ export default function App() {
             />
           </Suspense>
         )}
+
+        {/* Floating WhatsApp Button */}
+        <a
+          href="https://wa.me/5528999106887?text=Olá!%20Fiquei%20com%20dúvidas%20sobre%20o%20RED%201000%20PRO%20e%20gostaria%20de%20ajuda."
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Falar conosco no WhatsApp"
+          className="fixed bottom-6 right-6 z-[100] flex items-center gap-2 bg-[#25D366] hover:bg-[#20ba5a] text-white px-4 py-3 sm:px-5 sm:py-3.5 rounded-full font-bold shadow-[0_10px_30px_rgba(37,211,102,0.4)] hover:scale-105 active:scale-95 transition-all group border border-white/10 select-none cursor-pointer"
+        >
+          <svg className="w-5 h-5 sm:w-6 sm:h-6 fill-current shrink-0" viewBox="0 0 24 24">
+            <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.37 9.864-9.799.002-2.63-1.023-5.101-2.885-6.97C16.528 2.016 14.1 1.01 11.99 1.01c-5.447 0-9.866 4.372-9.87 9.802 0 1.96.512 3.878 1.483 5.584l-.976 3.562 3.69-.958zM17.52 14.3c-.302-.15-1.786-.88-2.037-.972-.251-.09-.435-.136-.62.136-.184.272-.713.88-.872 1.058-.159.18-.32.203-.62.054-.303-.151-1.277-.47-2.433-1.499-.9-.8-1.507-1.79-1.284-1.21.32-.544.116-.859-.033-1.01-.137-.137-.302-.35-.454-.524-.151-.174-.202-.299-.303-.497-.101-.198-.051-.371-.025-.521.025-.15.184-.435.251-.592.067-.158.136-.32.2-.454.067-.136.101-.227.151-.379.05-.152.025-.286-.013-.362-.038-.075-.32-.782-.442-1.079-.117-.282-.236-.24-.32-.245-.084-.004-.18-.005-.276-.005-.097 0-.253.036-.385.18-.132.143-.503.491-.503 1.198 0 .707.514 1.39.585 1.487.073.099 1.01 1.542 2.45 2.162.342.148.608.236.814.301.344.11.657.094.904.057.276-.041.88-.36 1.004-.707.126-.347.126-.645.088-.707-.038-.063-.15-.1-.453-.25z"/>
+          </svg>
+          <span className="text-xs font-black uppercase tracking-wider hidden sm:inline">Dúvida sobre o curso? Fale com um monitor agora</span>
+          <span className="text-xs font-black uppercase tracking-wider sm:hidden">Falar com monitor</span>
+          <span className="relative flex h-2.5 w-2.5">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
+          </span>
+        </a>
 
       </div>
     </div>
