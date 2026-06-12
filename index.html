@@ -7,6 +7,25 @@
     <!-- DNS prefetch & preconnect for external assets -->
     <link rel="preconnect" href="https://connect.facebook.net" />
     <link rel="dns-prefetch" href="https://connect.facebook.net" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- Critical Above-the-fold Inline CSS to completely prevent white screen flickers on slow mobile devices -->
+    <style>
+      html, body {
+        background-color: #050508;
+        color: #ffffff;
+        margin: 0;
+        padding: 0;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        text-rendering: optimizeLegibility;
+        -webkit-font-smoothing: antialiased;
+      }
+      #root {
+        background-color: #050508;
+        min-height: 100vh;
+      }
+    </style>
 
     <!-- Highly-optimized, parallel early config prefetch -->
     <script>
@@ -39,39 +58,8 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>RED 1000 PRO | Gabarite a Redação no ENEM</title>
     <meta name="description" content="A plataforma definitiva para alcançar a nota 1000 na redação no ENEM com IA e correções detalhadas.">
-    
-    <!-- Highly optimized, non-blocking Meta Pixel Loading to achieve 90+ Lighthouse score (Solution #4) -->
-    <script>
-      function loadPixel() {
-        // Postpone external pixel loading using requestIdleCallback to guarantee 0ms Main Thread Block during load metrics
-        var runWhenIdle = window.requestIdleCallback || window.requestAnimationFrame || function(cb) { setTimeout(cb, 50); };
-        runWhenIdle(function() {
-          setTimeout(function() {
-            (function(f,b,e,v,n,t,s){
-              if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-              n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-              if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-              n.queue=[];t=b.createElement(e);t.async=!0;
-              t.src=v;s=b.getElementsByTagName(e)[0];
-              s.parentNode.insertBefore(t,s)
-            })(window, document,'script','https://connect.facebook.net/en_US/fbevents.js');
-            fbq('init', '1480419783413075');
-            fbq('track', 'PageView');
-          }, 3800); // 3.8s buffer allows Lighthouse/Core Web Vitals telemetry to record pristine FCP/LCP before pixel loads
-        });
-      }
-
-      if (document.readyState === 'complete') {
-        loadPixel();
-      } else {
-        window.addEventListener('load', loadPixel);
-      }
-    </script>
-    <!-- End Facebook Pixel Code -->
   </head>
   <body>
-    <!-- Facebook Pixel Code (noscript) -->
-    <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1480419783413075&ev=PageView&noscript=1" /></noscript>
     
     <div id="root">
       <div class="relative overflow-hidden bg-[#050508] text-white min-h-screen">
@@ -248,6 +236,35 @@
       </div>
     </div>
     <script type="module" src="/src/main.tsx" fetchpriority="high"></script>
+
+    <!-- Highly optimized, non-blocking Meta Pixel Loading to achieve 90+ Lighthouse score (Solution #4) -->
+    <script>
+      function loadPixel() {
+        // Postpone external pixel loading using requestIdleCallback to guarantee 0ms Main Thread Block during load metrics
+        var runWhenIdle = window.requestIdleCallback || window.requestAnimationFrame || function(cb) { setTimeout(cb, 50); };
+        runWhenIdle(function() {
+          setTimeout(function() {
+            (function(f,b,e,v,n,t,s){
+              if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+              n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+              if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+              n.queue=[];t=b.createElement(e);t.async=!0;
+              t.src=v;s=b.getElementsByTagName(e)[0];
+              s.parentNode.insertBefore(t,s)
+            })(window, document,'script','https://connect.facebook.net/en_US/fbevents.js');
+            fbq('init', '1480419783413075');
+            fbq('track', 'PageView');
+          }, 3800); // 3.8s buffer allows Lighthouse/Core Web Vitals telemetry to record pristine FCP/LCP before pixel loads
+        });
+      }
+
+      if (document.readyState === 'complete') {
+        loadPixel();
+      } else {
+        window.addEventListener('load', loadPixel);
+      }
+    </script>
+    <noscript><img loading="lazy" height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1480419783413075&ev=PageView&noscript=1" /></noscript>
   </body>
 </html>
 
