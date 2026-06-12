@@ -72,23 +72,9 @@ export default defineConfig(({ mode }) => {
       chunkSizeWarningLimit: 1400,
       rollupOptions: {
         output: {
-          manualChunks(id) {
-            if (id.includes('node_modules')) {
-              // Group critical initial dependencies into a single highly-cacheable 'vendor-core' chunk.
-              // This is a powerful mobile optimization that eliminates HTTP waterfalls on 4G links
-              // by reducing 5 separated chunks down to 1 unified cacheable script.
-              if (
-                id.includes('react/') || 
-                id.includes('react-dom/') || 
-                id.includes('scheduler/')
-              ) {
-                return 'vendor-core';
-              }
-              
-              // Let Rollup package late-imported modules (like react-markdown, @google/genai)
-              // directly inside the lazy dynamic chunks where they are imported. This guarantees
-              // a lightweight landing page that loads 0KB of Markdown utility during first paint.
-            }
+          manualChunks: {
+            vendor: ['react', 'react-dom'],
+            supabase: ['@supabase/supabase-js'],
           }
         },
         treeshake: {
