@@ -83,7 +83,7 @@ export default function App() {
   const [activeTab, setActiveTab] = useState<'overview' | 'ebook' | 'ia' | 'repertorios' | 'redacoes' | 'exercicios'>('overview');
   const [showAuth, setShowAuth] = useState<'login' | 'signup' | null>(null);
   const [isVerifying, setIsVerifying] = useState(false);
-  const [mountRest, setMountRest] = useState(true);
+  const [mountRest, setMountRest] = useState(false);
 
   // Lazy loading of Supabase for outstanding FCP/LCP network chain speeds
   const [loadSupabase, setLoadSupabase] = useState(() => hasCachedSession());
@@ -682,125 +682,129 @@ export default function App() {
           </div>
         </section>
 
-        {/* SEÇÃO 2: PROVA SOCIAL */}
-        <section className="py-12 pb-16 px-5 max-w-7xl mx-auto relative z-10 space-y-10 text-center animate-fade-in" id="prova-social">
-          <div className="space-y-3">
-            <span className="text-[#00FF88] text-xs font-black uppercase tracking-[0.2em] bg-[#00FF88]/10 px-3.5 py-1.5 rounded-full border border-[#00FF88]/20 inline-block">
-              PROVA DE ESTUDANTES REAIS (900+ NOTA OFICIAL)
-            </span>
-            <h2 className="text-3xl md:text-5xl font-display font-black uppercase italic text-white leading-tight">
-              Eles também achavam que <span className="text-[#00FF88]">não sabiam escrever</span>
-            </h2>
-            <p className="text-sm text-gray-400 font-semibold max-w-xl mx-auto leading-relaxed">
-              Milhares de estudantes começaram do completo zero, venceram a folha em branco com o Sistema de Blocos Lógicos e garantiram as notas mais altas do país.
-            </p>
-          </div>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-6xl mx-auto min-h-[350px]">
-            {/* Depoimento 1 - Bernardo Alves */}
-            <WhatsAppScreenshot 
-              name="Bernardo Alves"
-              text="cara do céu... saí do absoluto zero pra tirar 960 pontos na redação do ENEM! 😱 o método de Blocos Lógicos impediu que eu travasse na prova. Vale cada centavo dms!"
-              time="14:32"
-              avatarBg="bg-[#FF3366]"
-            />
-
-            {/* Depoimento 2 - Maria, RJ */}
-            <WhatsAppScreenshot 
-              name="Maria • RJ"
-              text="melhor investimento do ano real! Tirei 980 pontos na redação de 2025!! Mandei meu print lá no grupo de alunos, eu achava que redação era bicho de 7 cabeças 🥹"
-              time="18:05"
-              avatarBg="bg-[#7C3AED]"
-            />
-
-            {/* Depoimento 3 - Carlos (Pai), MG */}
-            <WhatsAppScreenshot 
-              name="Carlos (Pai) • MG"
-              text="Meu filho subiu de 450 para 940 pontos oficiais treinando com os esqueletos prontos e a corretora Malu. Economizei milhares de reais com cursinhos caros 👍"
-              time="11:24"
-              avatarBg="bg-[#00FF88]"
-            />
-
-            {/* Depoimento 4 - Bruna K., PR */}
-            <WhatsAppScreenshot 
-              name="Bruna K. • PR"
-              text="Tirei 940 pontos treinando com a Malu IA em 30 segundos! Corrigir toda semana sem esperar 10 dias por um corretor humano mudou o meu jogo."
-              time="09:41"
-              avatarBg="bg-[#FF6B35]"
-            />
-
-            {/* Depoimento 5 - Gabriela M., BA */}
-            <WhatsAppScreenshot 
-              name="Gabriela M. • BA"
-              text="estava travada na nota 600 em redações e tirei 960 pontos na redação oficial do ENEM!! To dentro da Universidade Federal!! mto grata de verdade ❤️"
-              time="22:15"
-              avatarBg="bg-[#3B82F6]"
-            />
-          </div>
-        </section>
-
-        {/* SEÇÃO 3: RECURSOS COMPLEMENTARES DA PLATAFORMA */}
-        <section className="py-8 pb-16 px-5 max-w-4xl mx-auto relative z-10 text-center animate-fade-in" id="features">
-          {/* Key showcase feature list */}
-          <div className="grid md:grid-cols-3 gap-4 max-w-3xl mx-auto text-left">
-            <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/5 space-y-2">
-              <div className="text-[#00FF88] text-xs font-black uppercase tracking-wider flex items-center gap-1.5">
-                📖 ÁREA DO ALUNO
-              </div>
-              <p className="text-xs text-gray-400 font-medium leading-relaxed">
-                Acesse o Guia de 30 páginas e esqueletos coringas diretamente na plataforma para acelerar sua redação.
-              </p>
-            </div>
-            
-            <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/5 space-y-2">
-              <div className="text-[#00FF88] text-xs font-black uppercase tracking-wider flex items-center gap-1.5">
-                🧠 TREINO PRÁTICO
-              </div>
-              <p className="text-xs text-gray-400 font-medium leading-relaxed">
-                Exercícios e desafios rápidos com foco direto nas principais competências exigidas pela banca do ENEM.
-              </p>
-            </div>
-
-            <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/5 space-y-2">
-              <div className="text-[#00FF88] text-xs font-black uppercase tracking-wider flex items-center gap-1.5">
-                🤖 CORRETORA MALU IA
-              </div>
-              <p className="text-xs text-gray-400 font-medium leading-relaxed">
-                Escreva ou cole seu texto e receba correção, estimativa de nota e feedbacks detalhados em até 30 segundos.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* Selo de Garantia de 7 Dias - Minimalista e Verde */}
-        <div className="max-w-4xl mx-auto px-5 pb-16 pt-4 relative z-10 animate-fade-in">
-          <div className="relative overflow-hidden rounded-2xl border border-[#00FF88]/10 bg-black/40 p-6 md:p-8 backdrop-blur-sm">
-            
-            <div className="flex flex-col md:flex-row items-center gap-6 relative z-10">
-              
-              {/* Minimal Icon Badge */}
-              <div className="flex items-center justify-center w-16 h-16 rounded-2xl bg-[#00FF88]/5 border border-[#00FF88]/20 shrink-0 text-[#00FF88]">
-                <ShieldCheck size={32} className="stroke-1" />
-              </div>
-
-              {/* Text Description */}
-              <div className="space-y-2 text-center md:text-left flex-1">
-                <div className="flex flex-col md:flex-row md:items-center gap-x-3 gap-y-1 justify-center md:justify-start">
-                  <span className="text-[#00FF88] text-[9px] font-black uppercase tracking-[0.2em]">GARANTIA INCONDICIONAL</span>
-                  <span className="hidden md:inline text-white/20 text-xs">•</span>
-                  <span className="text-white/60 text-xs font-medium">7 Dias de Risco Zero</span>
-                </div>
-                <h3 className="text-lg md:text-xl font-display font-bold text-white tracking-tight">
-                  Sua satisfação garantida ou <span className="text-[#00FF88]">reembolso integral</span>
-                </h3>
-                <p className="text-xs sm:text-sm text-gray-400 font-medium leading-relaxed max-w-2xl">
-                  Experimente o método por até 7 dias. Use a correção de redação Inteligente à vontade. Se não perceber sua evolução na escrita para o ENEM, basta pedir o cancelamento e devolvemos cada centavo, sem perguntas ou burocracia.
+        {mountRest && (
+          <>
+            {/* SEÇÃO 2: PROVA SOCIAL */}
+            <section className="py-12 pb-16 px-5 max-w-7xl mx-auto relative z-10 space-y-10 text-center animate-fade-in" id="prova-social">
+              <div className="space-y-3">
+                <span className="text-[#00FF88] text-xs font-black uppercase tracking-[0.2em] bg-[#00FF88]/10 px-3.5 py-1.5 rounded-full border border-[#00FF88]/20 inline-block">
+                  PROVA DE ESTUDANTES REAIS (900+ NOTA OFICIAL)
+                </span>
+                <h2 className="text-3xl md:text-5xl font-display font-black uppercase italic text-white leading-tight">
+                  Eles também achavam que <span className="text-[#00FF88]">não sabiam escrever</span>
+                </h2>
+                <p className="text-sm text-gray-400 font-semibold max-w-xl mx-auto leading-relaxed">
+                  Milhares de estudantes começaram do completo zero, venceram a folha em branco com o Sistema de Blocos Lógicos e garantiram as notas mais altas do país.
                 </p>
               </div>
 
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-6xl mx-auto min-h-[350px]">
+                {/* Depoimento 1 - Bernardo Alves */}
+                <WhatsAppScreenshot 
+                  name="Bernardo Alves"
+                  text="cara do céu... saí do absoluto zero pra tirar 960 pontos na redação do ENEM! 😱 o método de Blocos Lógicos impediu que eu travasse na prova. Vale cada centavo dms!"
+                  time="14:32"
+                  avatarBg="bg-[#FF3366]"
+                />
+
+                {/* Depoimento 2 - Maria, RJ */}
+                <WhatsAppScreenshot 
+                  name="Maria • RJ"
+                  text="melhor investimento do ano real! Tirei 980 pontos na redação de 2025!! Mandei meu print lá no grupo de alunos, eu achava que redação era bicho de 7 cabeças 🥹"
+                  time="18:05"
+                  avatarBg="bg-[#7C3AED]"
+                />
+
+                {/* Depoimento 3 - Carlos (Pai), MG */}
+                <WhatsAppScreenshot 
+                  name="Carlos (Pai) • MG"
+                  text="Meu filho subiu de 450 para 940 pontos oficiais treinando com os esqueletos prontos e a corretora Malu. Economizei milhares de reais com cursinhos caros 👍"
+                  time="11:24"
+                  avatarBg="bg-[#00FF88]"
+                />
+
+                {/* Depoimento 4 - Bruna K., PR */}
+                <WhatsAppScreenshot 
+                  name="Bruna K. • PR"
+                  text="Tirei 940 pontos treinando com a Malu IA em 30 segundos! Corrigir toda semana sem esperar 10 dias por um corretor humano mudou o meu jogo."
+                  time="09:41"
+                  avatarBg="bg-[#FF6B35]"
+                />
+
+                {/* Depoimento 5 - Gabriela M., BA */}
+                <WhatsAppScreenshot 
+                  name="Gabriela M. • BA"
+                  text="estava travada na nota 600 em redações e tirei 960 pontos na redação oficial do ENEM!! To dentro da Universidade Federal!! mto grata de verdade ❤️"
+                  time="22:15"
+                  avatarBg="bg-[#3B82F6]"
+                />
+              </div>
+            </section>
+
+            {/* SEÇÃO 3: RECURSOS COMPLEMENTARES DA PLATAFORMA */}
+            <section className="py-8 pb-16 px-5 max-w-4xl mx-auto relative z-10 text-center animate-fade-in" id="features">
+              {/* Key showcase feature list */}
+              <div className="grid md:grid-cols-3 gap-4 max-w-3xl mx-auto text-left">
+                <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/5 space-y-2">
+                  <div className="text-[#00FF88] text-xs font-black uppercase tracking-wider flex items-center gap-1.5">
+                    📖 ÁREA DO ALUNO
+                  </div>
+                  <p className="text-xs text-gray-400 font-medium leading-relaxed">
+                    Acesse o Guia de 30 páginas e esqueletos coringas diretamente na plataforma para acelerar sua redação.
+                  </p>
+                </div>
+                
+                <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/5 space-y-2">
+                  <div className="text-[#00FF88] text-xs font-black uppercase tracking-wider flex items-center gap-1.5">
+                    🧠 TREINO PRÁTICO
+                  </div>
+                  <p className="text-xs text-gray-400 font-medium leading-relaxed">
+                    Exercícios e desafios rápidos com foco direto nas principais competências exigidas pela banca do ENEM.
+                  </p>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/5 space-y-2">
+                  <div className="text-[#00FF88] text-xs font-black uppercase tracking-wider flex items-center gap-1.5">
+                    🤖 CORRETORA MALU IA
+                  </div>
+                  <p className="text-xs text-gray-400 font-medium leading-relaxed">
+                    Escreva ou cole seu texto e receba correção, estimativa de nota e feedbacks detalhados em até 30 segundos.
+                  </p>
+                </div>
+              </div>
+            </section>
+
+            {/* Selo de Garantia de 7 Dias - Minimalista e Verde */}
+            <div className="max-w-4xl mx-auto px-5 pb-16 pt-4 relative z-10 animate-fade-in">
+              <div className="relative overflow-hidden rounded-2xl border border-[#00FF88]/10 bg-black/40 p-6 md:p-8 backdrop-blur-sm">
+                
+                <div className="flex flex-col md:flex-row items-center gap-6 relative z-10">
+                  
+                  {/* Minimal Icon Badge */}
+                  <div className="flex items-center justify-center w-16 h-16 rounded-2xl bg-[#00FF88]/5 border border-[#00FF88]/20 shrink-0 text-[#00FF88]">
+                    <ShieldCheck size={32} className="stroke-1" />
+                  </div>
+
+                  {/* Text Description */}
+                  <div className="space-y-2 text-center md:text-left flex-1">
+                    <div className="flex flex-col md:flex-row md:items-center gap-x-3 gap-y-1 justify-center md:justify-start">
+                      <span className="text-[#00FF88] text-[9px] font-black uppercase tracking-[0.2em]">GARANTIA INCONDICIONAL</span>
+                      <span className="hidden md:inline text-white/20 text-xs">•</span>
+                      <span className="text-white/60 text-xs font-medium">7 Dias de Risco Zero</span>
+                    </div>
+                    <h3 className="text-lg md:text-xl font-display font-bold text-white tracking-tight">
+                      Sua satisfação garantida ou <span className="text-[#00FF88]">reembolso integral</span>
+                    </h3>
+                    <p className="text-xs sm:text-sm text-gray-400 font-medium leading-relaxed max-w-2xl">
+                      Experimente o método por até 7 dias. Use a correção de redação Inteligente à vontade. Se não perceber sua evolução na escrita para o ENEM, basta pedir o cancelamento e devolvemos cada centavo, sem perguntas ou burocracia.
+                    </p>
+                  </div>
+
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
+          </>
+        )}
 
         {mountRest && (
           <Suspense fallback={
