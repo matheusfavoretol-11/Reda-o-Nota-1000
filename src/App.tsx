@@ -540,7 +540,12 @@ export default function App() {
               </div>
 
               {/* Video Mockup - Posicionado logo abaixo da frase/descrição */}
-              <div id="demo-video" data-loading="lazy" className="relative max-w-[280px] sm:max-w-[310px] mx-auto xl:mx-0 rounded-[48px] border-[10px] border-neutral-900 bg-black shadow-[0_0_50px_rgba(0,255,136,0.12),0_25px_60px_-15px_rgba(0,0,0,0.8)] ring-1 ring-white/10 overflow-hidden group my-6 animate-fade-in">
+              <div 
+                id="demo-video" 
+                data-loading="lazy" 
+                className="relative max-w-[280px] sm:max-w-[310px] mx-auto xl:mx-0 rounded-[48px] border-[10px] border-neutral-900 bg-black shadow-[0_0_50px_rgba(0,255,136,0.12),0_25px_60px_-15px_rgba(0,0,0,0.8)] ring-1 ring-white/10 overflow-hidden group my-6 animate-fade-in"
+                style={{ aspectRatio: '9/16', minHeight: '498px' }}
+              >
                 
                 {/* Front Camera Notch / Speaker */}
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-neutral-900 rounded-b-2xl z-30 flex items-center justify-center">
@@ -549,14 +554,16 @@ export default function App() {
                 </div>
 
                 {/* Video Player Box with 9:16 aspect ratio */}
-                <div className="relative aspect-[9/16] bg-neutral-950 overflow-hidden" style={{ aspectRatio: '9/16' }}>
+                <div className="relative bg-neutral-950 overflow-hidden w-full h-full" style={{ aspectRatio: '9/16', minHeight: '478px' }}>
                   
-                  <div className="video-container" style={{ position: 'relative', paddingBottom: '177.77%', height: 0, overflow: 'hidden', borderRadius: '12px' }}>
+                  <div className="video-container" style={{ position: 'relative', width: '100%', height: '100%', overflow: 'hidden', borderRadius: '12px', aspectRatio: '9/16', minHeight: '478px' }}>
                     <a href="https://youtube.com/shorts/qvIivSti-ZM" target="_blank" rel="noopener noreferrer" style={{ display: 'block', position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}>
                       <img 
                         src="https://img.youtube.com/vi/qvIivSti-ZM/maxresdefault.jpg"
                         alt="Assistir vídeo"
-                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                        style={{ width: '100%', height: '100%', objectFit: 'cover', aspectRatio: '9/16', minHeight: '478px' }}
+                        width={310}
+                        height={551}
                         loading="lazy"
                       />
                       <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', backgroundColor: 'red', borderRadius: '50%', width: '64px', height: '64px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -616,7 +623,7 @@ export default function App() {
             {/* Right Column: Visuals */}
             <div className="lg:col-span-12 xl:col-span-5 space-y-6">
               {/* Ebook Mockup Cover Image (LCP optimized) */}
-              <div className="relative max-w-[280px] sm:max-w-[320px] mx-auto xl:mx-0 rounded-3xl overflow-hidden shadow-2xl border border-white/10 group mb-6 hover:scale-[1.02] transition-transform duration-300 aspect-[350/490]" style={{ aspectRatio: '350/490' }}>
+              <div className="relative max-w-[280px] sm:max-w-[320px] mx-auto xl:mx-0 rounded-3xl overflow-hidden shadow-2xl border border-white/10 group mb-6 hover:scale-[1.02] transition-transform duration-300 aspect-[350/490]" style={{ aspectRatio: '350/490', minHeight: '392px' }}>
                 <img 
                   src="/guia_do_zero.svg" 
                   alt="Guia do Zero ao 1000 Redação ENEM v3.0" 
@@ -624,7 +631,7 @@ export default function App() {
                   height={490}
                   fetchPriority="high"
                   className="w-full h-auto object-cover aspect-[350/490]"
-                  style={{ aspectRatio: '350/490' }}
+                  style={{ aspectRatio: '350/490', minHeight: '392px' }}
                   referrerPolicy="no-referrer"
                 />
               </div>
