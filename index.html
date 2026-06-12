@@ -5,13 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
     <!-- DNS prefetch & preconnect for external assets -->
-    <link rel="preconnect" href="https://connect.facebook.net" crossorigin />
-    <link rel="dns-prefetch" href="https://connect.facebook.net" />
     <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
-    <link rel="preconnect" href="https://wa.me" />
-    <link rel="preconnect" href="https://www.facebook.com" />
 
     <!-- Preload critical Hero Image (Guia do Zero Cover SVG) for Instant LCP -->
     <link rel="preload" as="image" href="/guia_do_zero.svg" fetchpriority="high" />
@@ -204,14 +200,15 @@
               <!-- Right Column: Visuals -->
               <div class="lg:col-span-12 xl:col-span-5 space-y-6">
                 <!-- Ebook Mockup Cover Image (LCP optimized) -->
-                <div class="relative max-w-[280px] sm:max-w-[320px] mx-auto xl:mx-0 rounded-3xl overflow-hidden shadow-2xl border border-white/10 group mb-6 transition-transform duration-300">
+                <div class="relative max-w-[280px] sm:max-w-[320px] mx-auto xl:mx-0 rounded-3xl overflow-hidden shadow-2xl border border-white/10 group mb-6 transition-transform duration-300 aspect-[350/490]" style="aspect-ratio:350/490;">
                   <img 
                     src="/guia_do_zero.svg" 
                     alt="Guia do Zero ao 1000 Redação ENEM v3.0" 
                     width="350" 
                     height="490"
                     fetchpriority="high"
-                    class="w-full h-auto object-cover"
+                    class="w-full h-auto object-cover aspect-[350/490]"
+                    style="aspect-ratio:350/490;"
                     referrerpolicy="no-referrer"
                   />
                 </div>
