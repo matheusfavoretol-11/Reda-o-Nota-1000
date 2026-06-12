@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 350 490" width="350" height="490">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#050508"/>
+      <stop offset="50%" stop-color="#121215"/>
+      <stop offset="100%" stop-color="#1a1a24"/>
+    </linearGradient>
+    <linearGradient id="greenNeon" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#00FF88"/>
+      <stop offset="100%" stop-color="#00FFD1"/>
+    </linearGradient>
+    <linearGradient id="coralNeon" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#FF6B35"/>
+      <stop offset="100%" stop-color="#FF3366"/>
+    </linearGradient>
+    <filter id="glow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#00FF88" flood-opacity="0.2"/>
+    </filter>
+  </defs>
+
+  <!-- Card background -->
+  <rect width="350" height="490" rx="24" fill="url(#bg)" stroke="#ffffff" stroke-opacity="0.05" stroke-width="2"/>
+  
+  <!-- Glowing border details -->
+  <rect x="12" y="12" width="326" height="466" rx="16" fill="none" stroke="url(#greenNeon)" stroke-opacity="0.1" stroke-width="1.5"/>
+  <rect x="20" y="20" width="310" height="450" rx="12" fill="none" stroke="url(#coralNeon)" stroke-opacity="0.1" stroke-width="1"/>
+
+  <!-- Subtle abstract math/cyber pattern -->
+  <g opacity="0.15">
+    <circle cx="175" cy="245" r="160" fill="none" stroke="#ffffff" stroke-width="0.5" stroke-dasharray="2 6"/>
+    <circle cx="175" cy="245" r="120" fill="none" stroke="url(#greenNeon)" stroke-width="1"/>
+    <path d="M 50,245 L 300,245 M 175,100 L 175,390" stroke="#ffffff" stroke-width="0.5" stroke-dasharray="4 8"/>
+  </g>
+
+  <!-- Vector pen / crown trophy emblem -->
+  <g transform="translate(145, 75)" filter="url(#glow)">
+    <!-- Shield or badge base -->
+    <path d="M 30,0 L 50,15 L 50,50 L 30,65 L 10,50 L 10,15 Z" fill="#00FF88" fill-opacity="0.08" stroke="url(#greenNeon)" stroke-width="2"/>
+    <path d="M 30,12 L 40,22 L 30,32 L 20,22 Z" fill="url(#coralNeon)" opacity="0.8"/>
+  </g>
+
+  <!-- "RED 1000 PRO" tag -->
+  <rect x="110" y="165" width="130" height="24" rx="12" fill="#0c0c14" stroke="#00FF88" stroke-width="1" />
+  <text x="175" y="181" font-family="'Inter', system-ui, sans-serif" font-size="9" font-weight="900" fill="#00FF88" letter-spacing="1.5" text-anchor="middle">REDAÇÃO ENEM 2026</text>
+
+  <!-- Main Headline Title -->
+  <text x="175" y="240" font-family="'Inter', system-ui, sans-serif" font-size="28" font-weight="900" fill="#ffffff" text-anchor="middle" letter-spacing="-0.5">GUIA DO</text>
+  <text x="175" y="278" font-family="'Inter', system-ui, sans-serif" font-size="44" font-weight="900" fill="url(#greenNeon)" text-anchor="middle" letter-spacing="-1">ZERO AO</text>
+  <text x="175" y="325" font-family="'Inter', system-ui, sans-serif" font-size="52" font-weight="950" fill="url(#coralNeon)" text-anchor="middle" letter-spacing="-1" font-style="italic">1000</text>
+
+  <!-- Bottom Tagline -->
+  <text x="175" y="380" font-family="'Inter', system-ui, sans-serif" font-size="11" font-weight="700" fill="#ffffff" fill-opacity="0.8" text-anchor="middle" letter-spacing="0.5">O MÉTODO DE BLOCOS LÓGICOS</text>
+  <text x="175" y="398" font-family="'Inter', system-ui, sans-serif" font-size="10" font-weight="500" fill="#888899" text-anchor="middle">A Fórmula Secreta dos Corretores</text>
+
+  <!-- Bottom Badges -->
+  <g transform="translate(45, 428)">
+    <rect width="120" height="20" rx="10" fill="#15151f" stroke="#ffffff" stroke-opacity="0.08"/>
+    <text x="60" y="13" font-family="sans-serif" font-size="8" font-weight="800" fill="#ffffff" fill-opacity="0.7" text-anchor="middle">CONTEÚDO PRÁTICO</text>
+  </g>
+  <g transform="translate(185, 428)">
+    <rect width="120" height="20" rx="10" fill="#15151f" stroke="#00FF88" stroke-opacity="0.2"/>
+    <text x="60" y="13" font-family="sans-serif" font-size="8" font-weight="800" fill="#00FF88" text-anchor="middle">CORREÇÕES ILIMITADAS</text>
+  </g>
+</svg>

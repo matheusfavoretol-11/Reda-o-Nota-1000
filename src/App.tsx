@@ -565,6 +565,19 @@ export default function App() {
 
             {/* Right Column: Visuals */}
             <div className="lg:col-span-12 xl:col-span-5 space-y-6">
+              {/* Ebook Mockup Cover Image (LCP optimized) */}
+              <div className="relative max-w-[280px] sm:max-w-[320px] mx-auto xl:mx-0 rounded-3xl overflow-hidden shadow-2xl border border-white/10 group mb-6 hover:scale-[1.02] transition-transform duration-300">
+                <img 
+                  src="/guia_do_zero.svg" 
+                  alt="Guia do Zero ao 1000 Redação ENEM v3.0" 
+                  width={350} 
+                  height={490}
+                  fetchPriority="high"
+                  className="w-full h-auto object-cover"
+                  referrerPolicy="no-referrer"
+                />
+              </div>
+
               {/* Evolution Badges */}
               <div className="glass p-6 rounded-3xl border-white/5 bg-[#151515]/90 space-y-4 shadow-xl">
                 <p className="text-[11px] font-black uppercase text-[#00FF88] tracking-widest flex items-center gap-1.5">

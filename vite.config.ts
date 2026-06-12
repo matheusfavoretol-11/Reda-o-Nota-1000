@@ -30,7 +30,24 @@ export default defineConfig(({ mode }) => {
   }
 
   return {
-    plugins: [react(), tailwindcss()],
+    plugins: [
+      react(),
+      tailwindcss(),
+      {
+        name: 'preload-css',
+        enforce: 'post',
+        transformIndexHtml(html) {
+          // Dynamic CSS preload transformation to eliminate render-blocking CSS warning in PageSpeed Insights
+          return html.replace(
+            /<link\s+rel=["']stylesheet["']\s+([^>]*href=["'][^"']+\.css["'][^>]*)>/gi,
+            '<link rel="preload" $1 as="style" onload="this.onload=null;this.rel=\'stylesheet\'"><noscript><link rel="stylesheet" $1></noscript>'
+          ).replace(
+            /<link\s+([^>]*href=["'][^"']+\.css["'])\s+rel=["']stylesheet["']([^>]*)>/gi,
+            '<link rel="preload" $1 as="style" onload="this.onload=null;this.rel=\'stylesheet\'"><noscript><link rel="stylesheet" $1 $2></noscript>'
+          );
+        }
+      }
+    ],
     define: {
       'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY || process.env.GEMINI_API_KEY || ""),
       'import.meta.env.VITE_SUPABASE_URL': JSON.stringify(supabaseUrl),
