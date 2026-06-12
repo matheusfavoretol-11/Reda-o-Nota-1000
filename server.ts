@@ -271,6 +271,7 @@ async function startServer() {
       for (const videoPath of candidatePaths) {
         if (fs.existsSync(videoPath)) {
           res.setHeader("Content-Type", "video/mp4");
+          res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
           return res.sendFile(videoPath);
         }
       }
@@ -283,6 +284,7 @@ async function startServer() {
         if (mp4File) {
           const matchedPath = path.join(publicPath, mp4File);
           res.setHeader("Content-Type", "video/mp4");
+          res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
           return res.sendFile(matchedPath);
         }
       }
@@ -315,8 +317,8 @@ async function startServer() {
           // Immutable caching for Vite assets containing hash
           res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
         } else if (['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg', '.ico'].includes(ext)) {
-          // Dynamic static images cache: 30 days
-          res.setHeader('Cache-Control', 'public, max-age=2592000');
+          // Dynamic static images cache: 1 year (completely clears Core Web Vitals cache penalties)
+          res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
         } else if (['.css', '.js'].includes(ext)) {
           // Fallback CSS and JS cache: 14 days
           res.setHeader('Cache-Control', 'public, max-age=1209600');

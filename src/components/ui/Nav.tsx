@@ -50,7 +50,7 @@ const Nav = ({ onAction, onLogin, topOffset }: NavProps) => {
             onClick={onAction}
             className="bg-white text-bg-dark px-4 md:px-8 py-2.5 md:py-3 rounded-full font-display font-black text-[9px] md:text-xs uppercase tracking-widest hover:bg-accent transition-all hover:scale-105 active:scale-95 shadow-lg shadow-white/5 whitespace-nowrap"
           >
-            QUERO A NOTA 1000
+            QUERO MEU 1000
           </button>
         </div>
       </div>

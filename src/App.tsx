@@ -10,9 +10,7 @@ import {
 } from 'lucide-react';
 import { Countdown } from './components/ui/Shared';
 import Nav from './components/ui/Nav';
-
-// Lazy load below-the-fold dynamic reviews widget (WhatsApp Screenshots)
-const WhatsAppScreenshot = lazy(() => import('./components/landing/WhatsAppScreenshot').then(m => ({ default: m.WhatsAppScreenshot })));
+import { WhatsAppScreenshot } from './components/landing/WhatsAppScreenshot';
 
 // Dynamically import Toaster and toasts to shave off 25KB from initial mobile bundle
 const LazyToaster = lazy(() => import('sonner').then(m => ({ default: m.Toaster })));
@@ -557,7 +555,7 @@ export default function App() {
                 <div className="relative bg-neutral-950 overflow-hidden w-full h-full" style={{ aspectRatio: '9/16' }}>
                   <a href="https://youtube.com/shorts/qvIivSti-ZM" target="_blank" rel="noopener noreferrer" className="absolute inset-0 block w-full h-full">
                     <img 
-                      src="https://img.youtube.com/vi/qvIivSti-ZM/maxresdefault.jpg"
+                      src="https://img.youtube.com/vi/qvIivSti-ZM/hqdefault.jpg"
                       alt="Assistir vídeo"
                       style={{ width: '100%', height: '100%', objectFit: 'cover', aspectRatio: '9/16' }}
                       width={310}
@@ -699,53 +697,45 @@ export default function App() {
           </div>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-6xl mx-auto min-h-[350px]">
-            <Suspense fallback={
-              <>
-                <div className="w-full h-[220px] rounded-2xl bg-white/[0.02] border border-white/5 animate-pulse" />
-                <div className="w-full h-[220px] rounded-2xl bg-white/[0.02] border border-white/5 animate-pulse hidden sm:block" />
-                <div className="w-full h-[220px] rounded-2xl bg-white/[0.02] border border-white/5 animate-pulse hidden lg:block" />
-              </>
-            }>
-              {/* Depoimento 1 - Bernardo Alves */}
-              <WhatsAppScreenshot 
-                name="Bernardo Alves"
-                text="cara do céu... saí do absoluto zero pra tirar 960 pontos na redação do ENEM! 😱 o método de Blocos Lógicos impediu que eu travasse na prova. Vale cada centavo dms!"
-                time="14:32"
-                avatarBg="bg-[#FF3366]"
-              />
+            {/* Depoimento 1 - Bernardo Alves */}
+            <WhatsAppScreenshot 
+              name="Bernardo Alves"
+              text="cara do céu... saí do absoluto zero pra tirar 960 pontos na redação do ENEM! 😱 o método de Blocos Lógicos impediu que eu travasse na prova. Vale cada centavo dms!"
+              time="14:32"
+              avatarBg="bg-[#FF3366]"
+            />
 
-              {/* Depoimento 2 - Maria, RJ */}
-              <WhatsAppScreenshot 
-                name="Maria • RJ"
-                text="melhor investimento do ano real! Tirei 980 pontos na redação de 2025!! Mandei meu print lá no grupo de alunos, eu achava que redação era bicho de 7 cabeças 🥹"
-                time="18:05"
-                avatarBg="bg-[#7C3AED]"
-              />
+            {/* Depoimento 2 - Maria, RJ */}
+            <WhatsAppScreenshot 
+              name="Maria • RJ"
+              text="melhor investimento do ano real! Tirei 980 pontos na redação de 2025!! Mandei meu print lá no grupo de alunos, eu achava que redação era bicho de 7 cabeças 🥹"
+              time="18:05"
+              avatarBg="bg-[#7C3AED]"
+            />
 
-              {/* Depoimento 3 - Carlos (Pai), MG */}
-              <WhatsAppScreenshot 
-                name="Carlos (Pai) • MG"
-                text="Meu filho subiu de 450 para 940 pontos oficiais treinando com os esqueletos prontos e a corretora Malu. Economizei milhares de reais com cursinhos caros 👍"
-                time="11:24"
-                avatarBg="bg-[#00FF88]"
-              />
+            {/* Depoimento 3 - Carlos (Pai), MG */}
+            <WhatsAppScreenshot 
+              name="Carlos (Pai) • MG"
+              text="Meu filho subiu de 450 para 940 pontos oficiais treinando com os esqueletos prontos e a corretora Malu. Economizei milhares de reais com cursinhos caros 👍"
+              time="11:24"
+              avatarBg="bg-[#00FF88]"
+            />
 
-              {/* Depoimento 4 - Bruna K., PR */}
-              <WhatsAppScreenshot 
-                name="Bruna K. • PR"
-                text="Tirei 940 pontos treinando com a Malu IA em 30 segundos! Corrigir toda semana sem esperar 10 dias por um corretor humano mudou o meu jogo."
-                time="09:41"
-                avatarBg="bg-[#FF6B35]"
-              />
+            {/* Depoimento 4 - Bruna K., PR */}
+            <WhatsAppScreenshot 
+              name="Bruna K. • PR"
+              text="Tirei 940 pontos treinando com a Malu IA em 30 segundos! Corrigir toda semana sem esperar 10 dias por um corretor humano mudou o meu jogo."
+              time="09:41"
+              avatarBg="bg-[#FF6B35]"
+            />
 
-              {/* Depoimento 5 - Gabriela M., BA */}
-              <WhatsAppScreenshot 
-                name="Gabriela M. • BA"
-                text="estava travada na nota 600 em redações e tirei 960 pontos na redação oficial do ENEM!! To dentro da Universidade Federal!! mto grata de verdade ❤️"
-                time="22:15"
-                avatarBg="bg-[#3B82F6]"
-              />
-            </Suspense>
+            {/* Depoimento 5 - Gabriela M., BA */}
+            <WhatsAppScreenshot 
+              name="Gabriela M. • BA"
+              text="estava travada na nota 600 em redações e tirei 960 pontos na redação oficial do ENEM!! To dentro da Universidade Federal!! mto grata de verdade ❤️"
+              time="22:15"
+              avatarBg="bg-[#3B82F6]"
+            />
           </div>
         </section>
 
