@@ -46,6 +46,17 @@ export default defineConfig(({ mode }) => {
             '<link rel="preload" $1 as="style" onload="this.onload=null;this.rel=\'stylesheet\'"><noscript><link rel="stylesheet" $1 $2></noscript>'
           );
         }
+      },
+      {
+        name: 'minify-html',
+        enforce: 'post',
+        transformIndexHtml(html) {
+          return html
+            .replace(/<!--[\s\S]*?-->/g, '')
+            .replace(/\s{2,}/g, ' ')
+            .replace(/>\s+</g, '><')
+            .trim();
+        }
       }
     ],
     define: {
@@ -65,9 +76,22 @@ export default defineConfig(({ mode }) => {
     },
     build: {
       target: 'esnext',
-      minify: 'esbuild',
+      minify: 'terser',
+      terserOptions: {
+        compress: {
+          drop_console: true,
+          drop_debugger: true,
+          pure_funcs: ['console.log', 'console.info'],
+          passes: 2,
+        },
+        mangle: true,
+        format: {
+          comments: false,
+        }
+      },
       cssMinify: true,
       cssCodeSplit: true,
+      reportCompressedSize: false,
       assetsInlineLimit: 8192, // Inline icons and images <= 8KB to completely eliminate HTTP handshakes
       chunkSizeWarningLimit: 1400,
       rollupOptions: {

@@ -6,7 +6,7 @@
     
     <!-- Preload critical Hero Image (Guia do Zero Cover SVG) for Instant LCP -->
     <link rel="preload" as="image" href="/guia_do_zero.svg" fetchpriority="high" />
-    <link rel="preload" as="image" href="https://img.youtube.com/vi/qvIivSti-ZM/maxresdefault.jpg" fetchpriority="high" />
+    <link rel="preload" as="image" href="https://img.youtube.com/vi/qvIivSti-ZM/maxresdefault.jpg" fetchpriority="low" />
 
     <!-- Critical Above-the-fold Inline CSS to completely prevent white screen flickers on slow mobile devices -->
     <style>
@@ -41,32 +41,20 @@
       }
     </style>
 
-    <!-- Highly-optimized, parallel early config prefetch -->
     <script>
-      (function() {
-        try {
-          window.__SUPABASE_DYNAMIC_CONFIG_READY__ = fetch('/api/config/supabase')
-            .then(function(res) {
-              var contentType = res.headers.get("content-type");
-              if (res.ok && contentType && contentType.indexOf("application/json") !== -1) {
-                return res.json();
-              }
-              return null;
-            })
-            .then(function(data) {
-              if (data && data.url && data.key) {
-                window.__SUPABASE_DYNAMIC_CONFIG__ = data;
-              }
-              return data;
-            })
-            .catch(function(err) {
-              // Gracefully handle any network errors or missing backend with zero console alarm
-              return null;
-            });
-        } catch (e) {
-          // Zero ops
-        }
-      })();
+      window.addEventListener('load', function() {
+        fetch('/api/config/supabase')
+          .then(function(res) {
+            if (res.ok) return res.json();
+            return null;
+          })
+          .then(function(data) {
+            if (data && data.url && data.key) {
+              window.__SUPABASE_DYNAMIC_CONFIG__ = data;
+            }
+          })
+          .catch(function() {});
+      });
     </script>
     
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -322,12 +310,12 @@
 
       </div>
     </div>
-    <script type="module" src="/src/main.tsx" fetchpriority="high"></script>
+    <script type="module" src="/src/main.tsx" defer></script>
 
     <!-- Highly optimized, non-blocking Meta Pixel Loading to achieve 90+ Lighthouse score (Solution #4) -->
     <script>
       function loadPixel() {
-        // Postpone external pixel loading using requestIdleCallback to guarantee 0ms Main Thread Block during load metrics
+        /* Postpone external pixel loading using requestIdleCallback to guarantee 0ms Main Thread Block during load metrics */
         var runWhenIdle = window.requestIdleCallback || window.requestAnimationFrame || function(cb) { setTimeout(cb, 50); };
         runWhenIdle(function() {
           setTimeout(function() {
@@ -341,7 +329,7 @@
             })(window, document,'script','https://connect.facebook.net/en_US/fbevents.js');
             fbq('init', '1480419783413075');
             fbq('track', 'PageView');
-          }, 3800); // 3.8s buffer allows Lighthouse/Core Web Vitals telemetry to record pristine FCP/LCP before pixel loads
+          }, 3800); /* 3.8s buffer allows Lighthouse/Core Web Vitals telemetry to record pristine FCP/LCP before pixel loads */
         });
       }
 
