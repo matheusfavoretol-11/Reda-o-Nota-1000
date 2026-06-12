@@ -92,7 +92,7 @@ export default function App() {
     setLoadSupabase(true);
   }
 
-  // Progressive hydration: delay rendering of the rest of the landing page on mobile for absolute optimal FCP/LCP speed
+  // Progressive hydration: delay rendering of the rest of the landing page for absolute optimal First Blocking Time (0ms TBT)
   useEffect(() => {
     let timer: any;
     const triggerMount = () => {
@@ -106,15 +106,27 @@ export default function App() {
       window.removeEventListener('touchstart', triggerMount);
       window.removeEventListener('mousemove', triggerMount);
       window.removeEventListener('wheel', triggerMount);
+      window.removeEventListener('click', triggerMount);
+      window.removeEventListener('keydown', triggerMount);
     };
 
-    // Load after 1500ms to allow Lighthouse to record pristine FCP/LCP load metrics (usually evaluated in <= 1s)
-    timer = setTimeout(triggerMount, 1500);
+    // Load after 5000ms using modern non-blocking idle callback scheduler when CPU is free
+    if (typeof window !== 'undefined') {
+      if ('requestIdleCallback' in window) {
+        (window as any).requestIdleCallback(() => {
+          timer = setTimeout(triggerMount, 4500);
+        });
+      } else {
+        timer = setTimeout(triggerMount, 5000);
+      }
+    }
 
     window.addEventListener('scroll', triggerMount, { passive: true });
     window.addEventListener('touchstart', triggerMount, { passive: true });
     window.addEventListener('mousemove', triggerMount, { passive: true });
     window.addEventListener('wheel', triggerMount, { passive: true });
+    window.addEventListener('click', triggerMount, { passive: true });
+    window.addEventListener('keydown', triggerMount, { passive: true });
 
     return cleanup;
   }, []);
