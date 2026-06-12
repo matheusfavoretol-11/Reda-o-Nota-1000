@@ -102,12 +102,6 @@ export default defineConfig(({ mode }) => {
           entryFileNames: 'assets/[name]-[hash].js',
           chunkFileNames: 'assets/[name]-[hash].js',
           assetFileNames: 'assets/[name]-[hash].[ext]',
-          manualChunks(id) {
-            // Isola as bibliotecas em arquivos separados para carregar em paralelo e não travar a build
-            if (id.includes('node_modules')) {
-              return 'vendor';
-            }
-          },
         },
         treeshake: {
           preset: 'recommended',
