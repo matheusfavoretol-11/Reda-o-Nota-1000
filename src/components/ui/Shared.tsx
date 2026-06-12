@@ -83,12 +83,9 @@ export const Countdown = ({ compact = false }: { compact?: boolean }) => {
 
   if (compact) {
     return (
-      <div className="flex gap-2 items-center justify-center bg-primary/10 border border-primary/20 p-2 rounded-xl">
-        <Clock size={14} className="text-primary animate-pulse" />
-        <span className="text-[10px] font-black uppercase tracking-widest text-primary">
-          Oferta expira em: {timeLeft.h}h {timeLeft.m}m {timeLeft.s}s
-        </span>
-      </div>
+      <span className="font-mono font-black text-xs text-[#FF6B35] bg-black/40 px-2.5 py-1 rounded-md border border-[#FF6B35]/20 inline-block min-w-[70px] text-center">
+        {timeLeft.h.toString().padStart(2, '0')}:{timeLeft.m.toString().padStart(2, '0')}:{timeLeft.s.toString().padStart(2, '0')}
+      </span>
     );
   }
   

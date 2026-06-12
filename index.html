@@ -8,6 +8,11 @@
     <link rel="preload" as="image" href="/guia_do_zero.svg" fetchpriority="high" />
     <link rel="preload" as="image" href="https://img.youtube.com/vi/qvIivSti-ZM/maxresdefault.jpg" fetchpriority="low" />
 
+    <!-- Preconnect to external resources to speed up network dependencies -->
+    <link rel="preconnect" href="https://img.youtube.com" crossorigin />
+    <link rel="preconnect" href="https://connect.facebook.net" crossorigin />
+    <link rel="preconnect" href="https://www.facebook.com" crossorigin />
+
     <!-- Critical Above-the-fold Inline CSS to completely prevent white screen flickers on slow mobile devices -->
     <style>
       html, body {
@@ -175,22 +180,19 @@
 
                   <!-- Video Player Box with 9:16 aspect ratio -->
                   <div class="relative bg-neutral-950 overflow-hidden w-full h-full" style="aspect-ratio: 9/16;">
-                    
-                    <div class="video-container" style="position: relative; width: 100%; padding-bottom: 177.77%; height: 0; overflow: hidden; border-radius: 12px;">
-                      <a href="https://youtube.com/shorts/qvIivSti-ZM" target="_blank" rel="noopener noreferrer" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: block;">
-                        <img 
-                          src="https://img.youtube.com/vi/qvIivSti-ZM/maxresdefault.jpg"
-                          alt="Assistir vídeo"
-                          style="width: 100%; height: 100%; object-fit: cover; aspect-ratio: 9/16;"
-                          width="310"
-                          height="551"
-                          loading="lazy"
-                        />
-                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); backgroundColor: red; background-color: red; border-radius: 50%; width: 64px; height: 64px; display: flex; align-items: center; justify-content: center;">
-                          <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
-                        </div>
-                      </a>
-                    </div>
+                    <a href="https://youtube.com/shorts/qvIivSti-ZM" target="_blank" rel="noopener noreferrer" class="absolute inset-0 block w-full h-full">
+                      <img 
+                        src="https://img.youtube.com/vi/qvIivSti-ZM/maxresdefault.jpg"
+                        alt="Assistir vídeo"
+                        style="width: 100%; height: 100%; object-fit: cover; aspect-ratio: 9/16;"
+                        width="310"
+                        height="551"
+                        loading="lazy"
+                      />
+                      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full w-16 h-16 flex items-center justify-center shadow-lg hover:bg-red-700 transition-all">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+                      </div>
+                    </a>
                     
                     <!-- Overlay reflection for realism -->
                     <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-white/[0.02] to-transparent pointer-events-none z-20"></div>
@@ -218,7 +220,7 @@
                   <div class="inline-flex flex-col sm:flex-row items-center gap-3 bg-[#FF6B35]/15 border border-[#FF6B35]/20 p-3 rounded-2xl w-fit mb-2">
                     <span class="text-[11px] font-black uppercase text-[#FF6B35]">🔥 Ganhe correções ilimitadas! Oferta por tempo limitado:</span>
                     <div class="shrink-0">
-                      <span class="font-mono font-black text-xs text-[#FF6B35] bg-black/40 px-2 py-1 rounded-md border border-[#FF6B35]/20">07:44</span>
+                      <span class="font-mono font-black text-xs text-[#FF6B35] bg-black/40 px-2.5 py-1 rounded-md border border-[#FF6B35]/20 inline-block min-w-[70px] text-center">14:32:45</span>
                     </div>
                   </div>
 

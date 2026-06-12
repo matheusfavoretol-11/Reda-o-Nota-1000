@@ -443,7 +443,7 @@ export default function App() {
   };
 
   return (
-    <div className="relative overflow-hidden">
+    <div className="relative overflow-hidden bg-[#050508] text-white min-h-screen">
       <Suspense fallback={null}>
         <LazyToaster position="bottom-right" theme="dark" />
       </Suspense>
@@ -555,22 +555,19 @@ export default function App() {
 
                 {/* Video Player Box with 9:16 aspect ratio */}
                 <div className="relative bg-neutral-950 overflow-hidden w-full h-full" style={{ aspectRatio: '9/16' }}>
-                  
-                  <div className="video-container" style={{ position: 'relative', width: '100%', paddingBottom: '177.77%', height: 0, overflow: 'hidden', borderRadius: '12px' }}>
-                    <a href="https://youtube.com/shorts/qvIivSti-ZM" target="_blank" rel="noopener noreferrer" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', display: 'block' }}>
-                      <img 
-                        src="https://img.youtube.com/vi/qvIivSti-ZM/maxresdefault.jpg"
-                        alt="Assistir vídeo"
-                        style={{ width: '100%', height: '100%', objectFit: 'cover', aspectRatio: '9/16' }}
-                        width={310}
-                        height={551}
-                        loading="lazy"
-                      />
-                      <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', backgroundColor: 'red', borderRadius: '50%', width: '64px', height: '64px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
-                      </div>
-                    </a>
-                  </div>
+                  <a href="https://youtube.com/shorts/qvIivSti-ZM" target="_blank" rel="noopener noreferrer" className="absolute inset-0 block w-full h-full">
+                    <img 
+                      src="https://img.youtube.com/vi/qvIivSti-ZM/maxresdefault.jpg"
+                      alt="Assistir vídeo"
+                      style={{ width: '100%', height: '100%', objectFit: 'cover', aspectRatio: '9/16' }}
+                      width={310}
+                      height={551}
+                      loading="lazy"
+                    />
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full w-16 h-16 flex items-center justify-center shadow-lg hover:bg-red-700 transition-all">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+                    </div>
+                  </a>
                   
                   {/* Overlay reflection for realism */}
                   <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/[0.02] to-transparent pointer-events-none z-20" />
