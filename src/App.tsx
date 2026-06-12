@@ -87,6 +87,13 @@ export default function App() {
   const [isVerifying, setIsVerifying] = useState(false);
   const [mountRest, setMountRest] = useState(true);
 
+  // Lazy loading of Supabase for outstanding FCP/LCP network chain speeds
+  const [loadSupabase, setLoadSupabase] = useState(() => hasCachedSession());
+
+  if ((showAuth !== null || user !== null) && !loadSupabase) {
+    setLoadSupabase(true);
+  }
+
   // Progressive hydration: delay rendering of the rest of the landing page on mobile for absolute optimal FCP/LCP speed
   useEffect(() => {
     let timer: any;
@@ -174,6 +181,12 @@ export default function App() {
 
   // Dynamic combined config setup + auth check to completely optimize First Contentful Paint and prevent race-conditions
   useEffect(() => {
+    if (!loadSupabase) {
+      setLoading(false);
+      setCheckingPayment(false);
+      return;
+    }
+
     let active = true;
     let subscriptionObj: any = null;
 
@@ -284,7 +297,7 @@ export default function App() {
         subscriptionObj.unsubscribe();
       }
     };
-  }, []);
+  }, [loadSupabase]);
 
   // Auto-verify every 3 seconds if on pending screen (faster for immediate access)
   useEffect(() => {
