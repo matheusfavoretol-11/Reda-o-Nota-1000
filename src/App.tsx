@@ -65,7 +65,6 @@ const hasCachedSession = (): boolean => {
   return false;
 };
 
-
 // --- CONFIG ---
 const KIWIFY_CHECKOUT_URL = "https://pay.kiwify.com.br/AhSL8x0";
 
@@ -84,6 +83,10 @@ export default function App() {
   const [showAuth, setShowAuth] = useState<'login' | 'signup' | null>(null);
   const [isVerifying, setIsVerifying] = useState(false);
   const [mountRest, setMountRest] = useState(false);
+  const [viewers, setViewers] = useState(23);
+  const [compPrice1, setCompPrice1] = useState(89.90);
+  const [compPrice2, setCompPrice2] = useState(99.90);
+  const [compPrice3, setCompPrice3] = useState(129.90);
 
   // Lazy loading of Supabase for outstanding FCP/LCP network chain speeds
   const [loadSupabase, setLoadSupabase] = useState(() => hasCachedSession());
@@ -92,16 +95,18 @@ export default function App() {
     setLoadSupabase(true);
   }
 
-  // Progressive hydration: delay rendering of the rest of the landing page for absolute optimal First Blocking Time (0ms TBT)
+  // PASSO 1 OTIMIZADO: Hidratação progressiva e adiamento de rotinas pesadas de terceiros (Alivia o TBT)
   useEffect(() => {
     let timer: any;
+    let viewersInterval: any;
+    let pricesInterval: any;
+
     const triggerMount = () => {
       setMountRest(true);
-      cleanup();
+      cleanupListeners();
     };
 
-    const cleanup = () => {
-      clearTimeout(timer);
+    const cleanupListeners = () => {
       window.removeEventListener('scroll', triggerMount);
       window.removeEventListener('touchstart', triggerMount);
       window.removeEventListener('mousemove', triggerMount);
@@ -110,14 +115,38 @@ export default function App() {
       window.removeEventListener('keydown', triggerMount);
     };
 
-    // Load after 5000ms using modern non-blocking idle callback scheduler when CPU is free
+    // Só ativa lógicas secundárias de simulação quando a CPU estiver totalmente livre (2 segundos após o load)
+    const initializeSecondaryLogics = () => {
+      viewersInterval = setInterval(() => {
+        setViewers(prev => {
+          const change = Math.random() > 0.5 ? 1 : -1;
+          const next = prev + change;
+          if (next < 19) return 19;
+          if (next > 28) return 28;
+          return next;
+        });
+      }, 38000);
+
+      pricesInterval = setInterval(() => {
+        setCompPrice1(() => Number((89.90 + ([-2, -1, 0, 1, 2, 3][Math.floor(Math.random() * 6)])).toFixed(2)));
+        setCompPrice2(() => Number((99.90 + ([-4, -2, 0, 2, 4, 6][Math.floor(Math.random() * 6)])).toFixed(2)));
+        setCompPrice3(() => Number((129.90 + ([-8, -4, 0, 4, 8, 10][Math.floor(Math.random() * 6)])).toFixed(2)));
+      }, 45000);
+    };
+
     if (typeof window !== 'undefined') {
       if ('requestIdleCallback' in window) {
         (window as any).requestIdleCallback(() => {
-          timer = setTimeout(triggerMount, 4500);
+          timer = setTimeout(() => {
+            triggerMount();
+            initializeSecondaryLogics();
+          }, 2000); // Reduzido para 2 segundos para equilibrar SEO e Performance
         });
       } else {
-        timer = setTimeout(triggerMount, 5000);
+        timer = setTimeout(() => {
+          triggerMount();
+          initializeSecondaryLogics();
+        }, 2000);
       }
     }
 
@@ -128,20 +157,18 @@ export default function App() {
     window.addEventListener('click', triggerMount, { passive: true });
     window.addEventListener('keydown', triggerMount, { passive: true });
 
-    return cleanup;
+    return () => {
+      clearTimeout(timer);
+      clearInterval(viewersInterval);
+      clearInterval(pricesInterval);
+      cleanupListeners();
+    };
   }, []);
   
-  const [showTopBar, setShowTopBar] = useState(false);
-  const [viewers, setViewers] = useState(23);
-  const [compPrice1, setCompPrice1] = useState(89.90);
-  const [compPrice2, setCompPrice2] = useState(99.90);
-  const [compPrice3, setCompPrice3] = useState(129.90);
-
   const videoRef = React.useRef<HTMLVideoElement>(null);
   const mobileVideoRef = React.useRef<HTMLVideoElement>(null);
   const [playMobileVideo, setPlayMobileVideo] = useState(false);
 
-  // Attempt to play the video once the component mounts
   useEffect(() => {
     const video = videoRef.current;
     if (video) {
@@ -150,13 +177,12 @@ export default function App() {
         video.pause();
       } else {
         video.play().catch(err => {
-          console.warn("Autoplay was prevented by the browser. Ready to play on user interaction.", err);
+          console.warn("Autoplay impedido pelo navegador.", err);
         });
       }
     }
   }, []);
 
-  // Ensure mobile video plays immediately upon user click / play enablement
   useEffect(() => {
     if (playMobileVideo && mobileVideoRef.current) {
       mobileVideoRef.current.play().catch(err => {
@@ -165,48 +191,7 @@ export default function App() {
     }
   }, [playMobileVideo]);
 
-  // Dynamic viewers updater (updates every 38 seconds)
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setViewers(prev => {
-        const change = Math.random() > 0.5 ? 1 : -1;
-        const next = prev + change;
-        if (next < 19) return 19;
-        if (next > 28) return 28;
-        return next;
-      });
-    }, 38000);
-    return () => clearInterval(interval);
-  }, []);
-
-  // Dynamic competition prices updater (updates every 45 seconds)
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCompPrice1(() => {
-        const diffs = [-2.00, -1.00, 0, 1.00, 2.00, 3.00];
-        const change = diffs[Math.floor(Math.random() * diffs.length)];
-        const next = 89.90 + change;
-        return Number(next.toFixed(2));
-      });
-      setCompPrice2(() => {
-        const diffs = [-4.00, -2.00, 0, 2.00, 4.00, 6.00];
-        const change = diffs[Math.floor(Math.random() * diffs.length)];
-        const next = 99.90 + change;
-        return Number(next.toFixed(2));
-      });
-      setCompPrice3(() => {
-        const diffs = [-8.00, -4.00, 0, 4.00, 8.00, 10.00];
-        const change = diffs[Math.floor(Math.random() * diffs.length)];
-        const next = 129.90 + change;
-        return Number(next.toFixed(2));
-      });
-    }, 45000);
-    return () => clearInterval(interval);
-  }, []);
-
-  const isPaid = profile?.status === 'paid' || user?.email === 'matheusfavoretol@gmail.com';
-
-  // Dynamic combined config setup + auth check to completely optimize First Contentful Paint and prevent race-conditions
+  // Sincronização e autenticação com Supabase
   useEffect(() => {
     if (!loadSupabase) {
       setLoading(false);
@@ -219,14 +204,9 @@ export default function App() {
 
     const initializeFlow = async () => {
       try {
-        // 1. Tenta pegar a configuração pré-carregada do <head> (instantâneo) ou busca do servidor if not yet ready
         let data = (window as any).__SUPABASE_DYNAMIC_CONFIG__;
         if (!data && (window as any).__SUPABASE_DYNAMIC_CONFIG_READY__) {
-          try {
-            data = await (window as any).__SUPABASE_DYNAMIC_CONFIG_READY__;
-          } catch (e) {
-            // Ignorado, usará fallbacks
-          }
+          try { data = await (window as any).__SUPABASE_DYNAMIC_CONFIG_READY__; } catch (e) {}
         }
         
         if (!data) {
@@ -236,9 +216,7 @@ export default function App() {
             if (response.ok && contentType && contentType.includes("application/json")) {
               data = await response.json();
             }
-          } catch (e) {
-            // Ignorado, usará fallbacks
-          }
+          } catch (e) {}
         }
 
         const { updateSupabaseConfig, getSupabase, supabase } = await import('./lib/supabase');
@@ -249,14 +227,12 @@ export default function App() {
 
         if (!active) return;
 
-        // Se o Supabase estiver na URL fallback temporária, não tente sincronizar para evitar timeouts demorados
         const finalClient = getSupabase();
         if (finalClient && finalClient.supabaseUrl === "https://missing-url.supabase.co") {
           setLoading(false);
           return;
         }
 
-        // 2. Tenta recuperar sessão existente apenas se houver sinal de token para evitar requisição pendente no landing
         if (hasCachedSession()) {
           const { data: { session } } = await supabase.auth.getSession();
           const currentUser = session?.user ?? null;
@@ -264,20 +240,16 @@ export default function App() {
           
           if (currentUser && active) {
             const hasStatus = localStorage.getItem('red1000_is_paid_cache') !== null;
-            if (!hasStatus) {
-              setCheckingPayment(true);
-            }
+            if (!hasStatus) setCheckingPayment(true);
             await checkPaymentStatus(currentUser.email);
           }
         } else {
-          // Se não há sessão em cache, finalize o carregamento imediatamente para renderização instantânea
           if (active) {
             setUser(null);
             setProfile(null);
           }
         }
 
-        // 3. Registra o listener de mudanças de autênticação
         try {
           const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
             try {
@@ -286,9 +258,7 @@ export default function App() {
               
               if (currentUser) {
                 const hasStatus = localStorage.getItem('red1000_is_paid_cache') !== null;
-                if (!hasStatus && active) {
-                  setCheckingPayment(true);
-                }
+                if (!hasStatus && active) setCheckingPayment(true);
                 await checkPaymentStatus(currentUser.email);
               } else {
                 if (active) {
@@ -297,17 +267,13 @@ export default function App() {
                 }
               }
             } catch (e) {
-              console.error("Erro no listener de mudanças de Auth:", e);
             } finally {
               if (active) setCheckingPayment(false);
             }
           });
           subscriptionObj = subscription;
-        } catch (err) {
-          console.error("Erro ao registrar onAuthStateChange:", err);
-        }
+        } catch (err) {}
       } catch (e) {
-        console.error("Erro na inicialização da aplicação:", e);
       } finally {
         if (active) {
           setCheckingPayment(false);
@@ -320,31 +286,26 @@ export default function App() {
 
     return () => {
       active = false;
-      if (subscriptionObj) {
-        subscriptionObj.unsubscribe();
-      }
+      if (subscriptionObj) subscriptionObj.unsubscribe();
     };
   }, [loadSupabase]);
 
-  // Auto-verify every 3 seconds if on pending screen (faster for immediate access)
   useEffect(() => {
     let interval: number;
-    if (user && !isPaid) {
-      // First check immediately
+    if (user && profile?.status !== 'paid' && user.email !== 'matheusfavoretol@gmail.com') {
       checkPaymentStatus(user.email);
-      
       interval = window.setInterval(() => {
         checkPaymentStatus(user.email);
       }, 3000);
     }
     return () => clearInterval(interval);
-  }, [user, isPaid]);
+  }, [user, profile]);
 
   const checkPaymentStatus = async (userEmail: string | undefined) => {
     if (!userEmail) return;
     try {
       const res = await fetch(`/api/check-payment?email=${encodeURIComponent(userEmail)}`);
-      if (!res.ok) throw new Error("Falha ao verificar pagamento no servidor");
+      if (!res.ok) throw new Error("Falha ao verificar pagamento");
       const data = await res.json();
       const prevCache = localStorage.getItem('red1000_is_paid_cache');
       setProfile({ status: data.isPaid ? 'paid' : 'pending' });
@@ -352,18 +313,14 @@ export default function App() {
       if (data.isPaid && prevCache !== 'true') {
         showToast.success("Pagamento identificado! Seu acesso foi liberado.");
       }
-    } catch (e) {
-      console.error("Error checking payment:", e);
-    }
+    } catch (e) {}
   };
 
   const handleLogout = async () => {
     try {
       const { supabase } = await import('./lib/supabase');
       await supabase.auth.signOut();
-    } catch (e) {
-      // ignore
-    }
+    } catch (e) {}
     localStorage.removeItem('red1000_is_paid_cache');
     localStorage.removeItem('red1000_free_test');
     setUser(null);
@@ -382,11 +339,11 @@ export default function App() {
     );
   }
 
+  const isPaid = profile?.status === 'paid' || user?.email === 'matheusfavoretol@gmail.com';
 
   if (user && isPaid) {
     return (
       <div className="min-h-screen bg-bg-dark flex flex-col selection:bg-primary/30">
-        {/* DASHBOARD NAVBAR */}
         <nav className="p-6 border-b border-white/5 bg-white/[0.02]">
           <div className="max-w-7xl mx-auto flex justify-between items-center">
              <button onClick={() => setActiveTab('overview')} className="flex items-center gap-3 hover:opacity-80 transition-opacity">
@@ -404,28 +361,15 @@ export default function App() {
              </div>
           </div>
         </nav>
-
         <main className="flex-1 overflow-y-auto">
           <div className="max-w-7xl mx-auto">
             <Suspense fallback={<LoadingView />}>
-              {activeTab === 'overview' && (
-                <DashboardOverview user={user} onNavigate={(view) => setActiveTab(view)} />
-              )}
-              {activeTab === 'ebook' && (
-                <EbookView />
-              )}
-              {activeTab === 'ia' && (
-                <IaView />
-              )}
-              {activeTab === 'repertorios' && (
-                <RepertoireView />
-              )}
-              {activeTab === 'redacoes' && (
-                <RedacoesView />
-              )}
-              {activeTab === 'exercicios' && (
-                <ChallengesView />
-              )}
+              {activeTab === 'overview' && <DashboardOverview user={user} onNavigate={(view) => setActiveTab(view)} />}
+              {activeTab === 'ebook' && <EbookView />}
+              {activeTab === 'ia' && <IaView />}
+              {activeTab === 'repertorios' && <RepertoireView />}
+              {activeTab === 'redacoes' && <RedacoesView />}
+              {activeTab === 'exercicios' && <ChallengesView />}
             </Suspense>
           </div>
         </main>
@@ -435,9 +379,7 @@ export default function App() {
 
   const handleCTA = () => {
     const url = new URL(KIWIFY_CHECKOUT_URL);
-    if (user?.email) {
-      url.searchParams.append('email', user.email);
-    }
+    if (user?.email) url.searchParams.append('email', user.email);
     window.location.href = url.toString();
   };
 
@@ -458,7 +400,6 @@ export default function App() {
         <LazyToaster position="bottom-right" theme="dark" />
       </Suspense>
       
-      {/* Top Bar matching static index.html layout */}
       <div className="fixed top-0 left-0 w-full z-[60] bg-gradient-to-r from-[#FF6B6B] to-[#FF8E53] shadow-[0_4px_20px_rgba(255,107,107,0.25)] select-none border-b border-white/10 h-[36px] lg:h-[42px] flex items-center justify-between px-3 md:px-6">
         <div className="absolute inset-0 bg-[#FF6B6B] opacity-10 pointer-events-none" />
         <div className="max-w-7xl mx-auto flex items-center justify-between px-3 md:px-6 relative z-10 w-full">
@@ -476,48 +417,22 @@ export default function App() {
         </div>
       </div>
 
-      <Nav 
-        onAction={handleCTA} 
-        onLogin={() => setShowAuth('login')} 
-        topOffset="top-[36px] lg:top-[42px]" 
-      />
+      <Nav onAction={handleCTA} onLogin={() => setShowAuth('login')} topOffset="top-[36px] lg:top-[42px]" />
       
       <Suspense fallback={null}>
-        {showAuth && (
-          <AuthScreen 
-            mode={showAuth} 
-            onClose={() => setShowAuth(null)} 
-            setMode={(m) => setShowAuth(m)}
-            checkoutUrl={KIWIFY_CHECKOUT_URL}
-          />
-        )}
-        {user && !isPaid && (
-          <BenefitsOffer 
-            user={user} 
-            onLogout={handleLogout} 
-            manualVerify={manualVerify} 
-            isVerifying={isVerifying} 
-            checkoutUrl={KIWIFY_CHECKOUT_URL}
-          />
-        )}
+        {showAuth && <AuthScreen mode={showAuth} onClose={() => setShowAuth(null)} setMode={(m) => setShowAuth(m)} checkoutUrl={KIWIFY_CHECKOUT_URL} />}
+        {user && !isPaid && <BenefitsOffer user={user} onLogout={handleLogout} manualVerify={manualVerify} isVerifying={isVerifying} checkoutUrl={KIWIFY_CHECKOUT_URL} />}
       </Suspense>
       
-      {/* GLOWS */}
       <div className="fixed inset-0 z-0 pointer-events-none">
         <div className="absolute top-[-10%] left-[-10%] w-[70%] h-[70%] bg-[#FF6B35]/10 blur-[100px] md:blur-[180px] rounded-full md:animate-pulse" />
         <div className="absolute bottom-[-10%] right-[-10%] w-[70%] h-[70%] bg-[#00FF88]/10 blur-[100px] md:blur-[180px] rounded-full md:animate-pulse" />
       </div>
 
-      {/* --- UNIFIED HIGH-CONVERTING LANDING PAGE (BG #050508) --- */}
       <div className="relative z-10 bg-bg-dark text-white min-h-screen pt-[106px] lg:pt-[122px] pb-12 selection:bg-[#FF6B35]/30">
-        
-        {/* SEÇÃO 1: HERO (3-5 segundos) */}
         <section className="py-12 md:py-24 px-5 max-w-7xl mx-auto relative justify-center">
           <div className="grid lg:grid-cols-12 gap-12 items-center">
-            
-            {/* Left Column: Copy & CTA */}
             <div className="lg:col-span-12 xl:col-span-7 space-y-8 text-center xl:text-left">
-              {/* Proof Points */}
               <div className="inline-flex flex-wrap items-center justify-center xl:justify-start gap-2.5 px-4 py-2 bg-white/[0.02] border border-white/5 rounded-full">
                 <span className="text-[#00FF88] font-black text-xs">✅ 2.847 alunos</span>
                 <span className="text-white/20">|</span>
@@ -531,17 +446,14 @@ export default function App() {
                 </div>
               </div>
 
-              {/* Headline (Sugestão de Alta Conversão) */}
               <h1 className="text-3xl sm:text-5xl md:text-6xl font-display font-black leading-[1.05] tracking-tight text-white uppercase italic">
                 SAIA DO ZERO E GARANTA <span className="text-[#00FF88]">900+ NA REDAÇÃO</span> DO ENEM EM APENAS 4 SEMANAS
               </h1>
 
-              {/* O que a pessoa recebe (O Mecanismo Único: Sem gramática chata, foco no Sistema de Blocos Lógicos) */}
               <p className="text-sm sm:text-lg text-white/90 leading-relaxed font-semibold max-w-2xl mx-auto xl:mx-0">
-                Você não vai aprender gramática chata. Você vai dominar o <span className="text-[#00FF88]">Sistema de Blocos Lógicos</span>, onde você apenas encaixa suas ideias em uma estrutura "Coringa" que os corretores amam e serve para qualquer tema de 2026.
+                Você não vai aprender gramática chata. Você vai dominar o <span className="text-[#00FF88]">Sistema de Blocos Lógicos</span>, onde você apenas encaixa suas ideas em uma estrutura "Coringa" que os corretores amam e serve para qualquer tema de 2026.
               </p>
 
-              {/* Title above cellphone mockup requested by user */}
               <div className="text-center xl:text-left pt-4 -mb-2">
                 <h3 className="text-base sm:text-lg font-display font-black tracking-widest text-[#00FF88] uppercase inline-flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-[#00FF88] animate-pulse" />
@@ -549,21 +461,17 @@ export default function App() {
                 </h3>
               </div>
 
-              {/* Video Mockup - Posicionado logo abaixo da frase/descrição */}
+              {/* CORREÇÃO DO VIDEO PLAYER (Removido lazy loading e adicionado prioridade máxima de rede) */}
               <div 
                 id="demo-video" 
-                data-loading="lazy" 
-                className="relative max-w-[280px] sm:max-w-[310px] mx-auto xl:mx-0 rounded-[48px] border-[10px] border-neutral-900 bg-black shadow-[0_0_50px_rgba(0,255,136,0.12),0_25px_60px_-15px_rgba(0,0,0,0.8)] ring-1 ring-white/10 overflow-hidden group my-6 animate-fade-in"
+                className="relative max-w-[280px] sm:max-w-[310px] mx-auto xl:mx-0 rounded-[48px] border-[10px] border-neutral-900 bg-black shadow-[0_0_50px_rgba(0,255,136,0.12),0_25px_60px_-15px_rgba(0,0,0,0.8)] ring-1 ring-white/10 overflow-hidden group my-6"
                 style={{ aspectRatio: '9/16', width: '280px', height: 'auto', contain: 'layout size' }}
               >
-                
-                {/* Front Camera Notch / Speaker */}
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-neutral-900 rounded-b-2xl z-30 flex items-center justify-center">
                   <div className="w-10 h-1 bg-neutral-800 rounded-full" />
                   <div className="w-2 h-2 bg-neutral-950 rounded-full ml-2 border border-neutral-800/50" />
                 </div>
 
-                {/* Video Player Box with 9:16 aspect ratio */}
                 <div className="relative bg-neutral-950 overflow-hidden w-full h-full" style={{ aspectRatio: '9/16' }}>
                   <a href="https://youtube.com/shorts/qvIivSti-ZM" target="_blank" rel="noopener noreferrer" className="absolute inset-0 block w-full h-full">
                     <img 
@@ -572,22 +480,17 @@ export default function App() {
                       style={{ width: '100%', height: '100%', objectFit: 'cover', aspectRatio: '9/16' }}
                       width={310}
                       height={551}
-                      loading="lazy"
+                      fetchPriority="high" // Diz ao navegador para baixar imediatamente no primeiro segundo
                     />
                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full w-16 h-16 flex items-center justify-center shadow-lg hover:bg-red-700 transition-all">
                       <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
                     </div>
                   </a>
-                  
-                  {/* Overlay reflection for realism */}
                   <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/[0.02] to-transparent pointer-events-none z-20" />
                 </div>
-
-                {/* Home indicator bar */}
                 <div className="absolute bottom-1 w-24 h-1 bg-white/20 rounded-full left-1/2 -translate-x-1/2 z-30 pointer-events-none" />
               </div>
 
-              {/* 3 Benefícios Principais */}
               <div className="space-y-3 max-w-xl mx-auto xl:mx-0 text-left bg-white/[0.01] border border-white/5 p-4 rounded-2xl select-none">
                 <div className="flex items-center gap-2.5 text-xs sm:text-sm font-bold text-white/95">
                   <span className="text-[#00FF88] shrink-0 text-base">⚡</span> <span>Malu IA: Corretora automática em 30 Segundos</span>
@@ -600,7 +503,6 @@ export default function App() {
                 </div>
               </div>
 
-              {/* CTA Button + Scarcity Closing Timer */}
               <div className="space-y-4 pt-2 text-center xl:text-left">
                 <div className="inline-flex flex-col sm:flex-row items-center gap-3 bg-[#FF6B35]/15 border border-[#FF6B35]/20 p-3 rounded-2xl w-fit mb-2">
                   <span className="text-[11px] font-black uppercase text-[#FF6B35] animate-pulse">🔥 Ganhe correções ilimitadas! Oferta por tempo limitado:</span>
@@ -627,9 +529,7 @@ export default function App() {
               </div>
             </div>
 
-            {/* Right Column: Visuals */}
             <div className="lg:col-span-12 xl:col-span-5 space-y-6">
-              {/* Ebook Mockup Cover Image (LCP optimized) */}
               <div className="relative max-w-[280px] sm:max-w-[320px] mx-auto xl:mx-0 rounded-3xl overflow-hidden shadow-2xl border border-white/10 group mb-6 hover:scale-[1.02] transition-transform duration-300" style={{ aspectRatio: '350/490', width: '100%', contain: 'layout size' }}>
                 <img 
                   src="/guia_do_zero.svg" 
@@ -643,7 +543,6 @@ export default function App() {
                 />
               </div>
 
-              {/* Evolution Badges */}
               <div className="glass p-6 rounded-3xl border-white/5 bg-[#151515]/90 space-y-4 shadow-xl">
                 <p className="text-[11px] font-black uppercase text-[#00FF88] tracking-widest flex items-center gap-1.5">
                   🛡️ EVOLUÇÃO COMPROVADA
@@ -667,7 +566,6 @@ export default function App() {
                 </div>
               </div>
 
-              {/* Correction mockup */}
               <div className="glass p-5 rounded-3xl border-white/5 bg-[#121212] space-y-3 shadow-2xl relative overflow-hidden">
                 <div className="flex items-center justify-between border-b border-white/5 pb-2.5">
                   <div className="flex items-center gap-2">
@@ -689,14 +587,12 @@ export default function App() {
                   </div>
                 </div>
               </div>
-
             </div>
           </div>
         </section>
 
         {mountRest && (
           <>
-            {/* SEÇÃO 2: PROVA SOCIAL */}
             <section className="py-12 pb-16 px-5 max-w-7xl mx-auto relative z-10 space-y-10 text-center animate-fade-in" id="prova-social">
               <div className="space-y-3">
                 <span className="text-[#00FF88] text-xs font-black uppercase tracking-[0.2em] bg-[#00FF88]/10 px-3.5 py-1.5 rounded-full border border-[#00FF88]/20 inline-block">
@@ -711,107 +607,46 @@ export default function App() {
               </div>
 
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-6xl mx-auto min-h-[350px]">
-                {/* Depoimento 1 - Bernardo Alves */}
-                <WhatsAppScreenshot 
-                  name="Bernardo Alves"
-                  text="cara do céu... saí do absoluto zero pra tirar 960 pontos na redação do ENEM! 😱 o método de Blocos Lógicos impediu que eu travasse na prova. Vale cada centavo dms!"
-                  time="14:32"
-                  avatarBg="bg-[#FF3366]"
-                />
-
-                {/* Depoimento 2 - Maria, RJ */}
-                <WhatsAppScreenshot 
-                  name="Maria • RJ"
-                  text="melhor investimento do ano real! Tirei 980 pontos na redação de 2025!! Mandei meu print lá no grupo de alunos, eu achava que redação era bicho de 7 cabeças 🥹"
-                  time="18:05"
-                  avatarBg="bg-[#7C3AED]"
-                />
-
-                {/* Depoimento 3 - Carlos (Pai), MG */}
-                <WhatsAppScreenshot 
-                  name="Carlos (Pai) • MG"
-                  text="Meu filho subiu de 450 para 940 pontos oficiais treinando com os esqueletos prontos e a corretora Malu. Economizei milhares de reais com cursinhos caros 👍"
-                  time="11:24"
-                  avatarBg="bg-[#00FF88]"
-                />
-
-                {/* Depoimento 4 - Bruna K., PR */}
-                <WhatsAppScreenshot 
-                  name="Bruna K. • PR"
-                  text="Tirei 940 pontos treinando com a Malu IA em 30 segundos! Corrigir toda semana sem esperar 10 dias por um corretor humano mudou o meu jogo."
-                  time="09:41"
-                  avatarBg="bg-[#FF6B35]"
-                />
-
-                {/* Depoimento 5 - Gabriela M., BA */}
-                <WhatsAppScreenshot 
-                  name="Gabriela M. • BA"
-                  text="estava travada na nota 600 em redações e tirei 960 pontos na redação oficial do ENEM!! To dentro da Universidade Federal!! mto grata de verdade ❤️"
-                  time="22:15"
-                  avatarBg="bg-[#3B82F6]"
-                />
+                <WhatsAppScreenshot name="Bernardo Alves" text="cara do céu... saí do absoluto zero pra tirar 960 pontos na redação do ENEM! 😱 o método de Blocos Lógicos impediu que eu travasse na prova. Vale cada centavo dms!" time="14:32" avatarBg="bg-[#FF3366]" />
+                <WhatsAppScreenshot name="Maria • RJ" text="melhor investimento do ano real! Tirei 980 pontos na redação de 2025!! Mandei meu print lá no grupo de alunos, eu achava que redação era bicho de 7 cabeças 🥹" time="18:05" avatarBg="bg-[#7C3AED]" />
+                <WhatsAppScreenshot name="Carlos (Pai) • MG" text="Meu filho subiu de 450 para 940 pontos oficiais treinando com os esqueletos prontos e a corretora Malu. Economizei milhares de reais com cursinhos caros 👍" time="11:24" avatarBg="bg-[#00FF88]" />
+                <WhatsAppScreenshot name="Bruna K. • PR" text="Tirei 940 pontos treinando com a Malu IA em 30 segundos! Corrigir toda semana sem esperar 10 dias por um corretor humano mudou o meu jogo." time="09:41" avatarBg="bg-[#FF6B35]" />
+                <WhatsAppScreenshot name="Gabriela M. • BA" text="estava travada na nota 600 em redações e tirei 960 pontos na redação oficial do ENEM!! To dentro da Universidade Federal!! mto grata de verdade ❤️" time="22:15" avatarBg="bg-[#3B82F6]" />
               </div>
             </section>
 
-            {/* SEÇÃO 3: RECURSOS COMPLEMENTARES DA PLATAFORMA */}
             <section className="py-8 pb-16 px-5 max-w-4xl mx-auto relative z-10 text-center animate-fade-in" id="features">
-              {/* Key showcase feature list */}
               <div className="grid md:grid-cols-3 gap-4 max-w-3xl mx-auto text-left">
                 <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/5 space-y-2">
-                  <div className="text-[#00FF88] text-xs font-black uppercase tracking-wider flex items-center gap-1.5">
-                    📖 ÁREA DO ALUNO
-                  </div>
-                  <p className="text-xs text-gray-400 font-medium leading-relaxed">
-                    Acesse o Guia de 30 páginas e esqueletos coringas diretamente na plataforma para acelerar sua redação.
-                  </p>
+                  <div className="text-[#00FF88] text-xs font-black uppercase tracking-wider flex items-center gap-1.5">📖 ÁREA DO ALUNO</div>
+                  <p className="text-xs text-gray-400 font-medium leading-relaxed">Acese o Guia de 30 páginas e esqueletos coringas diretamente na plataforma para acelerar sua redação.</p>
                 </div>
-                
                 <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/5 space-y-2">
-                  <div className="text-[#00FF88] text-xs font-black uppercase tracking-wider flex items-center gap-1.5">
-                    🧠 TREINO PRÁTICO
-                  </div>
-                  <p className="text-xs text-gray-400 font-medium leading-relaxed">
-                    Exercícios e desafios rápidos com foco direto nas principais competências exigidas pela banca do ENEM.
-                  </p>
+                  <div className="text-[#00FF88] text-xs font-black uppercase tracking-wider flex items-center gap-1.5">🧠 TREINO PRÁTICO</div>
+                  <p className="text-xs text-gray-400 font-medium leading-relaxed">Exercícios e desafios rápidos com foco direto nas principais competências exigidas pela banca do ENEM.</p>
                 </div>
-
                 <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/5 space-y-2">
-                  <div className="text-[#00FF88] text-xs font-black uppercase tracking-wider flex items-center gap-1.5">
-                    🤖 CORRETORA MALU IA
-                  </div>
-                  <p className="text-xs text-gray-400 font-medium leading-relaxed">
-                    Escreva ou cole seu texto e receba correção, estimativa de nota e feedbacks detalhados em até 30 segundos.
-                  </p>
+                  <div className="text-[#00FF88] text-xs font-black uppercase tracking-wider flex items-center gap-1.5">🤖 CORRETORA MALU IA</div>
+                  <p className="text-xs text-gray-400 font-medium leading-relaxed">Escreva ou cole seu texto e receba correção, estimativa de nota e feedbacks detalhados em até 30 segundos.</p>
                 </div>
               </div>
             </section>
 
-            {/* Selo de Garantia de 7 Dias - Minimalista e Verde */}
             <div className="max-w-4xl mx-auto px-5 pb-16 pt-4 relative z-10 animate-fade-in">
               <div className="relative overflow-hidden rounded-2xl border border-[#00FF88]/10 bg-black/40 p-6 md:p-8 backdrop-blur-sm">
-                
                 <div className="flex flex-col md:flex-row items-center gap-6 relative z-10">
-                  
-                  {/* Minimal Icon Badge */}
                   <div className="flex items-center justify-center w-16 h-16 rounded-2xl bg-[#00FF88]/5 border border-[#00FF88]/20 shrink-0 text-[#00FF88]">
                     <ShieldCheck size={32} className="stroke-1" />
                   </div>
-
-                  {/* Text Description */}
                   <div className="space-y-2 text-center md:text-left flex-1">
                     <div className="flex flex-col md:flex-row md:items-center gap-x-3 gap-y-1 justify-center md:justify-start">
                       <span className="text-[#00FF88] text-[9px] font-black uppercase tracking-[0.2em]">GARANTIA INCONDICIONAL</span>
                       <span className="hidden md:inline text-white/20 text-xs">•</span>
                       <span className="text-white/60 text-xs font-medium">7 Dias de Risco Zero</span>
                     </div>
-                    <h3 className="text-lg md:text-xl font-display font-bold text-white tracking-tight">
-                      Sua satisfação garantida ou <span className="text-[#00FF88]">reembolso integral</span>
-                    </h3>
-                    <p className="text-xs sm:text-sm text-gray-400 font-medium leading-relaxed max-w-2xl">
-                      Experimente o método por até 7 dias. Use a correção de redação Inteligente à vontade. Se não perceber sua evolução na escrita para o ENEM, basta pedir o cancelamento e devolvemos cada centavo, sem perguntas ou burocracia.
-                    </p>
+                    <h3 className="text-lg md:text-xl font-display font-bold text-white tracking-tight">Sua satisfação garantida ou <span className="text-[#00FF88]">reembolso integral</span></h3>
+                    <p className="text-xs sm:text-sm text-gray-400 font-medium leading-relaxed max-w-2xl">Experimente o método por até 7 dias. Use a correção de redação Inteligente à vontade. Se não perceber sua evolução na escrita para o ENEM, basta pedir o cancelamento e devolvemos cada centevos, sem perguntas ou burocracia.</p>
                   </div>
-
                 </div>
               </div>
             </div>
@@ -819,22 +654,11 @@ export default function App() {
         )}
 
         {mountRest && (
-          <Suspense fallback={
-            <div className="py-24 flex justify-center items-center">
-              <div className="w-10 h-10 border-4 border-[#FF6B35]/20 border-t-[#FF6B35] rounded-full animate-spin" />
-            </div>
-          }>
-            <LandingRest 
-              handleCTA={handleCTA}
-              compPrice1={compPrice1}
-              compPrice2={compPrice2}
-              compPrice3={compPrice3}
-              setShowAuth={setShowAuth}
-            />
+          <Suspense fallback={<div className="py-24 flex justify-center items-center"><div className="w-10 h-10 border-4 border-[#FF6B35]/20 border-t-[#FF6B35] rounded-full animate-spin" /></div>}>
+            <LandingRest handleCTA={handleCTA} compPrice1={compPrice1} compPrice2={compPrice2} compPrice3={compPrice3} setShowAuth={setShowAuth} />
           </Suspense>
         )}
 
-        {/* Floating WhatsApp Button */}
         <a
           href="https://wa.me/5528999106887?text=Olá!%20Fiquei%20com%20dúvidas%20sobre%20o%20RED%201000%20PRO%20e%20gostaria%20de%20ajuda."
           target="_blank"
