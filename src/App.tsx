@@ -128,15 +128,32 @@ export default function App() {
   const [compPrice3, setCompPrice3] = useState(129.90);
 
   const videoRef = React.useRef<HTMLVideoElement>(null);
+  const mobileVideoRef = React.useRef<HTMLVideoElement>(null);
+  const [playMobileVideo, setPlayMobileVideo] = useState(false);
 
   // Attempt to play the video once the component mounts
   useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.play().catch(err => {
-        console.warn("Autoplay was prevented by the browser. Ready to play on user interaction.", err);
-      });
+    const video = videoRef.current;
+    if (video) {
+      if (window.innerWidth < 768) {
+        video.removeAttribute('autoplay');
+        video.pause();
+      } else {
+        video.play().catch(err => {
+          console.warn("Autoplay was prevented by the browser. Ready to play on user interaction.", err);
+        });
+      }
     }
   }, []);
+
+  // Ensure mobile video plays immediately upon user click / play enablement
+  useEffect(() => {
+    if (playMobileVideo && mobileVideoRef.current) {
+      mobileVideoRef.current.play().catch(err => {
+        console.warn("Falha ao iniciar vídeo no mobile", err);
+      });
+    }
+  }, [playMobileVideo]);
 
   // Dynamic viewers updater (updates every 38 seconds)
   useEffect(() => {
@@ -523,7 +540,7 @@ export default function App() {
               </div>
 
               {/* Video Mockup - Posicionado logo abaixo da frase/descrição */}
-              <div id="demo-video" className="relative max-w-[280px] sm:max-w-[310px] mx-auto xl:mx-0 rounded-[48px] border-[10px] border-neutral-900 bg-black shadow-[0_0_50px_rgba(0,255,136,0.12),0_25px_60px_-15px_rgba(0,0,0,0.8)] ring-1 ring-white/10 overflow-hidden group my-6 animate-fade-in">
+              <div id="demo-video" data-loading="lazy" className="relative max-w-[280px] sm:max-w-[310px] mx-auto xl:mx-0 rounded-[48px] border-[10px] border-neutral-900 bg-black shadow-[0_0_50px_rgba(0,255,136,0.12),0_25px_60px_-15px_rgba(0,0,0,0.8)] ring-1 ring-white/10 overflow-hidden group my-6 animate-fade-in">
                 
                 {/* Front Camera Notch / Speaker */}
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-neutral-900 rounded-b-2xl z-30 flex items-center justify-center">
@@ -533,23 +550,20 @@ export default function App() {
 
                 {/* Video Player Box with 9:16 aspect ratio */}
                 <div className="relative aspect-[9/16] bg-neutral-950 overflow-hidden" style={{ aspectRatio: '9/16' }}>
-                  <video 
-                    ref={videoRef}
-                    width={310}
-                    height={551}
-                    style={{ aspectRatio: '9/16', width: '100%', height: 'auto' }}
-                    className="w-full h-full object-cover relative z-10"
-                    autoPlay 
-                    muted 
-                    loop 
-                    playsInline 
-                    controls
-                    preload="auto"
-                    poster="/favicon.svg"
-                  >
-                    <source src="/video.mp4" type="video/mp4" />
-                    Seu navegador não suporta a reprodução deste vídeo.
-                  </video>
+                  
+                  <div className="video-container" style={{ position: 'relative', paddingBottom: '177.77%', height: 0, overflow: 'hidden', borderRadius: '12px' }}>
+                    <a href="https://youtube.com/shorts/qvIivSti-ZM" target="_blank" rel="noopener noreferrer" style={{ display: 'block', position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}>
+                      <img 
+                        src="https://img.youtube.com/vi/qvIivSti-ZM/maxresdefault.jpg"
+                        alt="Assistir vídeo"
+                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                        loading="lazy"
+                      />
+                      <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', backgroundColor: 'red', borderRadius: '50%', width: '64px', height: '64px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+                      </div>
+                    </a>
+                  </div>
                   
                   {/* Overlay reflection for realism */}
                   <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/[0.02] to-transparent pointer-events-none z-20" />
