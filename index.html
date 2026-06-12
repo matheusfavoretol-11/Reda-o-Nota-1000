@@ -67,249 +67,52 @@
     <meta name="description" content="A plataforma definitiva para alcançar a nota 1000 na redação no ENEM com IA e correções detalhadas.">
   </head>
   <body>
-    
     <div id="root">
-      <div class="relative overflow-hidden bg-[#050508] text-white min-h-screen">
+      <!-- Premium Dark Loader Screen (100% inline CSS to guarantee absolute zero FOUC/flicker) -->
+      <div style="background-color: #050508; color: #ffffff; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; font-family: system-ui, -apple-system, sans-serif; margin: 0; padding: 20px; box-sizing: border-box; position: relative; overflow: hidden; width: 100%;">
         
-        <!-- Top Bar -->
-        <div class="fixed top-0 left-0 w-full z-[60] bg-gradient-to-r from-[#FF6B6B] to-[#FF8E53] shadow-[0_4px_20px_rgba(255,107,107,0.25)] select-none border-b border-white/10 h-[36px] lg:h-[42px] flex items-center justify-between px-3 md:px-6">
-          <div class="absolute inset-0 bg-[#FF6B6B] opacity-10 pointer-events-none" />
-          <div class="max-w-7xl mx-auto flex items-center justify-between px-3 md:px-6 relative z-10 w-full">
-            <div class="flex-1 flex items-center justify-center gap-1.5 md:gap-3.5 text-center text-white">
-              <div class="flex items-center gap-1.5 md:gap-3.5 text-[10px] md:text-xs font-bold uppercase tracking-wider">
-                <span class="bg-red-700/50 text-white font-black text-[8px] md:text-[10px] px-1.5 py-0.5 rounded border border-white/10 tracking-wider flex items-center gap-1 shrink-0">
-                  ⚠️ ÚLTIMAS VAGAS
-                </span>
-                <span class="text-white/30 text-[10px] select-none">|</span>
-                <span class="text-white font-black flex items-center gap-1 text-[9px] md:text-xs whitespace-nowrap">
-                  👥 <span>23 PESSOAS VENDO AGORA</span>
-                </span>
-              </div>
-            </div>
+        <!-- Background Ambient Glow -->
+        <div style="position: absolute; top: -20%; left: -20%; width: 60%; height: 60%; background: radial-gradient(circle, rgba(255,107,53,0.12) 0%, rgba(255,107,53,0) 70%); border-radius: 50%; pointer-events: none;"></div>
+        <div style="position: absolute; bottom: -20%; right: -20%; width: 60%; height: 60%; background: radial-gradient(circle, rgba(0,255,136,0.1) 0%, rgba(0,255,136,0) 70%); border-radius: 50%; pointer-events: none;"></div>
+
+        <!-- Glowing Central Logo -->
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 24px; text-align: center; z-index: 10; max-width: 90%;">
+          <div style="background-color: #FF3366; padding: 18px; border-radius: 24px; box-shadow: 0 0 40px rgba(255, 51, 102, 0.45); display: flex; align-items: center; justify-content: center; width: 64px; height: 64px; box-sizing: border-box; animation: pulse 2s infinite ease-in-out;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/>
+              <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/>
+              <path d="M4 22h16"/>
+              <path d="M10 14.66V17c0 .55-.45 1-1 1H4v2h16v-2h-5c-.55 0-1-.45-1-1v-2.34"/>
+              <path d="M12 2a6 6 0 0 1 6 6s-.5 4-6 4H10H6s-.5-4 6-4Z"/>
+            </svg>
+          </div>
+          
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <h1 style="margin: 0; font-size: 32px; font-weight: 900; letter-spacing: -1.5px; text-transform: uppercase;">
+              RED <span style="color: #FF3366; font-style: italic;">1000</span> PRO
+            </h1>
+            <p style="margin: 0; font-size: 11px; font-weight: 800; letter-spacing: 3px; text-transform: uppercase; color: rgba(255, 255, 255, 0.5);">
+              Gabarite a redação no ENEM
+            </p>
+          </div>
+          
+          <!-- Smooth Loader indicator -->
+          <div style="width: 140px; height: 4px; background-color: rgba(255, 255, 255, 0.08); border-radius: 2px; overflow: hidden; margin-top: 12px; position: relative;">
+            <div style="position: absolute; top:0; left:0; height: 100%; width: 50%; background-color: #FF3366; border-radius: 2px; animation: loading-bar 1.5s infinite linear; box-shadow: 0 0 8px #FF3366;"></div>
           </div>
         </div>
 
-        <!-- Navigation Nav -->
-        <nav class="fixed top-[36px] lg:top-[42px] w-full z-50 transition-all duration-300 p-3 md:p-6 drop-shadow-lg">
-          <div class="max-w-7xl mx-auto flex justify-between items-center bg-white/5 backdrop-blur-3xl border border-white/10 p-3 md:p-4 px-4 md:px-8 rounded-2xl md:rounded-[32px]">
-            <div class="flex items-center gap-2 md:gap-3">
-              <div class="bg-[#FF3366] p-1.5 md:p-2 rounded-xl md:rounded-2xl rotate-3 shadow-[0_0_20px_rgba(255,0,102,0.4)]">
-                <!-- Trophy Icon SVG -->
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white w-4 h-4 md:w-5 md:h-5"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.45 1-1 1H4v2h16v-2h-5c-.55 0-1-.45-1-1v-2.34"/><path d="M12 2a6 6 0 0 1 6 6s-.5 4-6 4H10H6s-.5-4 6-4Z"/></svg>
-              </div>
-              <span class="font-sans font-black text-lg md:text-2xl tracking-tighter uppercase">RED <span class="text-[#FF3366] italic">1000</span> PRO</span>
-            </div>
-            
-            <div class="hidden lg:flex gap-8 text-[11px] font-black uppercase tracking-[0.2em] opacity-60">
-              <a href="#features" class="hover:text-[#FF3366] transition-colors">Método</a>
-              <a href="#ia" class="hover:text-[#FF3366] transition-colors">Malu IA</a>
-              <a href="#faq" class="hover:text-[#FF3366] transition-colors">Dúvidas</a>
-            </div>
-
-            <div class="flex items-center gap-2 md:gap-4">
-              <button class="flex items-center gap-1.5 md:gap-2 text-[9px] md:text-[10px] font-black uppercase tracking-widest opacity-60 hover:opacity-100 transition-opacity px-2">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> <span>Entrar</span>
-              </button>
-              
-              <button class="bg-white text-[#050508] px-4 md:px-8 py-2.5 md:py-3 rounded-full font-sans font-black text-[9px] md:text-xs uppercase tracking-widest hover:bg-[#D9FF00] transition-all hover:scale-105 active:scale-95 shadow-lg shadow-white/5 whitespace-nowrap">
-                QUERO MEU 1000
-              </button>
-            </div>
-          </div>
-        </nav>
-
-        <!-- Main Wrapper -->
-        <div class="relative z-10 bg-[#050508] text-white min-h-screen pt-[106px] lg:pt-[122px] pb-12 transition-[padding-top] duration-300 selection:bg-[#FF6B35]/30">
-          <!-- Glows -->
-          <div class="fixed inset-0 z-0 pointer-events-none">
-            <div class="absolute top-[-10%] left-[-10%] w-[70%] h-[70%] bg-[#FF6B35]/10 blur-[100px] md:blur-[180px] rounded-full" />
-            <div class="absolute bottom-[-10%] right-[-10%] w-[70%] h-[70%] bg-[#00FF88]/10 blur-[100px] md:blur-[180px] rounded-full" />
-          </div>
-
-          <!-- SEÇÃO 1: HERO -->
-          <section class="py-12 md:py-24 px-5 max-w-7xl mx-auto relative justify-center">
-            <div class="grid lg:grid-cols-12 gap-12 items-center">
-              
-              <!-- Left Column: Copy & CTA -->
-              <div class="lg:col-span-12 xl:col-span-7 space-y-8 text-center xl:text-left">
-                <!-- Proof Points -->
-                <div class="inline-flex flex-wrap items-center justify-center xl:justify-start gap-2.5 px-4 py-2 bg-white/[0.02] border border-white/5 rounded-full">
-                  <span class="text-[#00FF88] font-black text-xs">✅ 2.847 alunos</span>
-                  <span class="text-white/20">|</span>
-                  <span class="text-white font-bold text-xs">92% com 750+</span>
-                  <span class="text-white/20">|</span>
-                  <div class="flex items-center gap-1">
-                    <div class="flex text-amber-500 gap-0.5">
-                      <!-- 5 Star Icons -->
-                      <svg class="text-amber-400 fill-current w-[11px] h-[11px]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                      <svg class="text-amber-400 fill-current w-[11px] h-[11px]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                      <svg class="text-amber-400 fill-current w-[11px] h-[11px]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                      <svg class="text-amber-400 fill-current w-[11px] h-[11px]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                      <svg class="text-amber-400 fill-current w-[11px] h-[11px]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                    </div>
-                    <span class="text-xs font-black text-white">4,9/5 estrelas</span>
-                  </div>
-                </div>
-
-                <!-- Headline (Sugestão de Alta Conversão) -->
-                <h1 class="text-3xl sm:text-5xl md:text-6xl font-sans font-black leading-[1.05] tracking-tight text-white uppercase italic" style="font-size: clamp(1.875rem, 5vw, 3.75rem); line-height: 1.05;">
-                  SAIA DO ZERO E GARANTA <span class="text-[#00FF88]">900+ NA REDAÇÃO</span> DO ENEM EM APENAS 4 SEMANAS
-                </h1>
-
-                <!-- O que a pessoa recebe (O Mecanismo Único) -->
-                <p class="text-sm sm:text-lg text-white/90 leading-relaxed font-semibold max-w-2xl mx-auto xl:mx-0">
-                  Você não vai aprender gramática chata. Você vai dominar o <span class="text-[#00FF88]">Sistema de Blocos Lógicos</span>, onde você apenas encaixa suas ideias em uma estrutura "Coringa" que os corretores amam e serve para qualquer tema de 2026.
-                </p>
-
-                <!-- Title above cellphone mockup -->
-                <div class="text-center xl:text-left pt-4 -mb-2">
-                  <h3 class="text-base sm:text-lg font-sans font-black tracking-widest text-[#00FF88] uppercase inline-flex items-center gap-2">
-                    <span class="w-2 h-2 rounded-full bg-[#00FF88]" style="background-color: #00FF88;"></span>
-                    Como funciona por dentro
-                  </h3>
-                </div>
-
-                <!-- Video Mockup - Posicionado logo abaixo da frase/descrição -->
-                <div id="demo-video" class="relative max-w-[280px] sm:max-w-[310px] mx-auto xl:mx-0 rounded-[48px] border-[10px] border-neutral-900 bg-black shadow-[0_0_50px_rgba(0,255,136,0.12),0_25px_60px_-15px_rgba(0,0,0,0.8)] ring-1 ring-white/10 overflow-hidden group my-6" style="aspect-ratio: 9/16; width: 280px; height: auto; contain: layout size;">
-                  
-                  <!-- Front Camera Notch / Speaker -->
-                  <div class="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-neutral-900 rounded-b-2xl z-30 flex items-center justify-center">
-                    <div class="w-10 h-1 bg-neutral-800 rounded-full"></div>
-                    <div class="w-2 h-2 bg-neutral-950 rounded-full ml-2 border border-neutral-800/50"></div>
-                  </div>
-
-                  <!-- Video Player Box with 9:16 aspect ratio -->
-                  <div class="relative bg-neutral-950 overflow-hidden w-full h-full" style="aspect-ratio: 9/16;">
-                    <a href="https://youtube.com/shorts/qvIivSti-ZM" target="_blank" rel="noopener noreferrer" class="absolute inset-0 block w-full h-full">
-                      <img 
-                        src="https://img.youtube.com/vi/qvIivSti-ZM/hqdefault.jpg"
-                        alt="Assistir vídeo"
-                        style="width: 100%; height: 100%; object-fit: cover; aspect-ratio: 9/16;"
-                        width="310"
-                        height="551"
-                        loading="lazy"
-                      />
-                      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full w-16 h-16 flex items-center justify-center shadow-lg hover:bg-red-700 transition-all">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
-                      </div>
-                    </a>
-                    
-                    <!-- Overlay reflection for realism -->
-                    <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-white/[0.02] to-transparent pointer-events-none z-20"></div>
-                  </div>
-
-                  <!-- Home indicator bar -->
-                  <div class="absolute bottom-1 w-24 h-1 bg-white/20 rounded-full left-1/2 -translate-x-1/2 z-30 pointer-events-none"></div>
-                </div>
-
-                <!-- 3 Benefícios Principais -->
-                <div class="space-y-3 max-w-xl mx-auto xl:mx-0 text-left bg-white/[0.01] border border-white/5 p-4 rounded-2xl select-none">
-                  <div class="flex items-center gap-2.5 text-xs sm:text-sm font-bold text-white/95">
-                    <span class="text-[#00FF88] shrink-0 text-base">⚡</span> <span>Malu IA: Corretora automática em 30 Segundos</span>
-                  </div>
-                  <div class="flex items-center gap-2.5 text-xs sm:text-sm font-bold text-white/95">
-                    <span class="text-[#00FF88] shrink-0 text-base">📚</span> <span>Sistema de Blocos Lógicos com Esqueletos Coringas Prontos</span>
-                  </div>
-                  <div class="flex items-center gap-2.5 text-xs sm:text-sm font-bold text-white/95">
-                    <span class="text-[#00FF88] shrink-0 text-base">🏆</span> <span>Exemplos Reais Comentados Nota 1000 de Alunos Reais</span>
-                  </div>
-                </div>
-
-                <!-- CTA Button + Scarcity Closing Timer -->
-                <div class="space-y-4 pt-2 text-center xl:text-left">
-                  <div class="inline-flex flex-col sm:flex-row items-center gap-3 bg-[#FF6B35]/15 border border-[#FF6B35]/20 p-3 rounded-2xl w-fit mb-2">
-                    <span class="text-[11px] font-black uppercase text-[#FF6B35]">🔥 Ganhe correções ilimitadas! Oferta por tempo limitado:</span>
-                    <div class="shrink-0">
-                      <span class="font-mono font-black text-xs text-[#FF6B35] bg-black/40 px-2.5 py-1 rounded-md border border-[#FF6B35]/20 inline-block min-w-[70px] text-center">14:32:45</span>
-                    </div>
-                  </div>
-
-                  <button class="w-full sm:w-auto bg-[#FF6B35] text-white px-10 py-5 rounded-2xl text-lg font-sans font-black tracking-wider uppercase transition-all shadow-[0_15px_40px_rgba(255,107,53,0.35)] flex items-center justify-center gap-3 mx-auto xl:mx-0 border-b-4 border-black/30 cursor-pointer">
-                    QUERO MINHA REDAÇÃO NOTA 1000
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-                  </button>
-                  
-                  <div class="flex flex-col sm:flex-row items-center justify-center xl:justify-start gap-4">
-                    <p class="text-[#00FF88] text-xs font-extrabold uppercase tracking-wider">
-                      ⏰ Apenas 7 vagas restantes nesta oferta
-                    </p>
-                    <span class="hidden sm:inline text-white/10 text-xs">|</span>
-                    <div class="flex items-center gap-1.5 text-[#00FF88] font-sans font-black text-[11px] uppercase tracking-wider">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#00FF88]"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-                      <span>Garantia de 7 Dias Incondicional</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Right Column: Visuals -->
-              <div class="lg:col-span-12 xl:col-span-5 space-y-6">
-                <!-- Ebook Mockup Cover Image (LCP optimized) -->
-                <div class="relative max-w-[280px] sm:max-w-[320px] mx-auto xl:mx-0 rounded-3xl overflow-hidden shadow-2xl border border-white/10 group mb-6 transition-transform duration-300" style="aspect-ratio: 350/490; width: 100%; contain: layout size;">
-                  <img 
-                    src="/guia_do_zero.svg" 
-                    alt="Guia do Zero ao 1000 Redação ENEM v3.0" 
-                    width="350" 
-                    height="490"
-                    fetchpriority="high"
-                    class="w-full h-auto object-cover"
-                    style="aspect-ratio: 350/490;"
-                    referrerpolicy="no-referrer"
-                  />
-                </div>
-
-                <!-- Evolution Badges -->
-                <div class="border border-white/5 backdrop-blur-3xl p-6 rounded-3xl bg-[#151515]/90 space-y-4 shadow-xl">
-                  <p class="text-[11px] font-black uppercase text-[#00FF88] tracking-widest flex items-center gap-1.5">
-                    🛡️ EVOLUÇÃO COMPROVADA
-                  </p>
-                  <div class="space-y-3">
-                    <div class="flex justify-between items-center">
-                      <span class="text-xs font-black uppercase text-white/50">Antes do programa</span>
-                      <span class="bg-red-500/15 text-red-400 font-extrabold text-[10px] px-2.5 py-0.5 rounded-full border border-red-500/10">Nota Média: 550</span>
-                    </div>
-                    <div class="h-2 w-full bg-white/5 rounded-full overflow-hidden">
-                      <div class="h-full bg-red-400 rounded-full" style="width: 55%" />
-                    </div>
-
-                    <div class="flex justify-between items-center pt-3 border-t border-white/5">
-                      <span class="text-xs font-black uppercase text-[#00FF88]">Depois do RED 1000 PRO</span>
-                      <span class="bg-[#00FF88]/15 text-[#00FF88] font-extrabold text-[10px] px-2.5 py-0.5 rounded-full border border-[#00FF88]/10">Média: 900+</span>
-                    </div>
-                    <div class="h-2 w-full bg-white/5 rounded-full overflow-hidden">
-                      <div class="h-full bg-[#00FF88] rounded-full" style="width: 88%" />
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Correction mockup -->
-                <div class="border border-white/5 backdrop-blur-3xl p-5 rounded-3xl bg-[#121212] space-y-3 shadow-2xl relative overflow-hidden">
-                  <div class="flex items-center justify-between border-b border-white/5 pb-2.5">
-                    <div class="flex items-center gap-2">
-                      <div class="w-2.5 h-2.5 rounded-full bg-[#00FF88]" />
-                      <span class="text-[10px] font-black uppercase text-white/60 tracking-wider">Malu IA • Corretora v3.0</span>
-                    </div>
-                    <span class="text-[9px] font-bold text-white/30 font-mono">ENEM 2026</span>
-                  </div>
-                  <p class="text-xs text-white/50 italic leading-relaxed">
-                    "O consumismo na sociedade contemporânea, segundo Bauman..."
-                  </p>
-                  <div class="p-3 bg-[#1A1A1A] rounded-xl border border-white/5 space-y-2">
-                    <p class="text-xs font-bold text-white leading-normal">
-                      💡 <span class="text-[#00FF88]">Análise concluída em 30 segundos!</span> Excelente uso da sociologia. Corrija o conectivo do D2 para garantir nota máxima na C4.
-                  </p>
-                    <div class="flex gap-1.5">
-                      <span class="text-[8px] font-black bg-[#FF6B35]/10 text-[#FF6B35] px-2 py-0.5 rounded uppercase">Erro Identificado</span>
-                      <span class="text-[8px] font-black bg-[#00FF88]/10 text-[#00FF88] px-2 py-0.5 rounded uppercase font-mono">Nota Projetada: 940+</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-            </div>
-          </section>
-        </div>
-
+        <style>
+          @keyframes pulse {
+            0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.95; box-shadow: 0 0 30px rgba(255, 51, 102, 0.4); }
+            50% { transform: scale(1.06) rotate(3deg); opacity: 1; box-shadow: 0 0 50px rgba(255, 51, 102, 0.65); }
+          }
+          @keyframes loading-bar {
+            0% { left: -50%; width: 30%; }
+            50% { width: 50%; }
+            100% { left: 100%; width: 30%; }
+          }
+        </style>
       </div>
     </div>
     <script type="module" src="/src/main.tsx" defer></script>
