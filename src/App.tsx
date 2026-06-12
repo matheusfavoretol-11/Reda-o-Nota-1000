@@ -475,7 +475,7 @@ export default function App() {
                 <div className="relative bg-neutral-950 overflow-hidden w-full h-full" style={{ aspectRatio: '9/16' }}>
                   <a href="https://youtube.com/shorts/qvIivSti-ZM" target="_blank" rel="noopener noreferrer" className="absolute inset-0 block w-full h-full">
                     <img 
-                      src="https://img.youtube.com/vi/qvIivSti-ZM/hqdefault.jpg"
+                      src="/thumbnail.jpg"
                       alt="Assistir vídeo"
                       style={{ width: '100%', height: '100%', objectFit: 'cover', aspectRatio: '9/16' }}
                       width={310}
