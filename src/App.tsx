@@ -85,7 +85,7 @@ export default function App() {
   const [activeTab, setActiveTab] = useState<'overview' | 'ebook' | 'ia' | 'repertorios' | 'redacoes' | 'exercicios'>('overview');
   const [showAuth, setShowAuth] = useState<'login' | 'signup' | null>(null);
   const [isVerifying, setIsVerifying] = useState(false);
-  const [mountRest, setMountRest] = useState(false);
+  const [mountRest, setMountRest] = useState(true);
 
   // Progressive hydration: delay rendering of the rest of the landing page on mobile for absolute optimal FCP/LCP speed
   useEffect(() => {
@@ -418,10 +418,28 @@ export default function App() {
         <LazyToaster position="bottom-right" theme="dark" />
       </Suspense>
       
+      {/* Top Bar matching static index.html layout */}
+      <div className="fixed top-0 left-0 w-full z-[60] bg-gradient-to-r from-[#FF6B6B] to-[#FF8E53] shadow-[0_4px_20px_rgba(255,107,107,0.25)] select-none border-b border-white/10 h-[36px] lg:h-[42px] flex items-center justify-between px-3 md:px-6">
+        <div className="absolute inset-0 bg-[#FF6B6B] opacity-10 pointer-events-none" />
+        <div className="max-w-7xl mx-auto flex items-center justify-between px-3 md:px-6 relative z-10 w-full">
+          <div className="flex-1 flex items-center justify-center gap-1.5 md:gap-3.5 text-center text-white">
+            <div className="flex items-center gap-1.5 md:gap-3.5 text-[10px] md:text-xs font-bold uppercase tracking-wider">
+              <span className="bg-red-700/50 text-white font-black text-[8px] md:text-[10px] px-1.5 py-0.5 rounded border border-white/10 tracking-wider flex items-center gap-1 shrink-0">
+                ⚠️ ÚLTIMAS VAGAS
+              </span>
+              <span className="text-white/30 text-[10px] select-none">|</span>
+              <span className="text-white font-black flex items-center gap-1 text-[9px] md:text-xs whitespace-nowrap">
+                👥 <span>{viewers} PESSOAS VENDO AGORA</span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <Nav 
         onAction={handleCTA} 
         onLogin={() => setShowAuth('login')} 
-        topOffset="top-0" 
+        topOffset="top-[36px] lg:top-[42px]" 
       />
       
       <Suspense fallback={null}>
@@ -451,7 +469,7 @@ export default function App() {
       </div>
 
       {/* --- UNIFIED HIGH-CONVERTING LANDING PAGE (BG #050508) --- */}
-      <div className="relative z-10 bg-bg-dark text-white min-h-screen pt-24 pb-12 selection:bg-[#FF6B35]/30">
+      <div className="relative z-10 bg-bg-dark text-white min-h-screen pt-[106px] lg:pt-[122px] pb-12 selection:bg-[#FF6B35]/30">
         
         {/* SEÇÃO 1: HERO (3-5 segundos) */}
         <section className="py-12 md:py-24 px-5 max-w-7xl mx-auto relative justify-center">
@@ -501,9 +519,12 @@ export default function App() {
                 </div>
 
                 {/* Video Player Box with 9:16 aspect ratio */}
-                <div className="relative aspect-[9/16] bg-neutral-950 overflow-hidden">
+                <div className="relative aspect-[9/16] bg-neutral-950 overflow-hidden" style={{ aspectRatio: '9/16' }}>
                   <video 
                     ref={videoRef}
+                    width={310}
+                    height={551}
+                    style={{ aspectRatio: '9/16', width: '100%', height: 'auto' }}
                     className="w-full h-full object-cover relative z-10"
                     autoPlay 
                     muted 
