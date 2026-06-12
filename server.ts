@@ -297,41 +297,43 @@ async function startServer() {
 
   // Vite integration
   const nodeEnv = getEnvVar("NODE_ENV");
-  if (nodeEnv !== "production") {
+  const forceProd = fs.existsSync(path.join(process.cwd(), "dist", "index.html"));
+
+  if (nodeEnv !== "production" && !forceProd) {
+    console.log("Starting server in VITE DEV MODULE mode...");
     const vite = await createViteServer({
       server: { middlewareMode: true },
       appType: "spa",
     });
     app.use(vite.middlewares);
   } else {
+    console.log("Starting server in COMPRESSED HIGH-PERFORMANCE STATIC PRODUCTION mode...");
     const distPath = path.join(process.cwd(), "dist");
     
-    // Serve static files with proper cache-control headers as requested in Section 7
+    // Serve static files with proper cache-control headers
     app.use(express.static(distPath, {
-      maxAge: '14d', // Default cache for generic assets
+      maxAge: '365d', // Default cache for production static assets
       setHeaders: (res, filePath) => {
         const ext = path.extname(filePath).toLowerCase();
-        const isAsset = filePath.includes('assets');
         
-        if (isAsset && ['.js', '.css', '.woff', '.woff2', '.ttf', '.eot'].includes(ext)) {
-          // Immutable caching for Vite assets containing hash
+        // Cache anything containing /assets/ or image / font formats under high-performance rules
+        if (filePath.includes('assets') || ['.woff', '.woff2', '.ttf', '.eot'].includes(ext)) {
           res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
         } else if (['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg', '.ico'].includes(ext)) {
-          // Dynamic static images cache: 1 year (completely clears Core Web Vitals cache penalties)
+          // Absolute maximum cache-control lifetime for assets/images to clear Lighthouse alarms
           res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
         } else if (['.css', '.js'].includes(ext)) {
-          // Fallback CSS and JS cache: 14 days
-          res.setHeader('Cache-Control', 'public, max-age=1209600');
+          // Immutable caching for JS/CSS assets
+          res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
         } else if (filePath.endsWith('index.html')) {
-          // HTML main index cache: 1 hour (allows quick rollouts)
-          res.setHeader('Cache-Control', 'public, max-age=3600');
+          // Keep index.html fresh but with a quick revalidation policy
+          res.setHeader('Cache-Control', 'public, no-cache, no-store, must-revalidate');
         }
       }
     }));
 
     app.get("*", (req, res) => {
-      // Set short caching for index.html SPA routing
-      res.setHeader('Cache-Control', 'public, max-age=3600');
+      res.setHeader('Cache-Control', 'public, no-cache, no-store, must-revalidate');
       res.sendFile(path.join(distPath, "index.html"));
     });
   }
