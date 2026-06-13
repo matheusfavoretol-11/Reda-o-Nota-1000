@@ -1,149 +1,135 @@
 <!doctype html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
-    <!-- Preload critical Hero Image (Guia do Zero Cover SVG) for Instant LCP -->
-    <link rel="preload" as="image" href="/guia_do_zero.svg" fetchpriority="high" />
-    <link rel="preload" as="image" href="/thumbnail.jpg" fetchpriority="high" />
-
-    <!-- Preconnect to external resources to speed up network dependencies -->
-    <link rel="preconnect" href="https://img.youtube.com" crossorigin />
-    <link rel="preconnect" href="https://connect.facebook.net" crossorigin />
-
-    <!-- Critical Above-the-fold Inline CSS to completely prevent white screen flickers on slow mobile devices -->
-    <style>
-      html, body {
-        background-color: #050508;
-        color: #ffffff;
-        margin: 0;
-        padding: 0;
-        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-        text-rendering: optimizeLegibility;
-        -webkit-font-smoothing: antialiased;
-        scroll-behavior: smooth;
-      }
-      #root {
-        background-color: #050508;
-        min-height: 100vh;
-      }
-      .critical-top-bar {
-        background: linear-gradient(90deg, #FF6B6B 0%, #FF8E53 100%);
-        box-shadow: 0 4px 20px rgba(255, 107, 107, 0.25);
-        height: 36px;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        z-index: 60;
-      }
-      @media (min-width: 1024px) {
-        .critical-top-bar {
-          height: 42px;
-        }
-      }
-    </style>
-
-    <script>
-      window.addEventListener('load', function() {
-        fetch('/api/config/supabase')
-          .then(function(res) {
-            if (res.ok) return res.json();
-            return null;
-          })
-          .then(function(data) {
-            if (data && data.url && data.key) {
-              window.__SUPABASE_DYNAMIC_CONFIG__ = data;
-            }
-          })
-          .catch(function() {});
-      });
-    </script>
-    
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <title>RED 1000 PRO | Gabarite a Redação no ENEM</title>
-    <meta name="description" content="A plataforma definitiva para alcançar a nota 1000 na redação no ENEM com IA e correções detalhadas.">
-  </head>
-  <body>
-    <div id="root">
-      <!-- Premium Dark Loader Screen (100% inline CSS to guarantee absolute zero FOUC/flicker) -->
-      <div style="background-color: #050508; color: #ffffff; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; font-family: system-ui, -apple-system, sans-serif; margin: 0; padding: 20px; box-sizing: border-box; position: relative; overflow: hidden; width: 100%;">
-        
-        <!-- Background Ambient Glow -->
-        <div style="position: absolute; top: -20%; left: -20%; width: 60%; height: 60%; background: radial-gradient(circle, rgba(255,107,53,0.12) 0%, rgba(255,107,53,0) 70%); border-radius: 50%; pointer-events: none;"></div>
-        <div style="position: absolute; bottom: -20%; right: -20%; width: 60%; height: 60%; background: radial-gradient(circle, rgba(0,255,136,0.1) 0%, rgba(0,255,136,0) 70%); border-radius: 50%; pointer-events: none;"></div>
-
-        <!-- Glowing Central Logo -->
-        <div style="display: flex; flex-direction: column; align-items: center; gap: 24px; text-align: center; z-index: 10; max-width: 90%;">
-          <div style="background-color: #FF3366; padding: 18px; border-radius: 24px; box-shadow: 0 0 40px rgba(255, 51, 102, 0.45); display: flex; align-items: center; justify-content: center; width: 64px; height: 64px; box-sizing: border-box; animation: pulse 2s infinite ease-in-out;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/>
-              <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/>
-              <path d="M4 22h16"/>
-              <path d="M10 14.66V17c0 .55-.45 1-1 1H4v2h16v-2h-5c-.55 0-1-.45-1-1v-2.34"/>
-              <path d="M12 2a6 6 0 0 1 6 6s-.5 4-6 4H10H6s-.5-4 6-4Z"/>
-            </svg>
-          </div>
-          
-          <div style="display: flex; flex-direction: column; gap: 8px;">
-            <h1 style="margin: 0; font-size: 32px; font-weight: 900; letter-spacing: -1.5px; text-transform: uppercase;">
-              RED <span style="color: #FF3366; font-style: italic;">1000</span> PRO
-            </h1>
-            <p style="margin: 0; font-size: 11px; font-weight: 800; letter-spacing: 3px; text-transform: uppercase; color: rgba(255, 255, 255, 0.5);">
-              Gabarite a redação no ENEM
-            </p>
-          </div>
-          
-          <!-- Smooth Loader indicator -->
-          <div style="width: 140px; height: 4px; background-color: rgba(255, 255, 255, 0.08); border-radius: 2px; overflow: hidden; margin-top: 12px; position: relative;">
-            <div style="position: absolute; top:0; left:0; height: 100%; width: 50%; background-color: #FF3366; border-radius: 2px; animation: loading-bar 1.5s infinite linear; box-shadow: 0 0 8px #FF3366;"></div>
-          </div>
-        </div>
-
-        <style>
-          @keyframes pulse {
-            0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.95; box-shadow: 0 0 30px rgba(255, 51, 102, 0.4); }
-            50% { transform: scale(1.06) rotate(3deg); opacity: 1; box-shadow: 0 0 50px rgba(255, 51, 102, 0.65); }
-          }
-          @keyframes loading-bar {
-            0% { left: -50%; width: 30%; }
-            50% { width: 50%; }
-            100% { left: 100%; width: 30%; }
-          }
-        </style>
-      </div>
-    </div>
-    <script type="module" src="/src/main.tsx" defer></script>
-
-    <!-- Highly optimized, non-blocking Meta Pixel Loading to achieve 90+ Lighthouse score (Solution #4) -->
-    <script>
-      function loadPixel() {
-        /* Postpone external pixel loading using requestIdleCallback to guarantee 0ms Main Thread Block during load metrics */
-        var runWhenIdle = window.requestIdleCallback || window.requestAnimationFrame || function(cb) { setTimeout(cb, 50); };
-        runWhenIdle(function() {
-          setTimeout(function() {
-            (function(f,b,e,v,n,t,s){
-              if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-              n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-              if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-              n.queue=[];t=b.createElement(e);t.async=!0;
-              t.src=v;s=b.getElementsByTagName(e)[0];
-              s.parentNode.insertBefore(t,s)
-            })(window, document,'script','https://connect.facebook.net/en_US/fbevents.js');
-            fbq('init', '1480419783413075');
-            fbq('track', 'PageView');
-          }, 3800); /* 3.8s buffer allows Lighthouse/Core Web Vitals telemetry to record pristine FCP/LCP before pixel loads */
-        });
-      }
-
-      if (document.readyState === 'complete') {
-        loadPixel();
-      } else {
-        window.addEventListener('load', loadPixel);
-      }
-    </script>
-    <noscript><img loading="lazy" height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1480419783413075&ev=PageView&noscript=1" /></noscript>
-  </body>
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<!-- Preload critical Hero Image (Guia do Zero Cover SVG) for Instant LCP -->
+<link rel="preload" as="image" href="/guia_do_zero.svg" fetchpriority="high" />
+<link rel="preload" as="image" href="/thumbnail.jpg" fetchpriority="high" />
+<!-- Preconnect to external resources to speed up network dependencies -->
+<link rel="preconnect" href="https://img.youtube.com" crossorigin />
+<link rel="preconnect" href="https://connect.facebook.net" crossorigin />
+<!-- Critical Above-the-fold Inline CSS to completely prevent white screen flickers on slow mobile devices -->
+<style>
+html, body {
+background-color: #050508;
+color: #ffffff;
+margin: 0;
+padding: 0;
+font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+text-rendering: optimizeLegibility;
+-webkit-font-smoothing: antialiased;
+scroll-behavior: smooth;
+}
+#root {
+background-color: #050508;
+min-height: 100vh;
+}
+.critical-top-bar {
+background: linear-gradient(90deg, #FF6B6B 0%, #FF8E53 100%);
+box-shadow: 0 4px 20px rgba(255, 107, 107, 0.25);
+height: 36px;
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+z-index: 60;
+}
+@media (min-width: 1024px) {
+.critical-top-bar {
+height: 42px;
+}
+}
+</style>
+<script>
+window.addEventListener('load', function() {
+fetch('/api/config/supabase')
+.then(function(res) {
+if (res.ok) return res.json();
+return null;
+})
+.then(function(data) {
+if (data && data.url && data.key) {
+window.__SUPABASE_DYNAMIC_CONFIG__ = data;
+}
+})
+.catch(function() {});
+});
+</script>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<title>RED 1000 PRO | Gabarite a Redação no ENEM</title>
+<meta name="description" content="A plataforma definitiva para alcançar a nota 1000 na redação no ENEM com IA e correções detalhadas.">
+</head>
+<body>
+<div id="root">
+<!-- Premium Dark Loader Screen (100% inline CSS to guarantee absolute zero FOUC/flicker) -->
+<div style="background-color: #050508; color: #ffffff; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; font-family: system-ui, -apple-system, sans-serif; margin: 0; padding: 20px; box-sizing: border-box; position: relative; overflow: hidden; width: 100%;">
+<!-- Background Ambient Glow -->
+<div style="position: absolute; top: -20%; left: -20%; width: 60%; height: 60%; background: radial-gradient(circle, rgba(255,107,53,0.12) 0%, rgba(255,107,53,0) 70%); border-radius: 50%; pointer-events: none;"></div>
+<div style="position: absolute; bottom: -20%; right: -20%; width: 60%; height: 60%; background: radial-gradient(circle, rgba(0,255,136,0.1) 0%, rgba(0,255,136,0) 70%); border-radius: 50%; pointer-events: none;"></div>
+<!-- Glowing Central Logo -->
+<div style="display: flex; flex-direction: column; align-items: center; gap: 24px; text-align: center; z-index: 10; max-width: 90%;">
+<div style="background-color: #FF3366; padding: 18px; border-radius: 24px; box-shadow: 0 0 40px rgba(255, 51, 102, 0.45); display: flex; align-items: center; justify-content: center; width: 64px; height: 64px; box-sizing: border-box; animation: pulse 2s infinite ease-in-out;">
+<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+<path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/>
+<path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/>
+<path d="M4 22h16"/>
+<path d="M10 14.66V17c0 .55-.45 1-1 1H4v2h16v-2h-5c-.55 0-1-.45-1-1v-2.34"/>
+<path d="M12 2a6 6 0 0 1 6 6s-.5 4-6 4H10H6s-.5-4 6-4Z"/>
+</svg>
+</div>
+<div style="display: flex; flex-direction: column; gap: 8px;">
+<h1 style="margin: 0; font-size: 32px; font-weight: 900; letter-spacing: -1.5px; text-transform: uppercase;">
+RED <span style="color: #FF3366; font-style: italic;">1000</span> PRO
+</h1>
+<p style="margin: 0; font-size: 11px; font-weight: 800; letter-spacing: 3px; text-transform: uppercase; color: rgba(255, 255, 255, 0.5);">
+Gabarite a redação no ENEM
+</p>
+</div>
+<!-- Smooth Loader indicator -->
+<div style="width: 140px; height: 4px; background-color: rgba(255, 255, 255, 0.08); border-radius: 2px; overflow: hidden; margin-top: 12px; position: relative;">
+<div style="position: absolute; top:0; left:0; height: 100%; width: 50%; background-color: #FF3366; border-radius: 2px; animation: loading-bar 1.5s infinite linear; box-shadow: 0 0 8px #FF3366;"></div>
+</div>
+</div>
+<style>
+@keyframes pulse {
+0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.95; box-shadow: 0 0 30px rgba(255, 51, 102, 0.4); }
+50% { transform: scale(1.06) rotate(3deg); opacity: 1; box-shadow: 0 0 50px rgba(255, 51, 102, 0.65); }
+}
+@keyframes loading-bar {
+0% { left: -50%; width: 30%; }
+50% { width: 50%; }
+100% { left: 100%; width: 30%; }
+}
+</style>
+</div>
+</div>
+<script type="module" src="/src/main.tsx" defer></script>
+<!-- Meta Pixel - dispara em 300ms após o load para não perder usuários -->
+<script>
+function loadPixel() {
+var runWhenIdle = window.requestIdleCallback || window.requestAnimationFrame || function(cb) { setTimeout(cb, 50); };
+runWhenIdle(function() {
+setTimeout(function() {
+(function(f,b,e,v,n,t,s){
+if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)
+})(window, document,'script','https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1480419783413075');
+fbq('track', 'PageView');
+}, 300); /* CORRIGIDO: era 3800ms, agora 300ms — pixel dispara antes do usuário sair */
+});
+}
+if (document.readyState === 'complete') {
+loadPixel();
+} else {
+window.addEventListener('load', loadPixel);
+}
+</script>
+<noscript><img loading="lazy" height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1480419783413075&ev=PageView&noscript=1" /></noscript>
+</body>
 </html>
-
