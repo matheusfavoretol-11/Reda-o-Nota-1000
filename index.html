@@ -3,199 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Redação Nota Mil - Inteligência Artificial para o ENEM</title>
-    
-    <!-- 1. PRELOAD DA CAPA DO VÍDEO (LCP FIX) - Deve ser a primeira coisa! -->
-    <link rel="preload" as="image" href="https://i.ytimg.com/vi/qvIivSti-ZM/hqdefault.jpg" fetchpriority="high">
-
-    <!-- 2. FAVICON -->
+    <title>Redação Nota Mil</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
-
-    <!-- 3. CSS E DESIGN MÍNIMO (Para a tela não ficar branca FCP FIX) -->
-    <style>
-        body { background-color: #0b0f19; color: #f1f5f9; margin: 0; font-family: system-ui, -apple-system, sans-serif; }
-        .glass-panel { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.05); }
-        .glow-button { box-shadow: 0 0 25px rgba(99, 102, 241, 0.4); }
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #0b0f19; }
-        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 10px; }
-    </style>
-
-    <!-- 4. TAILWIND CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = { theme: { extend: { fontFamily: { sans: ['Inter', 'sans-serif'], }, } } }
-    </script>
-
-    <!-- 5. FONTES ASSÍNCRONAS (Não bloqueia a tela - FCP FIX) -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" media="print" onload="this.media='all'">
-    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap"></noscript>
-
-    <!-- 6. GOOGLE TAG MANAGER (Carrega depois do visual crítico) -->
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-MW5ZDR9T');</script>
     
-    <!-- 7. META PIXEL -->
+    <!-- CSS CRÍTICO EMBUTIDO (Elimina tempo de download) -->
+    <style>
+        body { background-color: #0b0f19; color: #f1f5f9; margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+        .glass-panel { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.05); }
+        .glow-button { box-shadow: 0 0 20px rgba(99, 102, 241, 0.3); }
+    </style>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- GTM E PIXEL (Adiados em 1 segundo para não travar o carregamento do conteúdo) -->
     <script>
-    !function(f,b,e,v,n,t,s)
-    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-    n.queue=[];t=b.createElement(e);t.async=!0;
-    t.src=v;s=b.getElementsByTagName(e)[0];
-    s.parentNode.insertBefore(t,s)}(window, document,'script',
-    'https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', '1480419783413075');
-    fbq('track', 'PageView');
+        setTimeout(function(){
+            (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s);j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-MW5ZDR9T');
+            !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window, document,'script','https://connect.facebook.net/en_US/fbevents.js');
+            fbq('init', '1480419783413075'); fbq('track', 'PageView');
+        }, 1000);
     </script>
-    <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1480419783413075&ev=PageView&noscript=1"/></noscript>
 </head>
 
-<body class="antialiased min-h-screen flex flex-col relative overflow-x-hidden pt-20">
-    <!-- GTM NOSCRIPT -->
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MW5ZDR9T" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-
-    <!-- CABEÇALHO -->
-    <header class="fixed top-0 left-0 w-full bg-[#0b0f19]/95 backdrop-blur-md border-b border-gray-800/60 z-50">
-        <div class="max-w-6xl mx-auto px-5 py-3 flex justify-between items-center">
-            <div class="text-xl font-black tracking-tighter text-white">
-                Nota<span class="text-indigo-500">Mil</span>.
-            </div>
-            <div class="flex items-center space-x-4">
-                <a href="javascript:void(0)" onclick="openLoginModal()" class="text-sm font-semibold text-gray-300 hover:text-white">Entrar</a>
-                <a href="https://pay.kiwify.com.br/AhSL8x0" class="bg-indigo-600 text-white text-sm font-bold py-2 px-4 rounded-lg">Comprar</a>
-            </div>
+<body class="pt-20">
+    <header class="fixed top-0 w-full bg-[#0b0f19]/95 backdrop-blur-md border-b border-gray-800 z-50">
+        <div class="max-w-4xl mx-auto px-5 py-3 flex justify-between items-center">
+            <div class="font-black text-xl">Nota<span class="text-indigo-500">Mil</span></div>
+            <a href="https://pay.kiwify.com.br/AhSL8x0" class="bg-indigo-600 text-white text-xs font-bold py-2 px-4 rounded-lg">Comprar</a>
         </div>
     </header>
 
-    <main class="flex-grow flex flex-col items-center px-5 py-8 max-w-5xl mx-auto w-full">
+    <main class="flex flex-col items-center px-5 py-8 max-w-lg mx-auto">
+        <h1 class="text-3xl font-extrabold text-center mb-6">Redação corrigida em <span class="text-indigo-400">30 Segundos.</span></h1>
+
+        <!-- VÍDEO LITE (Prioridade máxima de carregamento) -->
+        <div class="w-full aspect-[9/16] bg-black rounded-3xl overflow-hidden border-4 border-indigo-500/20 mb-10 cursor-pointer relative" 
+             onclick="this.innerHTML=`<iframe class='absolute w-full h-full' src='https://www.youtube.com/embed/qvIivSti-ZM?autoplay=1' frameborder='0' allowfullscreen></iframe>`">
+            <img src="https://i.ytimg.com/vi/qvIivSti-ZM/hqdefault.jpg" class="w-full h-full object-cover" fetchpriority="high">
+            <div class="absolute inset-0 flex items-center justify-center"><div class="w-16 h-16 bg-indigo-600 rounded-full flex items-center justify-center text-white">▶</div></div>
+        </div>
+
+        <a href="https://pay.kiwify.com.br/AhSL8x0" class="w-full bg-indigo-600 text-white text-lg font-bold py-4 rounded-xl text-center mb-10 shadow-xl">Quero minha redação 1000</a>
         
-        <!-- HERO -->
-        <h1 class="text-[32px] md:text-5xl font-extrabold tracking-tight leading-tight mb-4 text-center mt-2">
-            A sua redação corrigida nas 5 competências do ENEM em <span class="text-indigo-400">30 Segundos.</span>
-        </h1>
-        <p class="text-base text-gray-400 mb-8 max-w-2xl font-light text-center mx-auto leading-relaxed">
-            Nossa Inteligência Artificial analisa o seu texto com a mesma precisão da banca avaliadora oficial.
-        </p>
-
-        <!-- 1. VÍDEO LITE EMBED (LCP ELEMENT - OTIMIZADO PARA PRIORIDADE MÁXIMA) -->
-        <div class="w-full max-w-[340px] mx-auto bg-gray-900 rounded-3xl overflow-hidden shadow-2xl border-4 border-indigo-500/20 mb-12 relative cursor-pointer group" 
-             onclick="this.innerHTML=`<iframe class='absolute top-0 left-0 w-full h-full' src='https://www.youtube.com/embed/qvIivSti-ZM?autoplay=1&playsinline=1' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe>`">
-            
-            <div class="absolute -top-4 -right-4 bg-indigo-600 text-white text-[10px] font-bold px-3 py-1 rounded-full z-20 animate-pulse uppercase tracking-wider shadow-lg">Veja na Prática</div>
-            
-            <div class="aspect-[9/16] bg-black relative flex items-center justify-center">
-                <!-- CAPA COM FETCHPRIORITY E EAGER LOADING -->
-                <img src="https://i.ytimg.com/vi/qvIivSti-ZM/hqdefault.jpg" alt="Capa Demonstração" class="absolute w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" fetchpriority="high" loading="eager" decoding="sync">
-                
-                <!-- Botão Play Falso -->
-                <div class="w-16 h-16 bg-indigo-600 rounded-full flex items-center justify-center z-10 shadow-[0_0_20px_rgba(79,70,229,0.5)] transform group-hover:scale-110 transition-transform">
-                    <svg class="w-8 h-8 text-white ml-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path></svg>
-                </div>
-            </div>
-        </div>
-
-        <!-- 2. SIMULAÇÃO DE CHAT -->
-        <div class="w-full max-w-4xl mx-auto mb-16 pt-8 border-t border-gray-800">
-            <h2 class="text-2xl font-extrabold mb-2 text-center tracking-tight">Veja a correção <span class="text-indigo-400">em tempo real.</span></h2>
-            <p class="text-gray-400 text-center mb-6 text-sm">Cole um trecho da sua redação abaixo e a IA analisa agora.</p>
-
-            <div class="bg-[#111520] border border-gray-800/80 rounded-2xl p-5 shadow-xl relative overflow-hidden">
-                <div class="flex justify-between items-center mb-4 pb-4 border-b border-gray-800/50">
-                    <div class="flex items-center space-x-3">
-                        <div class="w-10 h-10 bg-indigo-500 rounded-full flex items-center justify-center text-white font-bold">M</div>
-                        <div>
-                            <p class="text-sm font-bold text-white">Malu IA</p>
-                            <p class="text-[10px] text-green-400 flex items-center mt-0.5"><span class="w-1.5 h-1.5 bg-green-500 rounded-full mr-1.5"></span> Corretora ativa</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="mb-4">
-                    <textarea class="w-full bg-[#080b13] border border-gray-700 rounded-xl p-3 text-sm text-gray-300 focus:outline-none focus:border-indigo-500 transition-all resize-none h-28" placeholder="Cole aqui o trecho da sua redação..."></textarea>
-                </div>
-                <button class="w-full bg-indigo-500 text-white font-bold py-3 rounded-xl shadow-lg text-sm">
-                    Analisar com Malu IA &rarr;
-                </button>
-            </div>
-        </div>
-
-        <!-- 3. COMPETÊNCIAS -->
-        <div class="w-full max-w-4xl mx-auto mb-16">
-            <h2 class="text-2xl font-extrabold mb-6 text-center tracking-tight">Raio-X das <span class="text-indigo-400">5 Competências</span></h2>
-            <div class="grid grid-cols-1 gap-4">
-                <div class="glass-panel p-5 rounded-2xl">
-                    <h3 class="font-bold text-base text-white mb-1">C1 e C2: Gramática e Tema</h3>
-                    <p class="text-sm text-gray-400">Nossa IA identifica vírgulas fora de lugar e verifica o uso das áreas do conhecimento.</p>
-                </div>
-                <div class="glass-panel p-5 rounded-2xl">
-                    <h3 class="font-bold text-base text-white mb-1">C3 e C4: Argumentação e Coesão</h3>
-                    <p class="text-sm text-gray-400">Avalia a coerência dos argumentos e aponta a repetição ou falta de conectivos no texto.</p>
-                </div>
-                <div class="glass-panel p-5 rounded-2xl text-center border-indigo-500/30">
-                    <h3 class="font-bold text-base text-white mb-1">C5: Proposta de Intervenção</h3>
-                    <p class="text-sm text-gray-400">A Malu IA te avisa exatamente se faltou ação, agente, modo ou detalhamento.</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- 4. CHECKOUT FINAL -->
-        <div class="glass-panel p-6 rounded-3xl w-full max-w-md mx-auto mb-10 shadow-2xl border-indigo-500/20 text-center">
-            <p class="text-xs text-gray-400 mb-3 font-medium uppercase">Acesso imediato ao sistema</p>
-            <a href="https://pay.kiwify.com.br/AhSL8x0" class="block w-full bg-indigo-600 text-white text-lg font-bold py-4 rounded-xl glow-button mb-3">
-                Quero Minha Redação 1000
-            </a>
-            <p class="text-xs text-gray-500 mb-3">Apenas R$ 29,90. Liberação via Pix/Cartão.</p>
-            <div class="flex items-center justify-center space-x-1 text-xs text-green-400">
-                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
-                <span>Garantia de 7 Dias.</span>
-            </div>
+        <div class="text-gray-400 text-sm space-y-4">
+            <p>✔ Correção automática das 5 competências.</p>
+            <p>✔ Diagnóstico detalhado em tempo real.</p>
+            <p>✔ Evolução garantida no ENEM.</p>
         </div>
     </main>
-
-    <!-- WHATSAPP -->
-    <a href="https://wa.me/5528999106887?text=Oi!%20Fiquei%20com%20uma%20d%C3%BAvida%20sobre%20o%20Reda%C3%A7%C3%A3o%20Nota%20Mil." target="_blank" class="fixed bottom-5 right-5 bg-green-500 text-white p-3.5 rounded-full shadow-lg z-40">
-        <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.618-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.099.824z"></path></svg>
-    </a>
-
-    <!-- MODAL DE LOGIN -->
-    <div id="loginModal" class="fixed inset-0 z-[100] flex items-center justify-center hidden opacity-0 transition-opacity duration-300">
-        <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" onclick="closeLoginModal()"></div>
-        <div class="bg-[#0b0f19] border border-gray-800 rounded-3xl p-6 w-[90%] max-w-sm relative z-10 shadow-2xl transform scale-95 transition-transform duration-300" id="loginBox">
-            <button onclick="closeLoginModal()" class="absolute top-4 right-4 text-gray-500"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
-            <div class="text-center mb-6 mt-2">
-                <div class="text-xl font-black text-white mb-1">Nota<span class="text-indigo-500">Mil</span>.</div>
-                <p class="text-xs text-gray-400">Acesse sua conta</p>
-            </div>
-            <form class="space-y-4">
-                <div>
-                    <label class="block text-xs font-medium text-gray-400 mb-1">E-mail</label>
-                    <input type="email" class="w-full bg-[#111520] border border-gray-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500" placeholder="Seu e-mail">
-                </div>
-                <div>
-                    <div class="flex justify-between mb-1"><label class="text-xs text-gray-400">Senha</label></div>
-                    <input type="password" class="w-full bg-[#111520] border border-gray-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500" placeholder="Sua senha">
-                </div>
-                <button type="button" class="w-full bg-indigo-600 text-white font-bold py-3 rounded-xl text-sm mt-2">Acessar</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- Script Modal -->
-    <script>
-        function openLoginModal() {
-            const m = document.getElementById('loginModal'); const b = document.getElementById('loginBox');
-            m.classList.remove('hidden'); setTimeout(() => { m.classList.remove('opacity-0'); b.classList.remove('scale-95'); b.classList.add('scale-100'); }, 10);
-        }
-        function closeLoginModal() {
-            const m = document.getElementById('loginModal'); const b = document.getElementById('loginBox');
-            m.classList.add('opacity-0'); b.classList.remove('scale-100'); b.classList.add('scale-95'); setTimeout(() => { m.classList.add('hidden'); }, 300);
-        }
-    </script>
 </body>
 </html>
