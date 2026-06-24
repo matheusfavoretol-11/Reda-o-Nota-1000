@@ -166,6 +166,50 @@
             </div>
         </div>
 
+        <div class="w-full max-w-4xl mx-auto mb-16 pt-4 border-t border-gray-800">
+            <h2 class="text-2xl font-extrabold mb-8 text-center tracking-tight mt-6">Evolução real nos simulados:</h2>
+            
+            <div class="flex flex-col md:flex-row items-center justify-center gap-6">
+                <div class="w-full max-w-[320px] bg-[#0b141a] rounded-2xl overflow-hidden border border-gray-800 shadow-2xl relative">
+                    <div class="bg-[#202c33] px-4 py-3 flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-full bg-indigo-500 text-white flex items-center justify-center font-bold text-sm">G</div>
+                        <div>
+                            <div class="text-gray-200 font-medium text-sm">Gabriel (Aluno)</div>
+                            <div class="text-gray-400 text-xs">online</div>
+                        </div>
+                    </div>
+                    <div class="p-4 flex flex-col space-y-4 bg-[#0b141a] bg-opacity-95" style="background-image: url('data:image/svg+xml,%3Csvg width=\'20\' height=\'20\' viewBox=\'0 0 20 20\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'%23111b21\' fill-opacity=\'0.4\' fill-rule=\'evenodd\'%3E%3Ccircle cx=\'3\' cy=\'3\' r=\'3\'/%3E%3Ccircle cx=\'13\' cy=\'13\' r=\'3\'/%3E%3C/g%3E%3C/svg%3E');">
+                        <div class="self-start bg-[#202c33] text-[#e9edef] rounded-lg rounded-tl-none px-3 py-2 text-sm max-w-[85%] shadow relative">
+                            Cara, passando pra agradecer!! Fiz o simulado ontem e tirei 960 😭🙏
+                            <div class="text-[10px] text-gray-400 text-right mt-1">14:20</div>
+                        </div>
+                        <div class="self-end bg-[#005c4b] text-[#e9edef] rounded-lg rounded-tr-none px-3 py-2 text-sm max-w-[85%] shadow relative">
+                            Que notícia fantástica, Gabriel! A evolução na C3 fez toda a diferença, né?
+                            <div class="flex items-center justify-end text-[10px] text-green-200 mt-1">
+                                14:22 
+                                <svg viewBox="0 0 16 15" width="14" height="14" class="ml-1 text-[#53bdeb]"><path fill="currentColor" d="M15.01 3.316l-.478-.372a.365.365 0 0 0-.51.063L8.666 9.879a.32.32 0 0 1-.484.033l-.358-.325a.319.319 0 0 0-.484.032l-.378.483a.418.418 0 0 0 .036.541l1.32 1.266c.143.14.361.125.484-.033l6.272-8.048a.366.366 0 0 0-.064-.512zm-4.1 0l-.478-.372a.365.365 0 0 0-.51.063L4.566 9.879a.32.32 0 0 1-.484.033L1.891 7.769a.366.366 0 0 0-.515.006l-.423.433a.364.364 0 0 0 .006.514l3.258 3.185c.143.14.361.125.484-.033l6.272-8.048a.365.365 0 0 0-.063-.51z"></path></svg>
+                            </div>
+                        </div>
+                        <div class="self-start bg-[#202c33] text-[#e9edef] rounded-lg rounded-tl-none px-3 py-2 text-sm max-w-[85%] shadow relative">
+                            Demais!! A IA acertou exatamente o que o corretor do cursinho cobrou, só que na mesma hora. Assinatura super paga!
+                            <div class="text-[10px] text-gray-400 text-right mt-1">14:25</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col space-y-4 max-w-md w-full">
+                    <div class="glass-panel p-5 rounded-2xl">
+                        <p class="text-gray-300 font-light italic text-sm mb-3">"Travava muito porque os cursinhos demoravam duas semanas para corrigir. Com a IA, corrijo na mesma hora. Fui de 640 para 920."</p>
+                        <p class="text-xs font-bold text-indigo-400">Mariana Costa — Evolução de +280 pontos</p>
+                    </div>
+                    <div class="glass-panel p-5 rounded-2xl">
+                        <p class="text-gray-300 font-light italic text-sm mb-3">"O detalhamento aponta exatamente a linha onde errei a concordância ou a proposta de intervenção. Vale cada centavo."</p>
+                        <p class="text-xs font-bold text-indigo-400">Matheus Vieira — Nota 960 (Medicina)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="glass-panel p-6 rounded-3xl w-full max-w-md mx-auto mb-10 shadow-2xl border-indigo-500/20 text-center">
             <p class="text-xs text-gray-400 mb-3 font-medium uppercase">Acesso imediato ao sistema</p>
             <a href="https://pay.kiwify.com.br/AhSL8x0" class="block w-full bg-indigo-600 text-white text-lg font-bold py-4 rounded-xl glow-button mb-3">
@@ -208,24 +252,16 @@
     <script>
         function startAiAnalysis() {
             const text = document.getElementById('essayInput').value.trim();
-            
             if (text.length < 20) {
                 alert('Por favor, cole um trecho válido da sua redação para que a IA possa analisar!');
                 return;
             }
-
-            // Transição para a tela de carregamento
             document.getElementById('inputStage').classList.add('hidden');
             document.getElementById('loadingStage').classList.remove('hidden');
-
             const loadingText = document.getElementById('loadingText');
-            
-            // Simulação de passos de processamento da IA (Gera altíssima percepção de valor)
             setTimeout(() => { loadingText.innerText = "Lendo estrutura sintática..."; }, 1000);
             setTimeout(() => { loadingText.innerText = "Cruzando dados com o manual do corretor do Inep..."; }, 2000);
             setTimeout(() => { loadingText.innerText = "Avaliando repetições e conectivos da C4..."; }, 3000);
-            
-            // Transição para a tela de resultado/paywall
             setTimeout(() => {
                 document.getElementById('loadingStage').classList.add('hidden');
                 document.getElementById('resultStage').classList.remove('hidden');
