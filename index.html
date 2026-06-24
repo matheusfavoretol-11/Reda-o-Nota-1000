@@ -5,13 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Redação Nota Mil - Inteligência Artificial para o ENEM</title>
     
-    <!-- 1. PRELOAD DA CAPA DO VÍDEO (LCP FIX) - Deve ser a primeira coisa! -->
     <link rel="preload" as="image" href="https://i.ytimg.com/vi/qvIivSti-ZM/hqdefault.jpg" fetchpriority="high">
 
-    <!-- 2. FAVICON -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
 
-    <!-- 3. CSS E DESIGN MÍNIMO (Para a tela não ficar branca FCP FIX) -->
     <style>
         body { background-color: #0b0f19; color: #f1f5f9; margin: 0; font-family: system-ui, -apple-system, sans-serif; }
         .glass-panel { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.05); }
@@ -21,27 +18,23 @@
         ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 10px; }
     </style>
 
-    <!-- 4. TAILWIND CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = { theme: { extend: { fontFamily: { sans: ['Inter', 'sans-serif'], }, } } }
     </script>
 
-    <!-- 5. FONTES ASSÍNCRONAS (Não bloqueia a tela - FCP FIX) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap"></noscript>
 
-    <!-- 6. GOOGLE TAG MANAGER (Carrega depois do visual crítico) -->
     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
     j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
     })(window,document,'script','dataLayer','GTM-MW5ZDR9T');</script>
     
-    <!-- 7. META PIXEL -->
     <script>
     !function(f,b,e,v,n,t,s)
     {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -58,10 +51,8 @@
 </head>
 
 <body class="antialiased min-h-screen flex flex-col relative overflow-x-hidden pt-20">
-    <!-- GTM NOSCRIPT -->
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MW5ZDR9T" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
-    <!-- CABEÇALHO -->
     <header class="fixed top-0 left-0 w-full bg-[#0b0f19]/95 backdrop-blur-md border-b border-gray-800/60 z-50">
         <div class="max-w-6xl mx-auto px-5 py-3 flex justify-between items-center">
             <div class="text-xl font-black tracking-tighter text-white">
@@ -76,7 +67,6 @@
 
     <main class="flex-grow flex flex-col items-center px-5 py-8 max-w-5xl mx-auto w-full">
         
-        <!-- HERO -->
         <h1 class="text-[32px] md:text-5xl font-extrabold tracking-tight leading-tight mb-4 text-center mt-2">
             A sua redação corrigida nas 5 competências do ENEM em <span class="text-indigo-400">30 Segundos.</span>
         </h1>
@@ -84,24 +74,21 @@
             Nossa Inteligência Artificial analisa o seu texto com a mesma precisão da banca avaliadora oficial.
         </p>
 
-        <!-- 1. VÍDEO LITE EMBED (LCP ELEMENT - OTIMIZADO PARA PRIORIDADE MÁXIMA) -->
-        <div class="w-full max-w-[340px] mx-auto bg-gray-900 rounded-3xl overflow-hidden shadow-2xl border-4 border-indigo-500/20 mb-12 relative cursor-pointer group" 
-             onclick="this.innerHTML=`<iframe class='absolute top-0 left-0 w-full h-full' src='https://www.youtube.com/embed/qvIivSti-ZM?autoplay=1&playsinline=1' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe>`">
+        <div class="w-full max-w-[340px] mx-auto bg-gray-900 rounded-3xl overflow-hidden shadow-2xl border-4 border-indigo-500/20 mb-12 relative group hover:scale-[1.02] transition-transform">
             
-            <div class="absolute -top-4 -right-4 bg-indigo-600 text-white text-[10px] font-bold px-3 py-1 rounded-full z-20 animate-pulse uppercase tracking-wider shadow-lg">Veja na Prática</div>
+            <a href="https://youtube.com/shorts/qvIivSti-ZM" target="_blank" class="absolute inset-0 z-50 w-full h-full cursor-pointer"></a>
+            
+            <div class="absolute -top-4 -right-4 bg-indigo-600 text-white text-[10px] font-bold px-3 py-1 rounded-full z-40 animate-pulse uppercase tracking-wider shadow-lg">Veja na Prática</div>
             
             <div class="aspect-[9/16] bg-black relative flex items-center justify-center">
-                <!-- CAPA COM FETCHPRIORITY E EAGER LOADING -->
                 <img src="https://i.ytimg.com/vi/qvIivSti-ZM/hqdefault.jpg" alt="Capa Demonstração" class="absolute w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" fetchpriority="high" loading="eager" decoding="sync">
                 
-                <!-- Botão Play Falso -->
-                <div class="w-16 h-16 bg-indigo-600 rounded-full flex items-center justify-center z-10 shadow-[0_0_20px_rgba(79,70,229,0.5)] transform group-hover:scale-110 transition-transform">
+                <div class="w-16 h-16 bg-indigo-600 rounded-full flex items-center justify-center z-30 shadow-[0_0_20px_rgba(79,70,229,0.5)] transform group-hover:scale-110 transition-transform">
                     <svg class="w-8 h-8 text-white ml-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path></svg>
                 </div>
             </div>
         </div>
 
-        <!-- 2. SIMULAÇÃO DE CHAT -->
         <div class="w-full max-w-4xl mx-auto mb-16 pt-8 border-t border-gray-800">
             <h2 class="text-2xl font-extrabold mb-2 text-center tracking-tight">Veja a correção <span class="text-indigo-400">em tempo real.</span></h2>
             <p class="text-gray-400 text-center mb-6 text-sm">Cole um trecho da sua redação abaixo e a IA analisa agora.</p>
@@ -125,7 +112,6 @@
             </div>
         </div>
 
-        <!-- 3. COMPETÊNCIAS -->
         <div class="w-full max-w-4xl mx-auto mb-16">
             <h2 class="text-2xl font-extrabold mb-6 text-center tracking-tight">Raio-X das <span class="text-indigo-400">5 Competências</span></h2>
             <div class="grid grid-cols-1 gap-4">
@@ -144,7 +130,6 @@
             </div>
         </div>
 
-        <!-- 4. CHECKOUT FINAL -->
         <div class="glass-panel p-6 rounded-3xl w-full max-w-md mx-auto mb-10 shadow-2xl border-indigo-500/20 text-center">
             <p class="text-xs text-gray-400 mb-3 font-medium uppercase">Acesso imediato ao sistema</p>
             <a href="https://pay.kiwify.com.br/AhSL8x0" class="block w-full bg-indigo-600 text-white text-lg font-bold py-4 rounded-xl glow-button mb-3">
@@ -158,12 +143,10 @@
         </div>
     </main>
 
-    <!-- WHATSAPP -->
     <a href="https://wa.me/5528999106887?text=Oi!%20Fiquei%20com%20uma%20d%C3%BAvida%20sobre%20o%20Reda%C3%A7%C3%A3o%20Nota%20Mil." target="_blank" class="fixed bottom-5 right-5 bg-green-500 text-white p-3.5 rounded-full shadow-lg z-40">
         <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.618-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.099.824z"></path></svg>
     </a>
 
-    <!-- MODAL DE LOGIN -->
     <div id="loginModal" class="fixed inset-0 z-[100] flex items-center justify-center hidden opacity-0 transition-opacity duration-300">
         <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" onclick="closeLoginModal()"></div>
         <div class="bg-[#0b0f19] border border-gray-800 rounded-3xl p-6 w-[90%] max-w-sm relative z-10 shadow-2xl transform scale-95 transition-transform duration-300" id="loginBox">
@@ -186,7 +169,6 @@
         </div>
     </div>
 
-    <!-- Script Modal -->
     <script>
         function openLoginModal() {
             const m = document.getElementById('loginModal'); const b = document.getElementById('loginBox');
