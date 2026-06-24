@@ -75,40 +75,76 @@
         </p>
 
         <div class="w-full max-w-[340px] mx-auto bg-gray-900 rounded-3xl overflow-hidden shadow-2xl border-4 border-indigo-500/20 mb-12 relative group hover:scale-[1.02] transition-transform">
-            
             <a href="https://youtube.com/shorts/qvIivSti-ZM" target="_blank" class="absolute inset-0 z-50 w-full h-full cursor-pointer"></a>
-            
             <div class="absolute -top-4 -right-4 bg-indigo-600 text-white text-[10px] font-bold px-3 py-1 rounded-full z-40 animate-pulse uppercase tracking-wider shadow-lg">Veja na Prática</div>
-            
             <div class="aspect-[9/16] bg-black relative flex items-center justify-center">
                 <img src="https://i.ytimg.com/vi/qvIivSti-ZM/hqdefault.jpg" alt="Capa Demonstração" class="absolute w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" fetchpriority="high" loading="eager" decoding="sync">
-                
                 <div class="w-16 h-16 bg-indigo-600 rounded-full flex items-center justify-center z-30 shadow-[0_0_20px_rgba(79,70,229,0.5)] transform group-hover:scale-110 transition-transform">
                     <svg class="w-8 h-8 text-white ml-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path></svg>
                 </div>
             </div>
         </div>
 
-        <div class="w-full max-w-4xl mx-auto mb-16 pt-8 border-t border-gray-800">
+        <div class="w-full max-w-4xl mx-auto mb-16 pt-8 border-t border-gray-800" id="demoSection">
             <h2 class="text-2xl font-extrabold mb-2 text-center tracking-tight">Veja a correção <span class="text-indigo-400">em tempo real.</span></h2>
             <p class="text-gray-400 text-center mb-6 text-sm">Cole um trecho da sua redação abaixo e a IA analisa agora.</p>
 
-            <div class="bg-[#111520] border border-gray-800/80 rounded-2xl p-5 shadow-xl relative overflow-hidden">
-                <div class="flex justify-between items-center mb-4 pb-4 border-b border-gray-800/50">
-                    <div class="flex items-center space-x-3">
-                        <div class="w-10 h-10 bg-indigo-500 rounded-full flex items-center justify-center text-white font-bold">M</div>
-                        <div>
-                            <p class="text-sm font-bold text-white">Malu IA</p>
-                            <p class="text-[10px] text-green-400 flex items-center mt-0.5"><span class="w-1.5 h-1.5 bg-green-500 rounded-full mr-1.5"></span> Corretora ativa</p>
+            <div class="bg-[#111520] border border-gray-800/80 rounded-2xl p-5 shadow-xl relative overflow-hidden" id="chatWrapper">
+                
+                <div id="inputStage">
+                    <div class="flex justify-between items-center mb-4 pb-4 border-b border-gray-800/50">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-indigo-500 rounded-full flex items-center justify-center text-white font-bold">M</div>
+                            <div>
+                                <p class="text-sm font-bold text-white">Malu IA</p>
+                                <p class="text-[10px] text-green-400 flex items-center mt-0.5"><span class="w-1.5 h-1.5 bg-green-500 rounded-full mr-1.5"></span> Corretora ativa</p>
+                            </div>
                         </div>
                     </div>
+                    <div class="mb-4">
+                        <textarea id="essayInput" class="w-full bg-[#080b13] border border-gray-700 rounded-xl p-3 text-sm text-gray-300 focus:outline-none focus:border-indigo-500 transition-all resize-none h-28" placeholder="Cole aqui pelo menos um parágrafo da sua redação para testar a velocidade do sistema..."></textarea>
+                    </div>
+                    <button onclick="startAiAnalysis()" id="submitAnalysisBtn" class="w-full bg-indigo-500 hover:bg-indigo-400 text-white font-bold py-3 rounded-xl shadow-lg text-sm transition-colors flex items-center justify-center space-x-2">
+                        <span>Analisar com Malu IA &rarr;</span>
+                    </button>
                 </div>
-                <div class="mb-4">
-                    <textarea class="w-full bg-[#080b13] border border-gray-700 rounded-xl p-3 text-sm text-gray-300 focus:outline-none focus:border-indigo-500 transition-all resize-none h-28" placeholder="Cole aqui o trecho da sua redação..."></textarea>
+
+                <div id="loadingStage" class="hidden py-8 flex flex-col items-center justify-center text-center">
+                    <div class="w-12 h-12 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin mb-4"></div>
+                    <p class="text-base font-bold text-white mb-1" id="loadingText">Iniciando inteligência artificial...</p>
+                    <p class="text-xs text-gray-400">Avaliando de acordo com os critérios oficiais do Inep</p>
                 </div>
-                <button class="w-full bg-indigo-500 text-white font-bold py-3 rounded-xl shadow-lg text-sm">
-                    Analisar com Malu IA &rarr;
-                </button>
+
+                <div id="resultStage" class="hidden py-4">
+                    <div class="text-center mb-6 border-b border-gray-800 pb-4">
+                        <p class="text-green-400 text-xs font-bold uppercase tracking-wider mb-1">✔ Análise Concluída com Sucesso</p>
+                        <h4 class="text-lg font-bold text-white">Diagnóstico Preliminar do Texto</h4>
+                    </div>
+                    
+                    <div class="space-y-3 mb-6">
+                        <div class="bg-gray-900/60 p-3 rounded-xl border border-gray-800 flex justify-between items-center">
+                            <span class="text-xs text-gray-300">Competência 1 (Gramática e Desvios)</span>
+                            <span class="text-xs text-amber-400 font-semibold">Ajustes Necessários ⚠</span>
+                        </div>
+                        <div class="bg-gray-900/60 p-3 rounded-xl border border-gray-800 flex justify-between items-center">
+                            <span class="text-xs text-gray-300">Competência 4 (Coesão e Mecanismos)</span>
+                            <span class="text-xs text-indigo-400 font-semibold">Repetições Detectadas 🔍</span>
+                        </div>
+                        <div class="bg-gray-900/60 p-3 rounded-xl border border-gray-800 flex justify-between items-center">
+                            <span class="text-xs text-gray-300">Nota Geral Estimada</span>
+                            <span class="text-xs text-gray-500 font-mono">🔒 Bloqueada</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-indigo-950/40 border border-indigo-500/30 p-5 rounded-xl text-center">
+                        <h5 class="text-sm font-bold text-white mb-2">Quer ver a nota exata e a correção linha por linha?</h5>
+                        <p class="text-xs text-gray-400 mb-4 max-w-sm mx-auto">Libere agora o seu acesso completo à plataforma e corrija redações ilimitadas nas 5 competências do ENEM.</p>
+                        <a href="https://pay.kiwify.com.br/AhSL8x0" class="block w-full bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold py-3 rounded-lg shadow-md transition-all uppercase tracking-wider">
+                            Desbloquear Correção Completa — R$ 29,90
+                        </a>
+                    </div>
+                </div>
+
             </div>
         </div>
 
@@ -170,6 +206,32 @@
     </div>
 
     <script>
+        function startAiAnalysis() {
+            const text = document.getElementById('essayInput').value.trim();
+            
+            if (text.length < 20) {
+                alert('Por favor, cole um trecho válido da sua redação para que a IA possa analisar!');
+                return;
+            }
+
+            // Transição para a tela de carregamento
+            document.getElementById('inputStage').classList.add('hidden');
+            document.getElementById('loadingStage').classList.remove('hidden');
+
+            const loadingText = document.getElementById('loadingText');
+            
+            // Simulação de passos de processamento da IA (Gera altíssima percepção de valor)
+            setTimeout(() => { loadingText.innerText = "Lendo estrutura sintática..."; }, 1000);
+            setTimeout(() => { loadingText.innerText = "Cruzando dados com o manual do corretor do Inep..."; }, 2000);
+            setTimeout(() => { loadingText.innerText = "Avaliando repetições e conectivos da C4..."; }, 3000);
+            
+            // Transição para a tela de resultado/paywall
+            setTimeout(() => {
+                document.getElementById('loadingStage').classList.add('hidden');
+                document.getElementById('resultStage').classList.remove('hidden');
+            }, 4200);
+        }
+
         function openLoginModal() {
             const m = document.getElementById('loginModal'); const b = document.getElementById('loginBox');
             m.classList.remove('hidden'); setTimeout(() => { m.classList.remove('opacity-0'); b.classList.remove('scale-95'); b.classList.add('scale-100'); }, 10);
