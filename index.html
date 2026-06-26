@@ -390,13 +390,51 @@
             }, 4800);
         }
 
+        function openLoginModal() { document.getElementById('loginModal').classList.add('active'); }
         function closeLoginModal() { document.getElementById('loginModal').classList.remove('active'); }
+
         function forceTestLogin() {
-            localStorage.setItem('dev_bypass_active', 'true');
-            const fakeUser = {
-                email: "teste@redacaonotamil.com",
-                plan: "premium",
-                status: "active"
+            // ─── 1. Simula o cache de pagamento que o App.tsx lê ───────────────
+            localStorage.setItem('red1000_is_paid_cache', 'true');
+
+            // ─── 2. Injeta um objeto de usuário falso no formato Supabase ──────
+            //    O App.tsx checa: user && isPaid → renderiza o dashboard
+            //    O campo `email` é o que aparece no topo da Área do Aluno
+            const fakeSession = {
+                access_token: 'dev_bypass_token',
+                token_type: 'bearer',
+                expires_in: 3600,
+                expires_at: Math.floor(Date.now() / 1000) + 3600,
+                refresh_token: 'dev_bypass_refresh',
+                user: {
+                    id: 'dev-bypass-user-id',
+                    email: 'teste@redacaonotamil.com',
+                    role: 'authenticated',
+                    aud: 'authenticated',
+                    app_metadata: { provider: 'dev_bypass' },
+                    user_metadata: { name: 'Modo Teste' },
+                    created_at: new Date().toISOString()
+                }
             };
-            localStorage.setItem('fake_user_profile', JSON.stringify(fakeUser));
-            window.location.href = '/dashboard'; 
+
+            // ─── 3. Grava nas chaves que o cliente Supabase procura no localStorage
+            //    (o prefixo "sb-" é o padrão do @supabase/auth-js v2)
+            //    Tenta as 3 variações para garantir compatibilidade
+            try {
+                localStorage.setItem('sb-auth-token', JSON.stringify(fakeSession));
+                // Variação com URL do projeto (formato mais comum no Supabase v2)
+                localStorage.setItem('sb-fakeproject-auth-token', JSON.stringify({ currentSession: fakeSession, expiresAt: fakeSession.expires_at }));
+                // Chave genérica usada por alguns projetos
+                localStorage.setItem('supabase.auth.token', JSON.stringify({ currentSession: fakeSession, expiresAt: fakeSession.expires_at }));
+            } catch(e) {
+                console.warn('localStorage indisponível', e);
+            }
+
+            // ─── 4. Redireciona para a raiz onde o App React está montado ──────
+            //    O React vai ler o localStorage, encontrar o cache paid=true
+            //    e renderizar diretamente o dashboard sem chamar o Supabase real
+            window.location.href = '/';
+        }
+    </script>
+</body>
+</html>
