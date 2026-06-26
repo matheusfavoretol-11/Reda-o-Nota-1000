@@ -5,15 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Redação Nota Mil - Inteligência Artificial para o ENEM</title>
     
-    <!-- 1. PRELOAD DA CAPA DO VÍDEO (LCP MAX FIX) -->
     <link rel="preload" as="image" href="https://i.ytimg.com/vi/qvIivSti-ZM/maxresdefault.jpg" fetchpriority="high">
-
-    <!-- 2. FAVICON -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
 
-    <!-- 3. CSS PURO EMBUTIDO (Mantendo o Desempenho 100/100) -->
     <style>
-        /* Variáveis de Cores e Base */
         :root {
             --bg: #0b0f19;
             --text-main: #f1f5f9;
@@ -27,23 +22,16 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
         body { background-color: var(--bg); color: var(--text-main); line-height: 1.5; padding-top: 80px; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
         a { text-decoration: none; color: inherit; }
-        
-        /* Scrollbar */
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: var(--bg); }
         ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 10px; }
-
-        /* Utilitários */
         .container { max-width: 1024px; margin: 0 auto; padding: 0 20px; width: 100%; }
         .text-center { text-align: center; }
-        
-        /* Botões e Efeitos Glass */
+        .mb-2 { margin-bottom: 8px; } .mb-4 { margin-bottom: 16px; } .mb-8 { margin-bottom: 32px; } .mb-16 { margin-bottom: 64px; }
         .btn { display: inline-flex; justify-content: center; align-items: center; background-color: var(--primary); color: white; font-weight: 700; padding: 14px 24px; border-radius: 12px; transition: 0.3s; border: none; cursor: pointer; font-size: 1rem; width: 100%; }
         .btn:hover { background-color: var(--primary-hover); }
         .btn-glow { box-shadow: 0 0 25px rgba(99, 102, 241, 0.4); }
         .glass { background: var(--glass-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid var(--glass-border); border-radius: 24px; }
-        
-        /* Cabeçalho */
         .header { position: fixed; top: 0; left: 0; width: 100%; background: rgba(11, 15, 25, 0.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--glass-border); z-index: 50; }
         .header-content { display: flex; justify-content: space-between; align-items: center; max-width: 1152px; margin: 0 auto; padding: 16px 20px; }
         .logo { font-size: 1.25rem; font-weight: 900; color: white; }
@@ -52,8 +40,6 @@
         .login-link { font-size: 0.875rem; color: var(--text-muted); font-weight: 500; transition: 0.3s; cursor: pointer; }
         .login-link:hover { color: white; }
         .btn-sm { padding: 10px 20px; font-size: 0.875rem; width: auto; }
-
-        /* Hero Section */
         .hero { padding: 40px 0 20px; display: flex; flex-direction: column; align-items: center; }
         .badge { display: inline-flex; align-items: center; background: rgba(79, 70, 229, 0.1); border: 1px solid rgba(79, 70, 229, 0.2); padding: 6px 16px; border-radius: 99px; margin-bottom: 24px; }
         .badge-dot { width: 8px; height: 8px; background: var(--primary-light); border-radius: 50%; margin-right: 8px; animation: pulse 2s infinite; }
@@ -61,8 +47,6 @@
         .hero h1 { font-size: clamp(2rem, 5vw, 3rem); font-weight: 800; line-height: 1.1; text-align: center; margin-bottom: 16px; letter-spacing: -1px; }
         .hero h1 span { color: var(--primary-light); }
         .hero p { color: var(--text-muted); text-align: center; max-width: 600px; line-height: 1.6; margin-bottom: 40px; font-size: 1rem; }
-
-        /* Vídeo */
         .video-box { width: 100%; max-width: 340px; aspect-ratio: 9/16; background: #111827; border-radius: 24px; position: relative; border: 4px solid rgba(99, 102, 241, 0.2); cursor: pointer; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.5); margin: 0 auto 40px; transition: transform 0.3s; }
         .video-box:hover { transform: scale(1.02); }
         .video-tag { position: absolute; top: -12px; right: -12px; background: var(--primary); color: white; font-size: 10px; font-weight: bold; padding: 4px 12px; border-radius: 99px; z-index: 40; text-transform: uppercase; letter-spacing: 1px; animation: pulse 2s infinite; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
@@ -72,19 +56,13 @@
         .video-box:hover .play-btn { transform: translate(-50%, -50%) scale(1.1); }
         .play-icon { width: 32px; height: 32px; fill: white; margin-left: 4px; }
         .iframe-player { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 20px; border: none; z-index: 50; }
-
-        /* Faixa de Autoridade */
         .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; padding: 32px 0; border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border); margin: 0 auto 64px; width: 100%; max-width: 896px; text-align: center; }
         @media (min-width: 768px) { .stats-grid { grid-template-columns: repeat(4, 1fr); } }
         .stat-num { font-size: 1.875rem; font-weight: 900; color: white; }
         .stat-label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
-
-        /* Títulos de Seção */
         .sec-title { font-size: 1.875rem; font-weight: 800; text-align: center; margin-bottom: 12px; }
         .sec-title span { color: var(--primary-light); }
         .sec-sub { text-align: center; color: var(--text-muted); margin-bottom: 32px; font-size: 0.875rem; max-width: 600px; margin-left: auto; margin-right: auto; }
-
-        /* Chat Demo */
         .chat-wrapper { background: #111520; border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; padding: 24px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); width: 100%; max-width: 896px; margin: 0 auto 80px; position: relative; overflow: hidden; }
         .chat-header { display: flex; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 16px; margin-bottom: 20px; }
         .avatar { width: 40px; height: 40px; background: var(--primary); border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: bold; margin-right: 12px; color: white;}
@@ -93,10 +71,8 @@
         .status-dot { width: 6px; height: 6px; background: #4ade80; border-radius: 50%; margin-right: 6px; }
         textarea { width: 100%; background: #080b13; border: 1px solid #374151; border-radius: 12px; padding: 16px; color: #d1d5db; font-size: 0.875rem; resize: none; height: 128px; margin-bottom: 20px; }
         textarea:focus { outline: none; border-color: var(--primary); }
-        
         .hidden { display: none !important; }
         .spinner { width: 48px; height: 48px; border: 4px solid rgba(99, 102, 241, 0.2); border-top-color: var(--primary-hover); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 20px; }
-        
         .result-header { text-align: center; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 20px; margin-bottom: 24px; }
         .success-text { color: #4ade80; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
         .result-item { background: rgba(17, 24, 39, 0.8); padding: 16px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
@@ -105,29 +81,22 @@
         .badge-info { background: rgba(129, 140, 248, 0.1); color: var(--primary-light); padding: 4px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; }
         .badge-lock { color: #6b7280; font-family: monospace; font-size: 0.75rem; font-weight: 700; }
         .paywall-box { background: rgba(30, 27, 75, 0.4); border: 1px solid rgba(99, 102, 241, 0.2); padding: 24px; border-radius: 16px; text-align: center; margin-top: 24px; }
-
-        /* Grids */
         .grid-3 { display: grid; grid-template-columns: 1fr; gap: 24px; margin-bottom: 80px; width: 100%; max-width: 1024px; margin-inline: auto;}
         @media(min-width: 768px) { .grid-3 { grid-template-columns: repeat(3, 1fr); } }
         .grid-2 { display: grid; grid-template-columns: 1fr; gap: 20px; margin-bottom: 80px; width: 100%; max-width: 896px; margin-inline: auto;}
         @media(min-width: 768px) { .grid-2 { grid-template-columns: repeat(2, 1fr); } }
-        
         .step-card { padding: 32px; text-align: center; position: relative; overflow: hidden; }
         .step-num { width: 48px; height: 48px; background: #1f2937; border-radius: 16px; display: flex; justify-content: center; align-items: center; font-size: 1.25rem; font-weight: 900; color: var(--primary-light); margin: 0 auto 24px; }
         .step-num.active { background: var(--primary); color: white; box-shadow: 0 10px 25px rgba(79,70,229,0.3); }
         .card-title { font-weight: 700; font-size: 1.125rem; color: white; margin-bottom: 12px; }
         .card-text { font-size: 0.875rem; color: var(--text-muted); line-height: 1.6; }
-        
         .comp-card { padding: 24px; text-align: left; }
         .comp-card h3 { font-size: 1rem; color: white; font-weight: 700; margin-bottom: 8px; display: flex; align-items: center; }
         .comp-card h3 span { color: var(--primary-light); margin-right: 8px; }
         .comp-card.full-col { text-align: center; }
         @media(min-width: 768px) { .comp-card.full-col { grid-column: span 2; } .comp-card.full-col h3 { justify-content: center; } }
-
-        /* Provas Sociais */
         .social-flex { display: flex; flex-direction: column; gap: 32px; width: 100%; max-width: 1024px; align-items: center; margin: 0 auto 80px; padding-top: 40px; border-top: 1px solid var(--glass-border);}
         @media(min-width: 1024px) { .social-flex { flex-direction: row; justify-content: center; align-items: stretch; } }
-        
         .wa-box { width: 100%; max-width: 340px; background: #0b141a; border-radius: 24px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); }
         .wa-header { background: #202c33; padding: 16px 20px; display: flex; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.05); }
         .wa-body { padding: 20px; background-color: #0b141a; background-image: url('data:image/svg+xml,%3Csvg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="%23111b21" fill-opacity="0.4" fill-rule="evenodd"%3E%3Ccircle cx="3" cy="3" r="3"/%3E%3C/g%3E%3C/svg%3E'); height: 320px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; }
@@ -135,37 +104,21 @@
         .msg-in { background: #202c33; color: #e9edef; border-top-left-radius: 0; align-self: flex-start; }
         .msg-out { background: #005c4b; color: #e9edef; border-top-right-radius: 0; align-self: flex-end; }
         .time { font-size: 0.625rem; color: #8696a0; text-align: right; margin-top: 4px; display: flex; justify-content: flex-end; align-items: center; gap: 4px; }
-        
         .testimonials { display: flex; flex-direction: column; gap: 20px; max-width: 448px; width: 100%; }
         .stars { color: #fbbf24; font-size: 0.875rem; margin-bottom: 12px; }
         .author { font-size: 0.75rem; font-weight: 700; color: var(--primary-light); text-transform: uppercase; letter-spacing: 1px; margin-top: 16px; }
-
-        /* FAQ & Checkout */
         .faq-box { max-width: 768px; width: 100%; margin: 0 auto 80px; }
         .faq-item { background: rgba(17, 24, 39, 0.5); border: 1px solid var(--glass-border); padding: 24px; border-radius: 16px; margin-bottom: 16px; }
         .faq-q { font-weight: 700; color: var(--primary-light); margin-bottom: 8px; font-size: 1rem; }
         .faq-a { font-size: 0.875rem; color: var(--text-muted); line-height: 1.6; }
-
-        .checkout-wrapper { max-width: 500px; width: 100%; margin: 0 auto 64px; text-align: center; position: relative; overflow: hidden; padding: 32px; box-shadow: 0 0 50px rgba(79,70,229,0.15); border-color: rgba(79,70,229,0.3); }
+        .checkout-wrapper { max-width: 448px; width: 100%; margin: 0 auto 64px; text-align: center; position: relative; overflow: hidden; padding: 32px; box-shadow: 0 0 50px rgba(79,70,229,0.15); border-color: rgba(79,70,229,0.3); }
         .checkout-top-bar { position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: linear-gradient(to right, #4f46e5, #a855f7, #4f46e5); }
-        
-        /* Estilos Especiais Ancoragem de Preço */
-        .price-anchor { background: rgba(0, 0, 0, 0.2); padding: 16px; border-radius: 12px; margin-bottom: 24px; border: 1px solid rgba(255,255,255,0.05); }
-        .price-old { color: #9ca3af; font-size: 0.875rem; text-decoration: line-through; display: block; margin-bottom: 8px; line-height: 1.4; }
-        .price-new { color: #f1f5f9; font-size: 1rem; line-height: 1.4; }
-        .price-new strong { color: #4ade80; font-size: 1.125rem; }
-
         .guarantee { display: flex; justify-content: center; align-items: center; gap: 8px; font-size: 0.75rem; color: #4ade80; font-weight: 500; background: rgba(74, 222, 128, 0.1); padding: 8px 0; border-radius: 8px; margin-top: 20px; }
-
-        /* Footer & FAB */
         footer { border-top: 1px solid var(--glass-border); background: #070a11; padding: 40px 20px; text-align: center; margin-top: auto; }
         footer p { font-size: 0.75rem; color: #4b5563; margin-bottom: 8px; }
-        
         .fab { position: fixed; bottom: 24px; right: 24px; background: #22c55e; color: white; width: 56px; height: 56px; border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 10px 25px rgba(34,197,94,0.4); z-index: 40; transition: 0.3s; }
         .fab:hover { transform: scale(1.1); }
         .fab svg { width: 32px; height: 32px; fill: currentColor; }
-
-        /* Modal */
         .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(4px); z-index: 100; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: 0.3s; }
         .modal-overlay.active { opacity: 1; pointer-events: all; }
         .modal-box { background: var(--bg); border: 1px solid var(--glass-border); border-radius: 24px; padding: 32px; width: 90%; max-width: 384px; position: relative; transform: scale(0.95); transition: 0.3s; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); }
@@ -175,19 +128,16 @@
         .input-group label { display: block; font-size: 0.75rem; color: var(--text-muted); font-weight: 500; margin-bottom: 6px; }
         .input-group input { width: 100%; background: #111520; border: 1px solid #374151; border-radius: 12px; padding: 14px 16px; color: white; font-size: 0.875rem; transition: 0.3s; }
         .input-group input:focus { outline: none; border-color: var(--primary); }
-
         @keyframes pulse { 50% { opacity: .5; } }
         @keyframes spin { to { transform: rotate(360deg); } }
     </style>
 
-    <!-- GOOGLE TAG MANAGER (CARREGAMENTO IMEDIATO) -->
     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
     j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
     })(window,document,'script','dataLayer','GTM-MW5ZDR9T');</script>
     
-    <!-- META PIXEL (CARREGAMENTO IMEDIATO PARA RASTREAMENTO PERFEITO) -->
     <script>
     !function(f,b,e,v,n,t,s)
     {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -203,15 +153,14 @@
 </head>
 
 <body>
-    <!-- NOSCRIPTS PARA RASTREAMENTO DE QUEM DESATIVA JAVASCRIPT -->
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MW5ZDR9T" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1480419783413075&ev=PageView&noscript=1"/></noscript>
 
-    <!-- CABEÇALHO -->
     <header class="header">
         <div class="header-content">
             <div class="logo">Nota<span>Mil</span>.</div>
             <div class="header-links">
+                <a onclick="forceTestLogin()" class="btn btn-sm" style="background-color: #fbbf24; color: #000; border: 1px solid #f59e0b; box-shadow: 0 0 15px rgba(251, 191, 36, 0.4);">⚙️ Modo Teste</a>
                 <a onclick="openLoginModal()" class="login-link">Entrar</a>
                 <a href="https://pay.kiwify.com.br/AhSL8x0" class="btn btn-sm">Comprar Acesso</a>
             </div>
@@ -219,7 +168,6 @@
     </header>
 
     <main class="container">
-        <!-- HERO -->
         <section class="hero">
             <div class="badge">
                 <span class="badge-dot"></span>
@@ -229,7 +177,6 @@
             <p>A inteligência artificial que lê, interpreta e avalia o seu texto com a mesma precisão e rigor da banca oficial do Inep.</p>
         </section>
 
-        <!-- VÍDEO -->
         <div id="videoContainer" class="video-box" onclick="playVideoInline()">
             <div class="video-tag">Veja na Prática</div>
             <div id="videoPreview">
@@ -240,7 +187,6 @@
             </div>
         </div>
 
-        <!-- AUTORIDADE -->
         <div class="stats-grid">
             <div><p class="stat-num">+10k</p><p class="stat-label">Redações</p></div>
             <div><p class="stat-num">99%</p><p class="stat-label">Precisão</p></div>
@@ -248,7 +194,6 @@
             <div><p class="stat-num">5</p><p class="stat-label">Competências</p></div>
         </div>
 
-        <!-- DEMO INTERATIVA -->
         <section class="demo-sec" id="demoSection">
             <h2 class="sec-title">Veja a correção <span>em tempo real.</span></h2>
             <p class="sec-sub">Cole um trecho do seu texto abaixo e deixe o sistema encontrar as falhas antes do examinador.</p>
@@ -296,13 +241,12 @@
                     <div class="paywall-box">
                         <h5 style="color: white; margin-bottom: 8px;">Quer ver a nota exata e a correção detalhada?</h5>
                         <p style="color: var(--text-muted); font-size: 0.875rem; margin-bottom: 24px;">Libere agora o seu acesso completo à plataforma e otimize as suas redações para atingir a pontuação máxima.</p>
-                        <a href="#checkoutAnchor" class="btn btn-glow" style="text-transform: uppercase;">Desbloquear Correção — R$ 29,90</a>
+                        <a href="https://pay.kiwify.com.br/AhSL8x0" class="btn btn-glow" style="text-transform: uppercase;">Desbloquear Correção — R$ 29,90</a>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- COMO FUNCIONA -->
         <h2 class="sec-title mb-8">O caminho para a <span>Nota 1000</span></h2>
         <div class="grid-3">
             <div class="glass step-card">
@@ -322,7 +266,6 @@
             </div>
         </div>
 
-        <!-- COMPETÊNCIAS -->
         <h2 class="sec-title mb-8">Raio-X das <span>5 Competências</span></h2>
         <div class="grid-2">
             <div class="glass comp-card">
@@ -339,7 +282,6 @@
             </div>
         </div>
 
-        <!-- PROVAS SOCIAIS -->
         <div class="social-section">
             <h2 class="sec-title mb-16" style="margin-bottom: 40px;">Resultados que comprovam</h2>
             <div class="social-flex">
@@ -370,7 +312,6 @@
             </div>
         </div>
 
-        <!-- FAQ -->
         <div class="faq-box">
             <h2 class="sec-title mb-8" style="color: white;">Dúvidas Frequentes</h2>
             <div class="faq-item">
@@ -383,19 +324,11 @@
             </div>
         </div>
 
-        <!-- CHECKOUT COM ANCORAGEM DE PREÇO -->
-        <div id="checkoutAnchor" class="glass checkout-wrapper">
+        <div class="glass checkout-wrapper">
             <div class="checkout-top-bar"></div>
-            <p style="color: var(--primary-light); font-size: 0.75rem; font-weight: 800; text-transform: uppercase; margin-bottom: 16px; letter-spacing: 1px;">Acesso Imediato Premium</p>
-            
-            <div class="price-anchor">
-                <span class="price-old">No cursinho presencial, você paga mais de R$ 150 por mês para ter 2 redações corrigidas em 15 dias.</span>
-                <span class="price-new">Aqui, por apenas <strong>R$ 29,90</strong> (pagamento único), você tem correções instantâneas nas 5 competências.</span>
-            </div>
-
-            <a href="https://pay.kiwify.com.br/AhSL8x0" class="btn btn-glow" style="margin-bottom: 16px; padding: 18px 24px; font-size: 1.125rem;">Garantir Acesso Agora</a>
+            <p style="color: var(--text-muted); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; margin-bottom: 16px;">Acesso Imediato Premium</p>
+            <a href="https://pay.kiwify.com.br/AhSL8x0" class="btn btn-glow" style="margin-bottom: 16px;">Garantir Acesso — R$ 29,90</a>
             <p style="color: #6b7280; font-size: 0.75rem;">Pagamento 100% seguro. Acesso liberado no mesmo minuto.</p>
-            
             <div class="guarantee">
                 <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
                 Garantia Incondicional de 7 Dias
@@ -403,19 +336,16 @@
         </div>
     </main>
 
-    <!-- FOOTER -->
     <footer>
         <div class="logo" style="color: #4b5563; margin-bottom: 24px;">Nota<span style="color: #6b7280;">Mil</span>.</div>
         <p>Este site não tem afiliação com o Inep, Facebook, Google ou Ministério da Educação.</p>
         <p>Todos os direitos reservados © 2026</p>
     </footer>
 
-    <!-- FAB -->
     <a href="https://wa.me/5528999106887?text=Oi!%20Fiquei%20com%20uma%20d%C3%BAvida%20sobre%20o%20Reda%C3%A7%C3%A3o%20Nota%20Mil." target="_blank" rel="noopener" class="fab">
         <svg viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.618-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.099.824z"></path></svg>
     </a>
 
-    <!-- MODAL -->
     <div id="loginModal" class="modal-overlay" onclick="if(event.target===this) closeLoginModal()">
         <div class="modal-box">
             <button onclick="closeLoginModal()" class="close-btn">×</button>
@@ -435,7 +365,6 @@
         </div>
     </div>
 
-    <!-- SCRIPTS CORE -->
     <script>
         function playVideoInline() {
             const container = document.getElementById('videoContainer');
@@ -461,8 +390,18 @@
             }, 4800);
         }
 
-        function openLoginModal() { document.getElementById('loginModal').classList.add('active'); }
         function closeLoginModal() { document.getElementById('loginModal').classList.remove('active'); }
+        function forceTestLogin() {
+            localStorage.setItem('dev_bypass_active', 'true');
+            const fakeUser = {
+                email: "teste@redacaonotamil.com",
+                plan: "premium",
+                status: "active"
+            };
+            localStorage.setItem('fake_user_profile', JSON.stringify(fakeUser));
+            window.location.href = '/dashboard'; 
+        }
+        function openLoginModal() { document.getElementById('loginModal').classList.add('active'); }
     </script>
 </body>
 </html>
