@@ -160,7 +160,7 @@
         <div class="header-content">
             <div class="logo">Nota<span>Mil</span>.</div>
             <div class="header-links">
-                <a onclick="forceTestLogin()" class="btn btn-sm" style="background-color: #fbbf24; color: #000; border: 1px solid #f59e0b; box-shadow: 0 0 15px rgba(251, 191, 36, 0.4);">⚙️ Modo Teste</a>
+                <a onclick="forceTestLogin()" class="btn btn-sm" style="background-color: #fbbf24; color: #000; border: 1px solid #f59e0b; box-shadow: 0 0 15px rgba(251, 191, 36, 0.4); cursor:pointer;">⚙️ Modo Teste</a>
                 <a onclick="openLoginModal()" class="login-link">Entrar</a>
                 <a href="https://pay.kiwify.com.br/AhSL8x0" class="btn btn-sm">Comprar Acesso</a>
             </div>
@@ -210,19 +210,16 @@
                     <textarea id="essayInput" placeholder="Cole aqui pelo menos um parágrafo da sua redação para testar a velocidade e precisão do sistema..."></textarea>
                     <button onclick="startAiAnalysis()" class="btn btn-glow">Analisar Texto Agora &rarr;</button>
                 </div>
-
                 <div id="loadingStage" class="hidden" style="padding: 40px 0; text-align: center;">
                     <div class="spinner"></div>
                     <p style="color: white; font-weight: bold; margin-bottom: 8px;" id="loadingText">Iniciando rede neural...</p>
                     <p style="color: var(--text-muted); font-size: 0.75rem;">Mapeando desvios gramaticais e estrutura</p>
                 </div>
-
                 <div id="resultStage" class="hidden">
                     <div class="result-header">
                         <p class="success-text">✔ Escaneamento Concluído</p>
                         <h4 style="color: white; font-size: 1.25rem;">Diagnóstico Preliminar</h4>
                     </div>
-                    
                     <div class="mb-8">
                         <div class="result-item">
                             <span class="item-label">Competência 1 (Gramática)</span>
@@ -237,7 +234,6 @@
                             <span class="badge-lock">🔒 Resultado Bloqueado</span>
                         </div>
                     </div>
-
                     <div class="paywall-box">
                         <h5 style="color: white; margin-bottom: 8px;">Quer ver a nota exata e a correção detalhada?</h5>
                         <p style="color: var(--text-muted); font-size: 0.875rem; margin-bottom: 24px;">Libere agora o seu acesso completo à plataforma e otimize as suas redações para atingir a pontuação máxima.</p>
@@ -249,37 +245,16 @@
 
         <h2 class="sec-title mb-8">O caminho para a <span>Nota 1000</span></h2>
         <div class="grid-3">
-            <div class="glass step-card">
-                <div class="step-num">1</div>
-                <h3 class="card-title">Envie o seu texto</h3>
-                <p class="card-text">Escreva a sua redação ou cole um texto já pronto diretamente na nossa plataforma inteligente.</p>
-            </div>
-            <div class="glass step-card">
-                <div class="step-num">2</div>
-                <h3 class="card-title">Processamento Neural</h3>
-                <p class="card-text">A Inteligência Artificial analisa milhares de padrões para identificar desvios gramaticais.</p>
-            </div>
-            <div class="glass step-card">
-                <div class="step-num active">3</div>
-                <h3 class="card-title">Relatório Completo</h3>
-                <p class="card-text">Receba a sua nota exata e sugestões de reescrita em menos de 30 segundos. Sem demoras.</p>
-            </div>
+            <div class="glass step-card"><div class="step-num">1</div><h3 class="card-title">Envie o seu texto</h3><p class="card-text">Escreva a sua redação ou cole um texto já pronto diretamente na nossa plataforma inteligente.</p></div>
+            <div class="glass step-card"><div class="step-num">2</div><h3 class="card-title">Processamento Neural</h3><p class="card-text">A Inteligência Artificial analisa milhares de padrões para identificar desvios gramaticais.</p></div>
+            <div class="glass step-card"><div class="step-num active">3</div><h3 class="card-title">Relatório Completo</h3><p class="card-text">Receba a sua nota exata e sugestões de reescrita em menos de 30 segundos. Sem demoras.</p></div>
         </div>
 
         <h2 class="sec-title mb-8">Raio-X das <span>5 Competências</span></h2>
         <div class="grid-2">
-            <div class="glass comp-card">
-                <h3><span>C1 & C2:</span> Domínio e Tema</h3>
-                <p>Identificação imediata de erros de ortografia, vírgulas e verificação da correta aplicação do repertório sociocultural.</p>
-            </div>
-            <div class="glass comp-card">
-                <h3><span>C3 & C4:</span> Argumentação e Coesão</h3>
-                <p>Avaliação lógica da defesa de ponto de vista e mapeamento de conectivos em falta ou repetidos ao longo do texto.</p>
-            </div>
-            <div class="glass comp-card full-col">
-                <h3>C5: Proposta de Intervenção</h3>
-                <p>Verificação pontual dos 5 elementos obrigatórios (Agente, Ação, Modo/Meio, Finalidade e Detalhamento).</p>
-            </div>
+            <div class="glass comp-card"><h3><span>C1 & C2:</span> Domínio e Tema</h3><p>Identificação imediata de erros de ortografia, vírgulas e verificação da correta aplicação do repertório sociocultural.</p></div>
+            <div class="glass comp-card"><h3><span>C3 & C4:</span> Argumentação e Coesão</h3><p>Avaliação lógica da defesa de ponto de vista e mapeamento de conectivos em falta ou repetidos ao longo do texto.</p></div>
+            <div class="glass comp-card full-col"><h3>C5: Proposta de Intervenção</h3><p>Verificação pontual dos 5 elementos obrigatórios (Agente, Ação, Modo/Meio, Finalidade e Detalhamento).</p></div>
         </div>
 
         <div class="social-section">
@@ -287,8 +262,8 @@
             <div class="social-flex">
                 <div class="wa-box">
                     <div class="wa-header">
-                        <div style="width: 40px; height: 40px; border-radius: 50%; background: var(--primary); color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; margin-right: 12px;">G</div>
-                        <div><div style="color: white; font-size: 0.875rem; font-weight: 500;">Gabriel (Medicina)</div><div style="color: var(--text-muted); font-size: 0.75rem;">online</div></div>
+                        <div style="width:40px;height:40px;border-radius:50%;background:var(--primary);color:white;display:flex;align-items:center;justify-content:center;font-weight:bold;margin-right:12px;">G</div>
+                        <div><div style="color:white;font-size:0.875rem;font-weight:500;">Gabriel (Medicina)</div><div style="color:var(--text-muted);font-size:0.75rem;">online</div></div>
                     </div>
                     <div class="wa-body">
                         <div class="msg msg-in">Cara, a plataforma salvou a minha vida. Fiz o último simulado e tirei 960 😭🙏<div class="time">14:20</div></div>
@@ -296,16 +271,15 @@
                         <div class="msg msg-in">Total!! A IA pontuou exatamente o que o corretor ia tirar de mim. A assinatura já se pagou.<div class="time">14:25</div></div>
                     </div>
                 </div>
-
                 <div class="testimonials">
                     <div class="glass" style="padding: 24px;">
                         <div class="stars">★★★★★</div>
-                        <p style="color: #d1d5db; font-size: 0.875rem; font-style: italic; margin-bottom: 16px;">"O meu cursinho demorava 15 dias para devolver a redação corrigida. Com a IA, eu corrijo na hora. Fui de 640 para 920."</p>
+                        <p style="color:#d1d5db;font-size:0.875rem;font-style:italic;margin-bottom:16px;">"O meu cursinho demorava 15 dias para devolver a redação corrigida. Com a IA, eu corrijo na hora. Fui de 640 para 920."</p>
                         <p class="author">Mariana Costa — Evolução de +280 pontos</p>
                     </div>
                     <div class="glass" style="padding: 24px;">
                         <div class="stars">★★★★★</div>
-                        <p style="color: #d1d5db; font-size: 0.875rem; font-style: italic; margin-bottom: 16px;">"O nível de detalhamento é absurdo. O sistema aponta exatamente a linha onde ocorreu o erro gramatical. Impecável."</p>
+                        <p style="color:#d1d5db;font-size:0.875rem;font-style:italic;margin-bottom:16px;">"O nível de detalhamento é absurdo. O sistema aponta exatamente a linha onde ocorreu o erro gramatical. Impecável."</p>
                         <p class="author">Matheus Vieira — Aprovado em Direito</p>
                     </div>
                 </div>
@@ -314,21 +288,15 @@
 
         <div class="faq-box">
             <h2 class="sec-title mb-8" style="color: white;">Dúvidas Frequentes</h2>
-            <div class="faq-item">
-                <p class="faq-q">A correção por IA é realmente fiável?</p>
-                <p class="faq-q" style="font-weight: 400; color: var(--text-muted); font-size: 0.875rem;">Sim. O nosso modelo foi treinado exclusivamente com a base de dados oficial e com milhares de redações nota 1000, garantindo uma assertividade superior a 95%.</p>
-            </div>
-            <div class="faq-item">
-                <p class="faq-q">Como é feito o acesso à plataforma?</p>
-                <p class="faq-q" style="font-weight: 400; color: var(--text-muted); font-size: 0.875rem;">O acesso é instantâneo. Assim que o pagamento é processado pela Kiwify, os dados de login são enviados automaticamente para o seu e-mail.</p>
-            </div>
+            <div class="faq-item"><p class="faq-q">A correção por IA é realmente fiável?</p><p class="faq-q" style="font-weight:400;color:var(--text-muted);font-size:0.875rem;">Sim. O nosso modelo foi treinado exclusivamente com a base de dados oficial e com milhares de redações nota 1000, garantindo uma assertividade superior a 95%.</p></div>
+            <div class="faq-item"><p class="faq-q">Como é feito o acesso à plataforma?</p><p class="faq-q" style="font-weight:400;color:var(--text-muted);font-size:0.875rem;">O acesso é instantâneo. Assim que o pagamento é processado pela Kiwify, os dados de login são enviados automaticamente para o seu e-mail.</p></div>
         </div>
 
         <div class="glass checkout-wrapper">
             <div class="checkout-top-bar"></div>
-            <p style="color: var(--text-muted); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; margin-bottom: 16px;">Acesso Imediato Premium</p>
-            <a href="https://pay.kiwify.com.br/AhSL8x0" class="btn btn-glow" style="margin-bottom: 16px;">Garantir Acesso — R$ 29,90</a>
-            <p style="color: #6b7280; font-size: 0.75rem;">Pagamento 100% seguro. Acesso liberado no mesmo minuto.</p>
+            <p style="color:var(--text-muted);font-size:0.75rem;font-weight:700;text-transform:uppercase;margin-bottom:16px;">Acesso Imediato Premium</p>
+            <a href="https://pay.kiwify.com.br/AhSL8x0" class="btn btn-glow" style="margin-bottom:16px;">Garantir Acesso — R$ 29,90</a>
+            <p style="color:#6b7280;font-size:0.75rem;">Pagamento 100% seguro. Acesso liberado no mesmo minuto.</p>
             <div class="guarantee">
                 <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
                 Garantia Incondicional de 7 Dias
@@ -337,7 +305,7 @@
     </main>
 
     <footer>
-        <div class="logo" style="color: #4b5563; margin-bottom: 24px;">Nota<span style="color: #6b7280;">Mil</span>.</div>
+        <div class="logo" style="color:#4b5563;margin-bottom:24px;">Nota<span style="color:#6b7280;">Mil</span>.</div>
         <p>Este site não tem afiliação com o Inep, Facebook, Google ou Ministério da Educação.</p>
         <p>Todos os direitos reservados © 2026</p>
     </footer>
@@ -349,17 +317,11 @@
     <div id="loginModal" class="modal-overlay" onclick="if(event.target===this) closeLoginModal()">
         <div class="modal-box">
             <button onclick="closeLoginModal()" class="close-btn">×</button>
-            <div class="logo text-center mb-2" style="font-size: 1.5rem; color: white;">Nota<span>Mil</span>.</div>
-            <p class="text-center" style="color: var(--text-muted); font-size: 0.75rem; margin-bottom: 32px;">Acesse a sua conta</p>
+            <div class="logo text-center mb-2" style="font-size:1.5rem;color:white;">Nota<span>Mil</span>.</div>
+            <p class="text-center" style="color:var(--text-muted);font-size:0.75rem;margin-bottom:32px;">Acesse a sua conta</p>
             <form>
-                <div class="input-group">
-                    <label>E-mail</label>
-                    <input type="email" placeholder="O seu e-mail">
-                </div>
-                <div class="input-group">
-                    <label>Senha</label>
-                    <input type="password" placeholder="A sua senha secreta">
-                </div>
+                <div class="input-group"><label>E-mail</label><input type="email" placeholder="O seu e-mail"></div>
+                <div class="input-group"><label>Senha</label><input type="password" placeholder="A sua senha secreta"></div>
                 <button type="button" class="btn">Entrar na Plataforma</button>
             </form>
         </div>
@@ -374,66 +336,61 @@
 
         function startAiAnalysis() {
             const text = document.getElementById('essayInput').value.trim();
-            if (text.length < 20) {
-                alert('Por favor, introduza um trecho válido da sua redação para que a IA possa analisar com precisão!');
-                return;
-            }
+            if (text.length < 20) { alert('Por favor, introduza um trecho válido da sua redação para que a IA possa analisar com precisão!'); return; }
             document.getElementById('inputStage').classList.add('hidden');
             document.getElementById('loadingStage').classList.remove('hidden');
             const loadingText = document.getElementById('loadingText');
             setTimeout(() => { loadingText.innerText = "Lendo estrutura sintática e gramatical..."; }, 1000);
             setTimeout(() => { loadingText.innerText = "Cruzando dados com o manual do corretor oficial do Inep..."; }, 2200);
             setTimeout(() => { loadingText.innerText = "Avaliando repetições e conectivos da Competência 4..."; }, 3500);
-            setTimeout(() => {
-                document.getElementById('loadingStage').classList.add('hidden');
-                document.getElementById('resultStage').classList.remove('hidden');
-            }, 4800);
+            setTimeout(() => { document.getElementById('loadingStage').classList.add('hidden'); document.getElementById('resultStage').classList.remove('hidden'); }, 4800);
         }
 
         function openLoginModal() { document.getElementById('loginModal').classList.add('active'); }
         function closeLoginModal() { document.getElementById('loginModal').classList.remove('active'); }
 
         function forceTestLogin() {
-            // ─── 1. Simula o cache de pagamento que o App.tsx lê ───────────────
+            // Seta o cache de pagamento que o App.tsx lê
             localStorage.setItem('red1000_is_paid_cache', 'true');
 
-            // ─── 2. Injeta um objeto de usuário falso no formato Supabase ──────
-            //    O App.tsx checa: user && isPaid → renderiza o dashboard
-            //    O campo `email` é o que aparece no topo da Área do Aluno
+            // Injeta sessão falsa no formato que o Supabase auth-js v2 procura
             const fakeSession = {
-                access_token: 'dev_bypass_token',
-                token_type: 'bearer',
-                expires_in: 3600,
-                expires_at: Math.floor(Date.now() / 1000) + 3600,
-                refresh_token: 'dev_bypass_refresh',
-                user: {
-                    id: 'dev-bypass-user-id',
-                    email: 'teste@redacaonotamil.com',
-                    role: 'authenticated',
-                    aud: 'authenticated',
-                    app_metadata: { provider: 'dev_bypass' },
-                    user_metadata: { name: 'Modo Teste' },
-                    created_at: new Date().toISOString()
-                }
+                currentSession: {
+                    access_token: 'dev_bypass_token',
+                    token_type: 'bearer',
+                    expires_in: 3600,
+                    expires_at: Math.floor(Date.now() / 1000) + 3600,
+                    refresh_token: 'dev_bypass_refresh',
+                    user: {
+                        id: 'dev-bypass-user-id',
+                        email: 'matheusfavoretol@gmail.com', // usa o e-mail hardcoded no isPaid do App.tsx
+                        role: 'authenticated',
+                        aud: 'authenticated',
+                        app_metadata: { provider: 'dev_bypass' },
+                        user_metadata: { name: 'Modo Teste' },
+                        created_at: new Date().toISOString()
+                    }
+                },
+                expiresAt: Math.floor(Date.now() / 1000) + 3600
             };
 
-            // ─── 3. Grava nas chaves que o cliente Supabase procura no localStorage
-            //    (o prefixo "sb-" é o padrão do @supabase/auth-js v2)
-            //    Tenta as 3 variações para garantir compatibilidade
+            // Grava nas variações de chave que o Supabase v2 usa
             try {
-                localStorage.setItem('sb-auth-token', JSON.stringify(fakeSession));
-                // Variação com URL do projeto (formato mais comum no Supabase v2)
-                localStorage.setItem('sb-fakeproject-auth-token', JSON.stringify({ currentSession: fakeSession, expiresAt: fakeSession.expires_at }));
-                // Chave genérica usada por alguns projetos
-                localStorage.setItem('supabase.auth.token', JSON.stringify({ currentSession: fakeSession, expiresAt: fakeSession.expires_at }));
-            } catch(e) {
-                console.warn('localStorage indisponível', e);
-            }
+                const sessionStr = JSON.stringify(fakeSession);
+                localStorage.setItem('sb-auth-token', sessionStr);
+                localStorage.setItem('supabase.auth.token', sessionStr);
+                // Tenta descobrir e setar a chave com prefixo do projeto
+                for (let i = 0; i < localStorage.length; i++) {
+                    const key = localStorage.key(i);
+                    if (key && key.startsWith('sb-') && key.endsWith('-auth-token')) {
+                        localStorage.setItem(key, sessionStr);
+                    }
+                }
+            } catch(e) { console.warn('localStorage erro:', e); }
 
-            // ─── 4. Redireciona para a raiz onde o App React está montado ──────
-            //    O React vai ler o localStorage, encontrar o cache paid=true
-            //    e renderizar diretamente o dashboard sem chamar o Supabase real
-            window.location.href = '/';
+            // Redireciona para o app React (raiz do site)
+            // O ?dev_bypass=1 serve como sinal extra caso queira usar no App.tsx futuramente
+            window.location.href = '/?dev_bypass=1';
         }
     </script>
 </body>
